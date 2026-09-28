@@ -17,10 +17,13 @@ import cv2
 import numpy as np
 from scipy.spatial.transform import Rotation
 
-import calibration as common
+if __package__:
+    from . import calibration as common
+else:
+    import calibration as common
 
 
-DEFAULT_SESSION = Path(__file__).resolve().parent / "data" / "wrist_camera_session"
+DEFAULT_SESSION = Path.cwd() / "data" / "wrist_camera_session"
 
 
 def load_config(path: Path) -> dict:
@@ -55,7 +58,9 @@ def capture_pair(config: dict) -> tuple[np.ndarray, dict]:
     timeout = float(settings.get("timeout_s", 8))
     if not 0 < timeout <= 60:
         raise ValueError("capture.timeout_s must be in (0, 60]")
-    remote = f"""source /opt/ros/foxy/setup.bash
+    ros_setup = str(settings.get("ros_setup", "/opt/ros/foxy/setup.bash"))
+    ros_setup = ros_setup.replace("'", "'\\''")
+    remote = f"""source '{ros_setup}'
 export ROS_DOMAIN_ID={int(settings.get('ros_domain_id', 0))}
 python3 - <<'PY'
 import base64
@@ -100,7 +105,7 @@ print(json.dumps({{'image_b64': base64.b64encode(image[2]).decode('ascii'),
 node.destroy_node()
 rclpy.shutdown()
 PY
-"""
+    """
     result = subprocess.run(
         ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=5", settings["host"], "bash -s"],
         input=remote.encode(), capture_output=True, timeout=timeout + 10, check=False,
@@ -212,22 +217,22 @@ def capture_command(config: dict, session: Path, count: int, append: bool) -> No
 
 
 def vendor_arm_state(config: dict) -> list[float]:
-    """Read the same controller arm_q14 used by the head touch validation."""
+    """Read controller state via optional tron2_env without exposing commands."""
     try:
-        from tron2_deployment.config import load_profile
-        from tron2_deployment.robot import WebsocketRobot
+        if __package__:
+            from .adapters.arm_state import read_arm_q14
+        else:
+            from adapters.arm_state import read_arm_q14
     except ImportError as error:
         raise RuntimeError(
-            "controller state probing requires the optional tron2_deployment "
-            "adapter; offline wrist calibration does not."
+            "controller state probing requires the optional tron2_env package; "
+            "offline wrist calibration does not."
         ) from error
 
-    profile = load_profile(common.config_path(config, config["capture"]["state_profile"]))
-    adapter = WebsocketRobot(profile)
-    try:
-        return adapter.read_state()["arm_q14"]
-    finally:
-        adapter.close()
+    profile_path = common.config_path(config, config["capture"]["state_profile"])
+    profile = common.read_json(profile_path)
+    robot = profile["robot"]
+    return read_arm_q14(robot, timeout_s=float(config["capture"].get("timeout_s", 8)))
 
 
 def probe_command(config: dict, output: Path) -> None:

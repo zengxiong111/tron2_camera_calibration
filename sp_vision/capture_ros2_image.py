@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import os
 
 import cv2
 import numpy as np
@@ -16,11 +17,13 @@ TOPICS = {
 }
 
 
-def capture(host: str, topic: str, timeout: float) -> bytes:
-    # ROS 2 Foxy and its Python packages live on the robot development host.
+def capture(host: str, topic: str, timeout: float, *, ros_setup: str = "/opt/ros/foxy/setup.bash",
+            ros_domain_id: int = 0) -> bytes:
+    # ROS 2 and its Python packages live on the configured remote host.
     # Keep the binary image on stdout and diagnostics on stderr.
-    remote = f"""source /opt/ros/foxy/setup.bash
-export ROS_DOMAIN_ID=0
+    setup = ros_setup.replace("'", "'\\''")
+    remote = f"""source '{setup}'
+export ROS_DOMAIN_ID={int(ros_domain_id)}
 python3 - <<'PY'
 import sys
 import time
@@ -64,15 +67,18 @@ PY
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--camera", choices=TOPICS, default="right")
-    parser.add_argument("--host", default="guest@10.192.1.4")
+    parser.add_argument("--host", default=os.environ.get("SP_VISION_ROS_HOST", "guest@10.192.1.4"))
+    parser.add_argument("--ros-setup", default=os.environ.get("SP_VISION_ROS_SETUP", "/opt/ros/foxy/setup.bash"))
+    parser.add_argument("--ros-domain-id", type=int, default=int(os.environ.get("ROS_DOMAIN_ID", "0")))
     parser.add_argument("--timeout", type=float, default=8.0)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     if not 0 < args.timeout <= 60:
         parser.error("--timeout must be between 0 and 60 seconds")
-    output = args.output or Path(__file__).resolve().parent / "data" / f"{args.camera}-camera-latest.jpg"
+    output = args.output or Path.cwd() / "data" / f"{args.camera}-camera-latest.jpg"
     try:
-        payload = capture(args.host, TOPICS[args.camera], args.timeout)
+        payload = capture(args.host, TOPICS[args.camera], args.timeout,
+                          ros_setup=args.ros_setup, ros_domain_id=args.ros_domain_id)
         image = cv2.imdecode(np.frombuffer(payload, dtype=np.uint8), cv2.IMREAD_COLOR)
         if image is None or image.size == 0:
             raise ValueError("ROS 2 camera payload is not a decodable image")

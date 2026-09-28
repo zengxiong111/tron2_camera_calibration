@@ -3,6 +3,7 @@
   "board": {"columns": 7, "rows": 10, "square_m": 0.021},
   "capture": {
     "host": "guest@10.192.1.4",
+    "ros_setup": "/opt/ros/foxy/setup.bash",
     "state_profile": "robot_profile.example.json",
     "ros_domain_id": 0,
     "color_topic": "/camera/right/color/image_resized/compressed",

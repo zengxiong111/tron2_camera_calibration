@@ -6,9 +6,9 @@
 
 控制器负载辨识值（`m`、`mc_x`、`mc_y`、`mc_z`）不参与本实验的图像、关节角和 FK 标定，不应填入本实验 JSON 或 URDF 相机变换。若使用拖动示教调整机器人姿态，应在该操作前单独为控制器设置当前负载并回读确认。
 
-## ROS 2 相机单帧检查
+## ROS 2 相机单帧诊断
 
-实机彩色相机话题运行在 `guest@10.192.1.4` 的 ROS 2 Foxy 中，本机 ROS 1 Noetic 的 `rostopic` 无法发现这些话题。从仓库根目录运行以下命令，读取 `/camera/right/color/image_resized/compressed` 的右手腕彩色图像：
+`sp-vision-capture` 诊断工具通过 SSH 从 ROS 2 Foxy 主机读取一张彩色图像。它与头部主标定流程不同：头部默认 RGB-D 后端通过本机 ROS 1 Noetic 订阅；右腕标定则有独立的 ROS 2 图像和关节状态采集路径。该单帧诊断不保存深度或同步头部状态，因此不能把结果当作头部标定数据。检查 ROS 2 数据流：
 
 ```bash
 .venv/bin/python capture_ros2_image.py
@@ -18,7 +18,7 @@
 
 本目录本身就是一个可复制的独立标定单元。命令默认使用本目录下的配置、`configs/assembly.urdf`、`configs/scene.xml` 和 `configs/robot_profile.example.json`；数据、诊断图和结果统一写入本目录的 `data/`。离线求解不依赖 `tron2_deployment`，只有实时采集才需要可选的相机适配器。
 
-本实验只标定：
+头部工作流负责标定：
 
 1. 头部彩色相机内参；
 2. 彩色光学相机坐标系到 `head_pitch_Link` 的刚体外参 `T_pitch_camera`；
@@ -63,8 +63,10 @@ yaw→pitch 的固定偏移是 `[0.051, 0.03, 0.097] m`。因此 yaw 旋转会�
 
 ```bash
 cp configs/head_config.example.json configs/head_config.json
-.venv/bin/python -m pip install -r requirements.txt
+python -m pip install -e ..
 ```
+
+若本机配置选择 WebSocket 桥接后端而非 ROS Noetic，请在此目录运行 `python -m pip install -e '..[live]'` 安装该可选 Python 依赖。
 
 检查 `head_config.json` 中的路径。默认已经指向本目录内的：
 

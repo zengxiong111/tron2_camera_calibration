@@ -4,11 +4,11 @@
 
 Controller payload identification (`m`, `mc_x`, `mc_y`, `mc_z`) is not used by this image, joint-angle, and FK calibration. It does not belong in this experiment's JSON or the URDF camera transform. If drag teaching is used to position the robot, configure the current payload separately in the robot controller and confirm its readback before that operation.
 
-## One-frame ROS 2 camera check
+## ROS 2 one-frame camera diagnostic
 
 This directory is a standalone calibration unit. Run commands from `sp_vision/`; all default configs, model assets, data, diagnostics, and result JSON files stay in this directory. The bundled `configs/assembly.urdf` and `configs/scene.xml` are the model snapshots used by the offline solver. Hardware adapters are optional and are only needed for live capture.
 
-The deployed color camera topics run under ROS 2 Foxy on `guest@10.192.1.4`. The local ROS 1 Noetic `rostopic` command cannot discover them. To capture a one-frame check:
+The `sp-vision-capture` diagnostic reads one color image from a ROS 2 Foxy host over SSH. It is separate from the main head calibration, whose default RGB-D backend subscribes locally through ROS 1 Noetic. The right wrist calibration also uses its own ROS 2 image and joint-state acquisition path. Do not use this single-image diagnostic as a head calibration frame because it does not save depth or synchronized head state. To check a ROS 2 stream:
 
 ```bash
 python capture_ros2_image.py
@@ -16,7 +16,7 @@ python capture_ros2_image.py
 
 The script subscribes to `sensor_msgs/msg/CompressedImage` with the sensor-data QoS profile over SSH and saves `data/right-camera-latest.jpg`. Use `--camera top` for the corresponding head color topic, `/camera/top/color/image_raw/compressed`. Both paths only read images; the snapshot does not include depth or joint state and is not a calibrated observation.
 
-This directory implements one minimal workflow:
+The head workflow implements:
 
 1. capture about 40 fixed-checkerboard images while moving head yaw and pitch;
 2. solve color-camera intrinsics;
@@ -60,8 +60,10 @@ As in the earlier workflow, board geometry can be supplied directly as `--patter
 
 ```bash
 cp configs/head_config.example.json configs/head_config.json
-python -m pip install -r requirements.txt
+python -m pip install -e ..
 ```
+
+If the profile selects the WebSocket bridge backend instead of ROS Noetic, install its optional Python dependency from this directory with `python -m pip install -e '..[live]'`.
 
 The example config references the bundled `configs/assembly.urdf`, `configs/scene.xml`, and `configs/robot_profile.example.json`. Relative paths are resolved from the config JSON.
 

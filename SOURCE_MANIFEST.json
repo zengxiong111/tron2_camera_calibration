@@ -1,0 +1,101 @@
+{
+  "provenance": {
+    "source_repository": "https://github.com/AcSg999/tron2_deployment_on_dc",
+    "source_commit": "dbd6c2f2d0718f38c86fac34dc86788ad43c60b5",
+    "source_subtree": "sp_vision/",
+    "license": "MIT",
+    "license_file": "LICENSE",
+    "license_provenance": "Copied from the same source checkout; Copyright (c) 2026 Jerry Lo.",
+    "license_source_sha256": "34d20c6d68a6e41d3ada3b2b76890a80ce5b58f20f45793b083b2ecd3756ece8",
+    "license_copied_sha256": "34d20c6d68a6e41d3ada3b2b76890a80ce5b58f20f45793b083b2ecd3756ece8",
+    "license_matches_source": true,
+    "baseline_snapshot_label": "original_import_sha256 values are the SHA256 hashes of files copied from source_commit before local changes.",
+    "live_capture_status": "untested; no camera, robot, or ROS capture was executed.",
+    "asset_scope": "Bundled URDF/MJCF snapshots provide kinematic transforms; referenced meshes are not included, so complete MuJoCo visualization/rendering is unavailable."
+  },
+  "copied_files": [
+    {
+      "path": "sp_vision/.gitignore",
+      "original_import_sha256": "e79f1bd316f7bcbbb50931b1ae425b8ba45bce72def7319aaac59ada2aa72e76"
+    },
+    {
+      "path": "sp_vision/calibration.py",
+      "original_import_sha256": "e96ac37a9704384108f510ea6c7a1c9327964f5d315ad44add57ad551a519386"
+    },
+    {
+      "path": "sp_vision/calibration_wrist.py",
+      "original_import_sha256": "cce1ed52a365f017cfc0f7d6fa4308b364ec4a5b9daff88244488962a8d93fcc"
+    },
+    {
+      "path": "sp_vision/capture_ros2_image.py",
+      "original_import_sha256": "340ae4a235bef85f998bcc6c938447e3870fd2ceaabfc4ab1586f574fb362974"
+    },
+    {
+      "path": "sp_vision/configs/assembly.urdf",
+      "original_import_sha256": "180faad7e72463812158cbbb984a970b8df60c8bce812d337d945eda522ca16d"
+    },
+    {
+      "path": "sp_vision/configs/head_config.example.json",
+      "original_import_sha256": "520ddcc15fe213e65059f6bfe7a10e0d919156449594f4dbf23163e2f4c23254"
+    },
+    {
+      "path": "sp_vision/configs/robot_profile.example.json",
+      "original_import_sha256": "0f8899a468d029e9cc26bd5bac53a5ac9945e4ccf34e96e83329851ce0323c51"
+    },
+    {
+      "path": "sp_vision/configs/scene.xml",
+      "original_import_sha256": "bdc87c0a548384213c4ce2319090f7fe80f6861afe1de40a7de967cb9ba9eab0"
+    },
+    {
+      "path": "sp_vision/configs/wrist_config.example.json",
+      "original_import_sha256": "c6ecabde210a85691ad64a294746cff5609113d0511844327f9301e6c5d76e7c"
+    },
+    {
+      "path": "sp_vision/head_calib.md",
+      "original_import_sha256": "9d30dc7b9c5d70d621c56c347eed1cb50c376afbecdcc27763c3fa95e84a98db"
+    },
+    {
+      "path": "sp_vision/head_calib.zh-CN.md",
+      "original_import_sha256": "0baf49d542c035ca647b6b06b1fa25292a51145dc1c2f2364ef3290a8dedbe7d"
+    },
+    {
+      "path": "sp_vision/test_calibration.py",
+      "original_import_sha256": "1bbcf61e1d70ac93edeff7fdcd3ba8b8d63c5031983592821c3557589f7b8d3c"
+    },
+    {
+      "path": "sp_vision/test_calibration_wrist.py",
+      "original_import_sha256": "65fdff9ad962742bdbc0072400b1f47dfe1f26005e750dbe980e9cd38cefcaae"
+    },
+    {
+      "path": "sp_vision/wrist_calib.md",
+      "original_import_sha256": "6e8d2aaa4a3ec40e560a5a9b8f2ecfc5037e8b2ef98fdca2e5cddce04efbffb2"
+    },
+    {
+      "path": "sp_vision/wrist_calib.zh-CN.md",
+      "original_import_sha256": "809b3ff9c9d298f2ed540b69b0435f4db05288df16a185daae0ce3c02e405014"
+    }
+  ],
+  "live_capture_status": "untested",
+  "migrated_adapters": [
+    {
+      "destination": "sp_vision/adapters/rgbd.py",
+      "source_reference": "src/tron2_deployment/rgbd.py at parent source commit",
+      "source_sha256": "cc379144ae094e9bc8dd9c12dfca30aec0b62673395b15fc8bccacbafa7fc49f",
+      "upstream_source": "hardware/tron2_rgbd.py from https://github.com/Shukashuki/dexpipe at 1e4a810de477bda7f621db553ecd496bb0884f2f",
+      "upstream_sha256": "0df4731dc3cea60ed45b39e00047015137d47b87ff14611b163e295d1aacb9fc",
+      "relationship": "adapted from the deployment RGB-D bridge adapter; see parent SOURCE_MANIFEST.json port record."
+    },
+    {
+      "destination": "sp_vision/adapters/validation.py",
+      "source_reference": "local minimal rigid-transform validation helper; no direct upstream source claimed."
+    },
+    {
+      "destination": "sp_vision/adapters/arm_state.py",
+      "source_reference": "deployment robot-feedback helper lineage; local implementation hash to be recorded after implementation is complete."
+    }
+  ],
+  "final_destinations": {
+    "status": "pending_final_hashes_after_local_edits",
+    "files": []
+  }
+}

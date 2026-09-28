@@ -1,0 +1,23 @@
+# Python build and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+*.egg-info/
+
+# Local camera and robot configuration
+sp_vision/configs/head_config.json
+sp_vision/configs/wrist_config.json
+sp_vision/configs/robot_profile.json
+sp_vision/local-*.json
+
+# Captures, fitted data, reports and local credentials
+data/
+*.bag
+*.mcap
+.env
+.venv/
+venv/

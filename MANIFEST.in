@@ -1,0 +1,15 @@
+include LICENSE README.md README.zh-CN.md CHANGELOG.md CHANGELOG.zh-CN.md
+include CONTRIBUTORS.md CONTRIBUTORS.zh-CN.md AGENTS.md AGENTS.zh-CN.md
+include SOURCE_MANIFEST.json requirements.txt
+recursive-include sp_vision *.py *.md
+recursive-include sp_vision/configs *.example.json *.urdf *.xml
+recursive-include docs *.md
+recursive-include specs *.md
+recursive-include scripts *.py
+recursive-include .github *.yml
+exclude sp_vision/configs/head_config.json
+exclude sp_vision/configs/wrist_config.json
+exclude sp_vision/configs/robot_profile.json
+prune build
+prune dist
+prune .venv

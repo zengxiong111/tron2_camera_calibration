@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tron2-camera-calibration"
+version = "0.1.0"
+description = "Offline head and wrist camera calibration tools for TRON2"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Jerry Lo" }]
+dependencies = [
+  "numpy>=1.24,<3",
+  "scipy>=1.10,<2",
+  "opencv-contrib-python>=4.8,<5",
+]
+
+[project.optional-dependencies]
+live = ["websockets>=12,<17"]
+test = ["pytest>=7"]
+
+[project.scripts]
+sp-vision-head = "sp_vision.calibration:main"
+sp-vision-wrist = "sp_vision.calibration_wrist:main"
+sp-vision-capture = "sp_vision.capture_ros2_image:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["sp_vision*"]
+exclude = ["sp_vision.test_*"]
+
+[tool.setuptools.package-data]
+sp_vision = ["configs/*.json", "configs/*.urdf", "configs/*.xml", "*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["sp_vision"]
+python_files = ["test_*.py"]

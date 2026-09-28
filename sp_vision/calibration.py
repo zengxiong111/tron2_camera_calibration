@@ -559,17 +559,25 @@ def check_frame_sync(frame, config) -> None:
 
 def _import_capture_dependencies():
     try:
-        from tron2_deployment.config import rigid
-        from tron2_deployment.rgbd import (
-            Tron2HighRgbdCapture,
-            Tron2HighRgbdConfig,
-            Tron2RosHighRgbdCapture,
-        )
+        if __package__:
+            from .adapters.validation import rigid
+            from .adapters.rgbd import (
+                Tron2HighRgbdCapture,
+                Tron2HighRgbdConfig,
+                Tron2RosHighRgbdCapture,
+            )
+        else:
+            from adapters.validation import rigid
+            from adapters.rgbd import (
+                Tron2HighRgbdCapture,
+                Tron2HighRgbdConfig,
+                Tron2RosHighRgbdCapture,
+            )
     except ImportError as error:
         raise RuntimeError(
-            "head capture requires the configured camera adapter; offline "
-            "calibration commands do not require tron2_deployment. Install the "
-            "adapter in the runtime environment or provide pre-captured views."
+            "head capture requires the configured camera backend dependencies; "
+            "offline calibration commands do not require ROS or websockets. "
+            "Install the optional backend dependencies or provide pre-captured views."
         ) from error
     return rigid, Tron2HighRgbdCapture, Tron2HighRgbdConfig, Tron2RosHighRgbdCapture
 
@@ -1364,41 +1372,41 @@ def build_parser():
 
     capture = commands.add_parser("capture", help="capture accepted moving-head checkerboard samples")
     add_board_arguments(capture)
-    capture.add_argument("--session", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_session")
+    capture.add_argument("--session", type=Path, default=Path.cwd() / "data" / "head_camera_session")
     capture.add_argument("--count", type=int, default=40, help="views to capture in this run")
     capture.add_argument("--append", action="store_true", help="append views instead of replacing the session's views")
 
     intrinsics = commands.add_parser("intrinsics", help="fit camera intrinsics")
     add_board_arguments(intrinsics)
-    intrinsics.add_argument("--session", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_session")
-    intrinsics.add_argument("--output", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_session" / "head_intrinsics.json")
+    intrinsics.add_argument("--session", type=Path, default=Path.cwd() / "data" / "head_camera_session")
+    intrinsics.add_argument("--output", type=Path, default=Path.cwd() / "data" / "head_camera_session" / "head_intrinsics.json")
 
     extrinsics = commands.add_parser("extrinsics", help="fit camera-to-pitch transform")
     add_board_arguments(extrinsics)
-    extrinsics.add_argument("--session", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_session")
-    extrinsics.add_argument("--intrinsics", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_session" / "head_intrinsics.json")
-    extrinsics.add_argument("--output", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_session" / "head_extrinsics.json")
+    extrinsics.add_argument("--session", type=Path, default=Path.cwd() / "data" / "head_camera_session")
+    extrinsics.add_argument("--intrinsics", type=Path, default=Path.cwd() / "data" / "head_camera_session" / "head_intrinsics.json")
+    extrinsics.add_argument("--output", type=Path, default=Path.cwd() / "data" / "head_camera_session" / "head_extrinsics.json")
 
     pivot = commands.add_parser("pivot", help="fit TCP tip from repeated fixed-point touches")
     pivot.add_argument("--side", choices=("left", "right"), required=True)
     pivot.add_argument("--states", required=True, nargs="+", type=Path)
-    pivot.add_argument("--output", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_session" / "tcp" / "tcp_pivot.json")
+    pivot.add_argument("--output", type=Path, default=Path.cwd() / "data" / "head_camera_session" / "tcp" / "tcp_pivot.json")
 
     selection = commands.add_parser("select-validation", help="select three checkerboard touch points")
     add_board_arguments(selection)
     selection.add_argument("--frame", required=True, type=Path)
-    selection.add_argument("--intrinsics", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_session" / "head_intrinsics.json")
-    selection.add_argument("--extrinsics", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_session" / "head_extrinsics.json")
+    selection.add_argument("--intrinsics", type=Path, default=Path.cwd() / "data" / "head_camera_session" / "head_intrinsics.json")
+    selection.add_argument("--extrinsics", type=Path, default=Path.cwd() / "data" / "head_camera_session" / "head_extrinsics.json")
     selection.add_argument("--corner", action="append", type=parse_corner, help="ROW,COLUMN; repeat exactly 3 times")
     selection.add_argument("--reuse-selection", type=Path, help="reuse ordered corners from an earlier touch selection")
-    selection.add_argument("--output", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_validation" / "head_selection.json")
+    selection.add_argument("--output", type=Path, default=Path.cwd() / "data" / "head_camera_validation" / "head_selection.json")
 
     validate = commands.add_parser("validate", help="compare predicted corners with touched TCP points")
-    validate.add_argument("--selection", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_validation" / "head_selection.json")
+    validate.add_argument("--selection", type=Path, default=Path.cwd() / "data" / "head_camera_validation" / "head_selection.json")
     validate.add_argument("--side", choices=("left", "right"), required=True)
     validate.add_argument("--states", required=True, nargs=3, type=Path)
     validate.add_argument("--tcp", type=Path, help="passed pivot JSON; otherwise use config value")
-    validate.add_argument("--output", type=Path, default=Path(__file__).resolve().parent / "data" / "head_camera_validation" / "head_validation.json")
+    validate.add_argument("--output", type=Path, default=Path.cwd() / "data" / "head_camera_validation" / "head_validation.json")
     return parser
 
 

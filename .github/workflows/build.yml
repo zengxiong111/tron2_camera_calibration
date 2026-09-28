@@ -1,0 +1,47 @@
+name: Build package
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade build
+      - run: python -m pip install -e '.[test]'
+      - run: python -m pytest -q
+      - run: python -m build
+      - name: Check wheel includes solver assets
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+
+          wheel = next(Path("dist").glob("*.whl"))
+          with ZipFile(wheel) as archive:
+              names = set(archive.namelist())
+          expected = {
+              "sp_vision/configs/assembly.urdf",
+              "sp_vision/configs/scene.xml",
+              "sp_vision/configs/head_config.example.json",
+              "sp_vision/configs/wrist_config.example.json",
+          }
+          missing = expected - names
+          if missing:
+              raise SystemExit(f"wheel is missing required assets: {sorted(missing)}")
+          PY
+      - name: Install wheel in clean environment and smoke-test commands
+        run: |
+          python -m venv /tmp/tron2-camera-calibration-venv
+          /tmp/tron2-camera-calibration-venv/bin/python -m pip install dist/*.whl
+          cd /tmp
+          /tmp/tron2-camera-calibration-venv/bin/sp-vision-head --help
+          /tmp/tron2-camera-calibration-venv/bin/sp-vision-wrist --help
+          /tmp/tron2-camera-calibration-venv/bin/sp-vision-capture --help
