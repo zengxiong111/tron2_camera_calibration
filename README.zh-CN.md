@@ -6,9 +6,11 @@
 
 ## 安装
 
-需要 Python 3.10 或更新版本。从源码目录安装：
+需要 Python 3.10 或更新版本。克隆仓库，进入根目录后安装：
 
 ```bash
+git clone https://github.com/zengxiong111/tron2_camera_calibration.git
+cd tron2_camera_calibration
 python -m pip install .
 ```
 
@@ -25,7 +27,7 @@ python -m pytest -q
 
 ## 命令
 
-安装后提供三个无需参数的命令入口；传入 `--help` 可查看各自帮助：
+安装后提供三个 CLI；传入 `--help` 可查看子命令和参数：
 
 ```bash
 sp-vision-head --help
@@ -43,6 +45,18 @@ python sp_vision/capture_ros2_image.py --help
 
 打包的示例配置和模型快照位于 `sp_vision/configs/`。使用前应把对应的 `*.example.json` 复制为本地 JSON，再填入本机相机主机、话题或配置路径。Git 和 wheel 包均不包含本机配置及标定会话；请将录像、拟合结果和报告放到可写工作目录，例如 `data/`。
 
+## 文档导航
+
+| 文档 | 用途 |
+|---|---|
+| [头部相机标定](sp_vision/head_calib.zh-CN.md) | 配置、采集、内外参求解及触点验证 |
+| [右腕相机标定](sp_vision/wrist_calib.zh-CN.md) | 关节映射核对、腕部采集及相机到腕部外参验证 |
+| [贡献者](CONTRIBUTORS.zh-CN.md) | 项目贡献者与版权归属 |
+| [更新记录](CHANGELOG.zh-CN.md) | 版本历史和兼容说明 |
+| [来源清单](SOURCE_MANIFEST.json) | 源提交、原始及修改后文件哈希、模型资产范围 |
+
+标定指南的脚本示例从 `sp_vision/` 目录运行。触点验证所需的状态 JSON 使用控制器实测反馈，由外部记录工具保存。仓库不分发标定数据集或历史拟合结果。
+
 ## 工作流与证据范围
 
 - **离线标定**读取保存的图像、关节状态记录、JSON 设置和随包运动学模型。它可拟合相机内参、外参、固定点 TCP，并执行几何一致性检查；不会打开相机、连接 ROS 或控制机器人。
@@ -55,6 +69,5 @@ python sp_vision/capture_ros2_image.py --help
 ## 许可证
 
 贡献者：[AcSg999](https://github.com/AcSg999)、[Shukashuki](https://github.com/Shukashuki)。来源署名见[贡献者说明](CONTRIBUTORS.zh-CN.md)。
-
 
 MIT。原始版权声明保留在 [LICENSE](LICENSE) 中。

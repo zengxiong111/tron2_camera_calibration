@@ -6,9 +6,11 @@ Standalone Python tools for offline calibration of the TRON2 moving head color c
 
 ## Install
 
-Python 3.10 or newer is required. Install from a checkout:
+Python 3.10 or newer is required. Clone the repository, enter its root and install:
 
 ```bash
+git clone https://github.com/zengxiong111/tron2_camera_calibration.git
+cd tron2_camera_calibration
 python -m pip install .
 ```
 
@@ -25,7 +27,7 @@ The offline solvers need NumPy, SciPy and OpenCV's contrib modules. Head-camera 
 
 ## Commands
 
-The install provides three no-argument command entrypoints; each opens its own help when passed `--help`:
+The install provides three command-line entrypoints. Pass `--help` to inspect their subcommands and options:
 
 ```bash
 sp-vision-head --help
@@ -43,6 +45,18 @@ python sp_vision/capture_ros2_image.py --help
 
 Packaged example configurations and model snapshots are under `sp_vision/configs/`. Copy the relevant `*.example.json` to a local JSON file before adding machine-specific camera host, topic or profile settings. Local profiles and calibration sessions are intentionally excluded from Git and wheel distributions; store recordings, fitted results and reports under a writable working directory such as `data/`.
 
+## Documentation
+
+| Document | Purpose |
+|---|---|
+| [Head calibration](sp_vision/head_calib.md) | Prepare configuration, capture views, solve intrinsics/extrinsics and validate touch points |
+| [Right wrist calibration](sp_vision/wrist_calib.md) | Verify state mapping, capture wrist views and validate the camera-to-wrist transform |
+| [Contributors](CONTRIBUTORS.md) | Project contributors and copyright attribution |
+| [Changelog](CHANGELOG.md) | Version history and compatibility notes |
+| [Source manifest](SOURCE_MANIFEST.json) | Source commits, original and edited file hashes, model asset scope |
+
+Calibration guides run script examples from `sp_vision/`. They describe the state JSON inputs required for touch validation; measured controller feedback must be recorded externally. No calibration datasets or previous fit results are distributed here.
+
 ## Workflows and evidence limits
 
 - **Offline calibration** reads saved images, joint-state records, JSON settings and the bundled kinematic models. It performs camera intrinsics/extrinsics, fixed-point TCP fitting and geometric checks without opening a camera, contacting ROS, or commanding a robot.
@@ -55,6 +69,5 @@ See [head calibration](sp_vision/head_calib.md) and [right wrist calibration](sp
 ## License
 
 Contributors: [AcSg999](https://github.com/AcSg999) and [Shukashuki](https://github.com/Shukashuki). See [CONTRIBUTORS.md](CONTRIBUTORS.md) for source attribution.
-
 
 MIT. The original copyright notice is retained in [LICENSE](LICENSE).

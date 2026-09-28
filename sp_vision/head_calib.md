@@ -1,14 +1,10 @@
-# Minimal Head-Camera Calibration Experiment
-
-The `tron2-deploy state` commands below are optional examples for installations that already have the separate deployment package; this calibration package does not install that command. You can instead supply state JSON from your own read-only controller logger with fourteen finite `arm_q14` values in the configured left-then-right joint order. Use measured feedback, not target commands. Run script examples from `sp_vision/` after installing the repository.
+# Head camera calibration
 
 [简体中文](head_calib.zh-CN.md)
 
-Controller payload identification (`m`, `mc_x`, `mc_y`, `mc_z`) is not used by this image, joint-angle, and FK calibration. It does not belong in this experiment's JSON or the URDF camera transform. If drag teaching is used to position the robot, configure the current payload separately in the robot controller and confirm its readback before that operation.
+From the repository root, run `cd sp_vision`, then run the script examples after installing the repository as described in the [README](../README.md). Configuration paths resolve relative to their JSON file; data and results resolve relative to the current working directory. The commands read sensors or solve offline and do not move the robot.
 
 ## ROS 2 one-frame camera diagnostic
-
-This directory is a standalone calibration unit. Run commands from `sp_vision/`; all default configs, model assets, data, diagnostics, and result JSON files stay in this directory. The bundled `configs/assembly.urdf` and `configs/scene.xml` are the model snapshots used by the offline solver. Hardware adapters are optional and are only needed for live capture.
 
 The `sp-vision-capture` diagnostic reads one color image from a ROS 2 Foxy host over SSH. It is separate from the main head calibration, whose default RGB-D backend subscribes locally through ROS 1 Noetic. The right wrist calibration also uses its own ROS 2 image and joint-state acquisition path. Do not use this single-image diagnostic as a head calibration frame because it does not save depth or synchronized head state. To check a ROS 2 stream:
 
@@ -27,11 +23,9 @@ The head workflow implements:
 
 The program does not command the head, arms, hands, or grippers. Perform motion manually through the robot's existing reviewed interface. Inputs and outputs use JSON, not YAML.
 
-The installed head camera is an **Intel RealSense D455**, and this workflow calibrates its color optical frame. The `d435i_visual_m.obj` filename in the assembled model is a visualization-asset name; it does not change the physical camera identification or the calibrated frame.
+## Model snapshots and frame convention
 
-## Final model and frame convention
-
-The final dexterous-hand models are authoritative:
+The bundled model snapshots define the kinematic chains:
 
 - `configs/assembly.urdf` supplies kinematics;
 - `configs/scene.xml` cross-checks the same head_camera chain;
@@ -56,18 +50,18 @@ Every extrinsic solve checks the relevant transforms from `configs/assembly.urdf
 
 ## Checkerboard and dependencies
 
-The current board has 7×10 **inner corners** and `0.021 m` squares, meaning 8×11 printed squares. Use a flat physical board with a white outer border.
+The example config specifies 7×10 **inner corners** and `0.021 m` squares, meaning 8×11 printed squares. Use a flat physical board with a white outer border.
 
-As in the earlier workflow, board geometry can be supplied directly as `--pattern COLSxROWS --square-m METRES`. Command-line values override JSON, and the program rejects disagreement between intrinsic, extrinsic, and validation stages.
+Board geometry can be supplied directly as `--pattern COLSxROWS --square-m METRES`. Command-line values override JSON, and the program rejects disagreement between intrinsic, extrinsic, and validation stages.
 
 ```bash
 cp configs/head_config.example.json configs/head_config.json
-python -m pip install -e ..
+cp configs/robot_profile.example.json configs/robot_profile.json
 ```
 
 If the profile selects the WebSocket bridge backend instead of ROS Noetic, install its optional Python dependency from this directory with `python -m pip install -e '..[live]'`.
 
-The example config references the bundled `configs/assembly.urdf`, `configs/scene.xml`, and `configs/robot_profile.example.json`. Relative paths are resolved from the config JSON.
+Keep the local config beside the example so `assembly.urdf` and `scene.xml` resolve correctly. For live capture, set `capture.profile` in `head_config.json` to `robot_profile.json` and fill its camera intrinsics, distortion, depth intrinsics, depth-to-color transform and selected ROS/bridge connection settings. Example placeholders and null fields are not a runnable camera profile. Offline solving of previously recorded views does not need a live camera profile. The XML is used for kinematic cross-checks; referenced meshes are not included.
 
 ## 1. Capture 40 views
 
@@ -91,7 +85,7 @@ Keys are:
 
 Detection uses `findChessboardCornersSB` with `NORMALIZE_IMAGE`, `EXHAUSTIVE`, and `ACCURACY`. It must find all 70 subpixel corners and pass topology, coverage, border, and synchronization checks. Colored row overlays are saved as `corners.png` for review.
 
-Move through combinations spanning positive and negative yaw and pitch, and wait for the head to stop before each save. Cover distinct board positions, tilts, and apparent sizes; extra nearly identical frames do little to improve the fit. With 40 accepted views, the final six diverse frames are held out and the preceding 34 are fitted, subject to quality rejection.
+Move through combinations spanning positive and negative yaw and pitch, and wait for the head to stop before each save. Cover distinct board positions, tilts, and apparent sizes; extra nearly identical frames do little to improve the fit. With the example settings and 40 accepted views, the last six frames are held out and the preceding 34 are fitted, subject to quality rejection. Collect distinct poses for the holdout frames as well.
 
 ## 2. Solve intrinsics
 
@@ -138,20 +132,11 @@ Task yaw and pitch therefore need not match a calibration pose; use the live joi
 
 Use a sharp point rigidly fixed relative to the wrist. With a dexterous hand, prefer a rigid probe. A fingertip is valid only if every finger joint remains fixed throughout pivot fitting and validation, because state JSON does not contain finger joints.
 
-Touch one fixed point at four clearly different wrist orientations and read state after each settles:
+Touch one fixed point at four clearly different right-wrist orientations and save measured state after each settles to `data/tcp/pose-01.json` through `pose-04.json`. Each state JSON must contain `arm_q14`: fourteen finite measured joint angles in radians, ordered by the configured left-arm joint list followed by the right-arm list. Record them with your controller's read-only feedback logger; this package has no general state-recording CLI. Keep the same right-arm probe for the pivot and validation examples below.
 
 ```bash
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/tcp/pose-01.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/tcp/pose-02.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/tcp/pose-03.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/tcp/pose-04.json
-
 python calibration.py \
-  --config configs/head_config.json pivot --side left \
+  --config configs/head_config.json pivot --side right \
   --states data/tcp/pose-{01,02,03,04}.json \
   --output data/head_camera_session/tcp/head_tcp_pivot.json
 ```
@@ -182,16 +167,9 @@ python calibration.py \
   --output data/head_camera_validation/head_selection.json
 ```
 
-Inspect `selection.png`. Keep the board fixed, touch labeled points 1, 2, and 3 in order, and read state in the same order. The head may move after imaging: prediction uses the image-synchronized `head_q2`, while later head motion is recorded only as a diagnostic and does not affect the error gate.
+Inspect `head_selection.png`. Keep the board fixed, touch labeled points 1, 2, and 3 in order, and save measured `arm_q14` state in the same order to `data/touch-validation/state-01.json` through `state-03.json`. The head may move after imaging: prediction uses the image-synchronized `head_q2`, while later head motion is recorded only as a diagnostic and does not affect the error gate.
 
 ```bash
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/touch-validation/state-01.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/touch-validation/state-02.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/touch-validation/state-03.json
-
 python calibration.py \
   --config configs/head_config.json validate \
   --selection data/head_camera_validation/head_selection.json \
@@ -256,4 +234,4 @@ This checks 7×10 SB detection, hand-eye transform direction, final-model FK, ya
 - `joint/image header skew exceeded`: wait for the head to settle and reacquire.
 - `insufficient head excitation`: add combined poses spanning both yaw and pitch directions.
 - URDF/XML consistency failure: fix the final model rather than compensating with an old transform.
-- Large touch error with low reprojection error: inspect TCP calibration, finger posture, board motion, touch order, and head motion after imaging.
+- Large touch error with low reprojection error: inspect TCP calibration, finger posture, board motion, touch order, and image/state synchronization.

@@ -1,12 +1,8 @@
-# 头部相机最小标定实验
-
-以下 `tron2-deploy state` 命令是已有独立部署包时的可选示例，本标定包不提供该命令。也可使用自己的只读控制器记录工具提供状态 JSON，其中 `arm_q14` 为按配置左臂再右臂顺序排列的十四个有限关节角。必须使用测量反馈，不能用目标指令代替。安装本仓库后，脚本示例均从 `sp_vision/` 目录运行。
+# 头部相机标定
 
 [English](head_calib.md)
 
-[腕部相机最小标定](wrist_calib.zh-CN.md)
-
-控制器负载辨识值（`m`、`mc_x`、`mc_y`、`mc_z`）不参与本实验的图像、关节角和 FK 标定，不应填入本实验 JSON 或 URDF 相机变换。若使用拖动示教调整机器人姿态，应在该操作前单独为控制器设置当前负载并回读确认。
+按 [README](../README.zh-CN.md) 安装后，先从仓库根目录执行 `cd sp_vision`，再运行以下脚本示例。配置中的相对路径以 JSON 所在目录为基准，数据及结果路径以当前工作目录为基准。命令只读取传感器或执行离线求解，不驱动机器人。
 
 ## ROS 2 相机单帧诊断
 
@@ -18,8 +14,6 @@ python capture_ros2_image.py
 
 脚本通过 SSH 使用传感器数据 QoS 订阅 `sensor_msgs/msg/CompressedImage`，保存到 `data/right-camera-latest.jpg`。加 `--camera top` 可读取对应的头部彩色话题 `/camera/top/color/image_raw/compressed`。两种方式都只读取图像；单帧快照不包含深度或关节状态，也不是经过标定的观测结果。
 
-本目录本身就是一个可复制的独立标定单元。命令默认使用本目录下的配置、`configs/assembly.urdf`、`configs/scene.xml` 和 `configs/robot_profile.example.json`；数据、诊断图和结果统一写入本目录的 `data/`。离线求解不依赖 `tron2_deployment`，只有实时采集才需要可选的相机适配器。
-
 头部工作流负责标定：
 
 1. 头部彩色相机内参；
@@ -28,18 +22,16 @@ python capture_ros2_image.py
 
 采集时固定棋盘格并移动头部的 yaw、pitch。程序不控制头部、机械臂、灵巧手或夹爪；所有运动都通过机器人已有且经过审核的界面人工完成。代码和生成配置均使用 JSON，不使用 YAML。
 
-实机头部相机为 **Intel RealSense D455**，本流程标定它的彩色光学坐标系。总装模型中的文件名 `d435i_visual_m.obj` 只是可视化资产名称，不改变实物相机型号或被标定的坐标系。
+## 模型快照与坐标约定
 
-## 最终模型与坐标约定
-
-本实验以仓库中的最终带灵巧手模型为准：
+以下随包模型快照定义标定的运动学链：
 
 - `configs/assembly.urdf`：运动学真值；
-- `configs/scene.xml`：MuJoCo 场景真值及交叉检查；
+- `configs/scene.xml`：运动学链交叉检查；未随包提供引用的 mesh；
 - `head_camera_color_optical_frame`：被标定的彩色光学坐标系，OpenCV 约定为 +x 向右、+y 向下、+z 向前；
 - `head_pitch_Link`：与相机最近的可动 pitch 轴坐标系。
 
-模型中还保留了一个直接挂在 `base_Link` 下的旧 `d435_Link`。本实验明确忽略它，只使用 `head_pitch_Link` 下的 `head_camera_color_optical_frame`。求解外参时，URDF 中的相机固定变换仅作为名义值对照，不作为求解约束。
+模型中还保留了一个直接挂在 `base_Link` 下的旧 `d435_Link`。本流程明确忽略它，只使用 `head_pitch_Link` 下的 `head_camera_color_optical_frame`。求解外参时，URDF 中的相机固定变换仅作为名义值对照，不作为求解约束。
 
 所有矩阵采用 `T_A_B` 表示“把 B 坐标转换到 A 坐标”。头部完整链为：
 
@@ -57,24 +49,24 @@ yaw→pitch 的固定偏移是 `[0.051, 0.03, 0.097] m`。因此 yaw 旋转会�
 
 ## 棋盘格与依赖
 
-当前实体板为横向 7、纵向 10 个**内角点**，方格边长 `0.021 m`。即印刷图案应有 8×11 个方格，并在四周留至少约一个方格宽的白边。修改标定板后必须同步修改 JSON 中的三个参数。
+示例配置的棋盘为横向 7、纵向 10 个**内角点**，方格边长 `0.021 m`。即印刷图案应有 8×11 个方格，并在四周留至少约一个方格宽的白边。修改标定板后必须同步修改 JSON 中的三个参数。
 
 棋盘参数也可以直接写在命令中：`--pattern` 始终表示“列数×行数”的内角点，`--square-m` 表示实测方格边长（米）。命令行值优先于 JSON；内参、外参和验证参数不一致时程序会拒绝继续。
 
-从 `sp_vision/` 目录准备实验配置：
+从 `sp_vision/` 目录准备本地配置：
 
 ```bash
 cp configs/head_config.example.json configs/head_config.json
-python -m pip install -e ..
+cp configs/robot_profile.example.json configs/robot_profile.json
 ```
 
 若本机配置选择 WebSocket 桥接后端而非 ROS Noetic，请在此目录运行 `python -m pip install -e '..[live]'` 安装该可选 Python 依赖。
 
-检查 `head_config.json` 中的路径。默认已经指向本目录内的：
+将本地配置保留在示例旁边，使模型相对路径正确解析。实时采集前，将 `head_config.json` 的 `capture.profile` 改为 `robot_profile.json`，并填写该 profile 的相机内参、畸变、深度内参、深度到彩色变换和所选 ROS/bridge 连接参数。示例中的占位符和 null 不能直接用于采集。离线处理已有图像无需连接相机。路径示例：
 
 ```json
 {
-  "capture": {"profile": "robot_profile.example.json"},
+  "capture": {"profile": "robot_profile.json"},
   "robot": {
     "urdf": "assembly.urdf",
     "model_xml": "scene.xml",
@@ -108,7 +100,7 @@ python calibration.py \
 - `f`：将角点顺序旋转 180°；当 `(0,0)` 没有落在与其他视角相同的实体角点时使用；
 - `q` 或 Esc：退出。
 
-预览使用与附图相同的彩色逐行连线，并标出四角的 `(row,column)`。每帧保存为：
+预览使用彩色逐行连线，并标出四角的 `(row,column)`。每帧保存为：
 
 ```text
 data/head_camera_session/
@@ -119,7 +111,7 @@ data/head_camera_session/
   ...
 ```
 
-保持棋盘不动，通过已有控制界面改变头部。采样应同时覆盖 yaw 和 pitch 的正负方向、不同组合，并在每次保存前等待头部完全停止。尽量覆盖不同的棋盘画面位置、倾角和成像大小；新增大量近乎相同的画面帮助很小。采满 40 张且通过质量检查时，默认将最后 6 张不同姿态的图像留作验证，其余 34 张参与拟合；质量剔除可能减少实际拟合张数。
+保持棋盘不动，通过已有控制界面改变头部。采样应同时覆盖 yaw 和 pitch 的正负方向、不同组合，并在每次保存前等待头部完全停止。尽量覆盖不同的棋盘画面位置、倾角和成像大小；新增大量近乎相同的画面帮助很小。采满 40 张且通过质量检查时，默认将最后 6 张图像留作验证；采集时应使这些视角也有充分差异，其余 34 张参与拟合；质量剔除可能减少实际拟合张数。
 
 检测器使用：
 
@@ -208,24 +200,13 @@ T_base_camera(q_yaw, q_pitch)
 
 最终验证需要一个相对腕部刚性不动、能重复接触内角点的尖端。带灵巧手时建议安装刚性探针；也可以使用固定姿态的指尖，但整个 TCP 标定和验证期间所有手指关节必须保持完全相同。当前状态文件只记录 `arm_q14` 和头部关节，不记录手指关节，因此手指一旦移动，验证立即失效。
 
-用同一个尖端抵住同一个固定点，改变至少四种明显不同的腕部朝向，每次稳定后只读取状态：
-
-```bash
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/tcp/pose-01.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/tcp/pose-02.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/tcp/pose-03.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/tcp/pose-04.json
-```
+用同一个右臂尖端抵住同一个固定点，改变至少四种明显不同的腕部朝向。每次稳定后，通过控制器的只读反馈记录工具保存 `data/tcp/pose-01.json` 至 `pose-04.json`。每份 JSON 必须包含 `arm_q14`：按配置左臂再右臂顺序排列的十四个有限实测关节角，单位 rad。本包不提供通用状态记录 CLI。下方 TCP 拟合与验证均使用同一右臂探针。
 
 离线拟合腕部坐标中的尖端位置：
 
 ```bash
 python calibration.py \
-  --config configs/head_config.json pivot --side right\
+  --config configs/head_config.json pivot --side right \
   --states data/tcp/pose-{01,02,03,04}.json \
   --output data/head_camera_session/tcp/head_tcp_pivot.json
 ```
@@ -252,19 +233,11 @@ python calibration.py \
   --frame data/touch-validation/view-001 \
   --intrinsics data/head_camera_session/head_intrinsics.json \
   --extrinsics data/head_camera_session/head_extrinsics.json \
+  --corner 0,0 --corner 0,6 --corner 9,3 \
   --output data/head_camera_validation/head_selection.json
 ```
---corner 0,0 --corner 0,6 --corner 9,3 \
-先打开 `selection.png`，确认编号 1、2、3 与将要触碰的实体角点完全一致。保持棋盘和头部不动，通过机器人已有的受审核控制界面，让同一个已标定尖端依次接触 1、2、3，并按同一顺序读取状态：
 
-```bash
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/touch-validation/state-01.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/touch-validation/state-02.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/touch-validation/state-03.json
-```
+先打开 `head_selection.png`，确认编号 1、2、3 与将要触碰的实体角点完全一致。保持棋盘不动，通过机器人已有的受审核控制界面，让同一个已标定尖端依次接触 1、2、3，并按同一顺序保存实测 `arm_q14` 至 `data/touch-validation/state-01.json` 至 `state-03.json`。预测使用拍照时同步保存的头姿；拍照后的头部运动仅作为诊断记录。
 
 程序不会发送任何运动命令。现场必须有人监护，使用低速和可重复定位的尖端，避免碰撞或推动棋盘。
 
@@ -297,7 +270,6 @@ p_base_touch
 ```
 
 最终比较的是两者在 `base_Link` 下的三维欧氏距离，不比较关节角。同一个空间点可能对应多组关节角，因此用关节角作为误差指标不成立。`head_validation.json` 给出三点各自误差、平均误差和最大误差；默认最大允许误差为 10 mm，必须根据 TCP 重复性、棋盘固定误差和实际任务间隙预算重新确定。
-**head_validation.json中有predicted的xyz和actual xyz，如果要补偿可以在这里取平均**
 
 ## 换一个头姿复核之前的触点
 
@@ -343,4 +315,4 @@ python -m pytest -q test_calibration.py
 - `joint/image header skew exceeded`：该帧不是严格同步样本，重新等待头部稳定后采集。
 - `insufficient head excitation`：yaw 或 pitch 覆盖不足，补采两个方向的组合姿态。
 - URDF/XML 一致性失败：最终模型的关节轴、偏移或相机链已变化，先修复模型，不能用旧外参补偿。
-- 触点误差大但重投影误差小：检查 TCP、手指姿态、棋盘是否被碰动、触点顺序及头部是否在拍照后移动。
+- 触点误差大但重投影误差小：检查 TCP、手指姿态、棋盘是否被碰动、触点顺序及图像/关节状态同步。

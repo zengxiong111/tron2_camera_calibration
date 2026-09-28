@@ -1,12 +1,10 @@
-# 左/右腕相机标定
+# 右腕相机标定
 
-以下 `tron2-deploy state` 命令是已有独立部署包时的可选示例，本标定包不提供该命令。也可使用自己的只读控制器记录工具提供状态 JSON，其中 `arm_q14` 为按配置左臂再右臂顺序排列的十四个有限关节角。必须使用测量反馈，不能用目标指令代替。安装本仓库后，脚本示例均从 `sp_vision/` 目录运行。
+[English](wrist_calib.md)
 
-[English](README_wrist.md)
+按 [README](../README.zh-CN.md) 安装后，先从仓库根目录执行 `cd sp_vision`，再运行以下脚本示例。配置中的相对路径以 JSON 所在目录为基准，数据及结果路径以当前工作目录为基准。命令只读取传感器或执行离线求解，不驱动机器人。
 
-这是右手腕彩色相机的独立只读实验。从本目录运行命令，图像和结果保存于 `data/wrist_camera_session/`；该目录不会进入 Git。模型文件随本目录提供，离线标定不再依赖外部仓库。程序不驱动机器人。
-
-控制器负载辨识值不参与这项几何标定。若用拖动示教调整手臂，应单独在控制器中设置并回读当前负载，不要将这些值写入相机配置。
+这是右手腕彩色相机的独立只读流程。从本目录运行命令，图像和结果保存于 `data/wrist_camera_session/`；该目录不会进入 Git。模型文件随本目录提供，离线标定不再依赖外部仓库。程序不驱动机器人。
 
 ## 坐标系与几何关系
 
@@ -21,7 +19,7 @@ T_wrist_pitch_camera(q_roll)
 
 `T_base_wrist_roll` 需要右臂七个实测关节角；头部与左臂关节角不在这条 FK 链上。采集仍按名称保存双臂全部 14 个角，供审计及后续触点验证使用。
 
-相机内参不取决于可动关节数量，但必须针对当前 **640×480 的腕部缩放图像** 单独标定。当前 ROS 2 `CameraInfo` 报告的是原始流的 848×480，不能直接原样用于缩放话题。
+内参必须针对所选彩色话题实际输出的图像尺寸标定。缩放后的图像需要对应分辨率的内参，不能不经缩放处理就复用原始流的 `CameraInfo`。标定期间保持图像尺寸不变。
 
 ## 准备配置并核对关节映射
 
@@ -29,11 +27,13 @@ T_wrist_pitch_camera(q_roll)
 cp configs/wrist_config.example.json configs/wrist_config.json
 ```
 
-相机和 `/joint_states` 位于 `guest@10.192.1.4` 的 ROS 2 Foxy 环境。脚本通过 SSH 连接，仅接收时间戳相差不超过 100 ms 的新图像与关节状态。ROS 2 的前四个关节名是 `abad`、`hip`、`yaw`、`knee`，URDF 对应位置写作 `proximal_pitch`、`proximal_roll`、`proximal_yaw`、`elbow`。配置中的名称列表把它们排成**头部触点验证读取的控制器 `arm_q14` 的同一 14 维顺序**：名称不同，向量顺序并未改变。采集同时保存 ROS 2 原始名称和值、以及排好顺序的向量。FK 的实物精度仍需用留出集棋盘图像和独立触碰检查。
+根据自己的 ROS 2 环境设置 `capture.host`、`ros_setup`、`ros_domain_id`、`color_topic` 和 `joint_topic`。示例主机及话题属于安装环境默认值，不代表自动发现的设备。脚本通过 SSH 连接，仅接收时间戳相差不超过 100 ms 的新图像与关节状态。ROS 2 的前四个关节名是 `abad`、`hip`、`yaw`、`knee`，URDF 对应位置写作 `proximal_pitch`、`proximal_roll`、`proximal_yaw`、`elbow`。配置中的名称列表把它们排成**头部触点验证读取的控制器 `arm_q14` 的同一 14 维顺序**：名称不同，向量顺序并未改变。采集同时保存 ROS 2 原始名称和值、以及排好顺序的向量。FK 的实物精度仍需用留出集棋盘图像和独立触碰检查。
 
 ```bash
 python calibration_wrist.py --config configs/wrist_config.json probe
 ```
+
+若需控制器交叉比较，将 `configs/robot_profile.example.json` 复制为 `configs/robot_profile.json`，填写 `robot.host` 和 `robot.port`，并把 `wrist_config.json` 的 `capture.state_profile` 改为 `robot_profile.json`。该比较需要兼容的外部 `tron2_env` 环境。
 
 `probe` 不要求画面中有棋盘，会把同步图像和带名称的关节 JSON 保存到 `data/wrist_camera_session/`。它还会在拍照前后读取头部验证所用的同一控制器 `arm_q14`；只有手臂保持静止且 ROS 2 映射值逐项相差不超过 0.005 rad，`mapping_check.passed` 才为 `true`。控制器比较失败或不可用，不代表图像获取失败。图像与 ROS 2 关节状态的 `state_skew_ms` 是另一项检查，阈值为 100 ms。
 
@@ -56,18 +56,7 @@ python calibration_wrist.py --config configs/wrist_config.json \
 
 ## 标定右臂触点 TCP
 
-若要重新标定 TCP，用同一支相对右腕刚性不动的尖端抵住同一个固定点，在至少四个明显不同的腕部朝向下读取实测状态。灵巧手指尖只有在所有手指关节始终保持同一姿态时才能作为尖端；状态文件不记录手指关节。每次由已有的受审核界面调整姿态，稳定后运行一次只读状态命令：
-
-```bash
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/wrist_camera_session/tcp/pose-01.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/wrist_camera_session/tcp/pose-02.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/wrist_camera_session/tcp/pose-03.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/wrist_camera_session/tcp/pose-04.json
-```
+若要重新标定 TCP，用同一支相对右腕刚性不动的尖端抵住同一个固定点，在至少四个明显不同的腕部朝向下读取实测状态。灵巧手指尖只有在所有手指关节始终保持同一姿态时才能作为尖端；状态文件不记录手指关节。每次稳定后，通过控制器只读反馈工具保存 `data/wrist_camera_session/tcp/pose-01.json` 至 `pose-04.json`。每份 JSON 必须包含 `arm_q14`：按配置左臂再右臂顺序排列的十四个有限实测关节角，单位 rad。本包不提供通用状态记录 CLI。
 
 腕部程序直接复用头部流程的固定点拟合器，输出 `wrist_roll_R_Link` 中的尖端位置：
 
@@ -77,9 +66,7 @@ python calibration_wrist.py --config configs/wrist_config.json \
   --output data/wrist_camera_session/tcp/wrist_tcp_pivot.json
 ```
 
-要求结果 `passed: true`，并检查 `max_residual_m`、姿态跨度和 `condition_number`。四姿态拟合只确定尖端**位置**，不确定工具朝向。若实体尖端和安装从头部验证时起完全未变，也可跳过重采样，改用已复制的 `data/wrist_camera_session/tcp-pivot-from-head.json`；它的内部拟合通过，但先前头部相机的独立三点验证仍有 13–14 mm 误差，不能视为整条测量链通过。
-
-如果已通过头部流程重新拟合并保存为 `data/head_camera_session/tcp/head_tcp_pivot.json`，无需再采集四姿态；将这份新结果复制到上述腕部 `wrist_tcp_pivot.json` 路径，或在下方验证命令中直接把它作为 `--tcp` 参数。不要误用更早的 `tcp-pivot-from-head.json`。
+要求结果 `passed: true`，并检查 `max_residual_m`、姿态跨度和 `condition_number`。四姿态拟合只确定尖端**位置**，不确定工具朝向。只有右腕坐标系、实体探针及手指姿态完全一致时，才可复用头部流程通过的 TCP 结果，并通过 `--tcp` 显式指定。仓库不分发任何既有标定结果。
 
 ## 独立触碰验证
 
@@ -94,18 +81,11 @@ python calibration_wrist.py --config configs/wrist_config.json \
   --output data/wrist_camera_validation/wrist_selection.json
 ```
 
-这条 `capture --count 1` 每次完整保存后都会用新的 `view-001` 覆盖旧验证图像；按 `q` 退出则保留旧图。重拍后必须重新运行 `select-validation`，使 `wrist_selection.json` 和 `selection.png` 对应新图；旧触点状态是否还能使用，取决于棋盘和实体角点是否保持不动。
+这条 `capture --count 1` 每次完整保存后都会用新的 `view-001` 覆盖旧验证图像；按 `q` 退出则保留旧图。重拍后必须重新运行 `select-validation`，使 `wrist_selection.json` 和 `wrist_selection.png` 对应新图；旧触点状态是否还能使用，取决于棋盘和实体角点是否保持不动。
 
-先检查 `data/wrist_camera_validation/wrist_selection.png` 的编号是否对应将要触碰的实体角点。保持棋盘固定，用与 TCP 拟合时相同的尖端和手指姿态，按编号 1、2、3 触碰；每次稳定后读取一次状态：
+先检查 `data/wrist_camera_validation/wrist_selection.png` 的编号是否对应将要触碰的实体角点。保持棋盘固定，用与 TCP 拟合时相同的尖端和手指姿态，按编号 1、2、3 触碰；每次稳定后将实测 `arm_q14` 保存到 `data/wrist_camera_validation/state-01.json` 至 `state-03.json`：
 
 ```bash
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/wrist_camera_validation/state-01.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/wrist_camera_validation/state-02.json
-tron2-deploy state --profile configs/robot_profile.example.json \
-  --output data/wrist_camera_validation/state-03.json
-
 python calibration_wrist.py --config configs/wrist_config.json \
   validate --selection data/wrist_camera_validation/wrist_selection.json \
   --side right --tcp data/wrist_camera_session/tcp/wrist_tcp_pivot.json \
@@ -113,6 +93,6 @@ python calibration_wrist.py --config configs/wrist_config.json \
   --output data/wrist_camera_validation/wrist_validation.json
 ```
 
-如果复用先前 TCP，仅把上述 `--tcp` 路径改为 `data/wrist_camera_session/tcp-pivot-from-head.json`。验证在 `base_Link` 中比较相机预测的三个角点和尖端实测位置；报告的 `passed` 才是这次独立检查的结果。TCP 内部残差和外参留出集通过都不能替代它。
+验证在 `base_Link` 中比较相机预测的三个角点和尖端实测位置；报告的 `passed` 才是这次独立检查的结果。TCP 内部残差和外参留出集通过都不能替代它。
 
 外参 JSON 的 `training`、`holdout` 中，`translation_m` 以米为单位；终端汇总中的 `max_training_mm`、`max_holdout_mm` 将其换算为毫米，与头部命令一致。若三点触碰误差接近棋盘角点间距，先核对 `wrist_selection.png` 上的 1、2、3 与实际触碰顺序。只有确认物理触点后，才用 `select-validation --corner 行,列` 按真实触碰顺序重新选点并验证；不要仅根据触碰状态反推角点后宣称独立验证通过。
