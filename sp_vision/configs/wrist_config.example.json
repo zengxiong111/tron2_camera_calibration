@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "board": {"columns": 7, "rows": 10, "square_m": 0.021},
+  "capture": {
+    "host": "guest@10.192.1.4",
+    "state_profile": "robot_profile.example.json",
+    "ros_domain_id": 0,
+    "color_topic": "/camera/right/color/image_resized/compressed",
+    "joint_topic": "/joint_states",
+    "max_state_skew_ms": 100,
+    "timeout_s": 8
+  },
+  "robot": {
+    "urdf": "assembly.urdf",
+    "model_xml": "scene.xml",
+    "base_link": "base_Link",
+    "mount_link": "wrist_roll_R_Link",
+    "camera_frame": "right_wrist_camera_color_optical_frame",
+    "wrist_links": {"left": "wrist_roll_L_Link", "right": "wrist_roll_R_Link"},
+    "arm_joint_names": {
+      "left": ["proximal_pitch_L_Joint", "proximal_roll_L_Joint", "proximal_yaw_L_Joint", "elbow_L_Joint", "wrist_yaw_L_Joint", "wrist_pitch_L_Joint", "wrist_roll_L_Joint"],
+      "right": ["proximal_pitch_R_Joint", "proximal_roll_R_Joint", "proximal_yaw_R_Joint", "elbow_R_Joint", "wrist_yaw_R_Joint", "wrist_pitch_R_Joint", "wrist_roll_R_Joint"]
+    },
+    "ros2_joint_names": {
+      "left": ["abad_L_Joint", "hip_L_Joint", "yaw_L_Joint", "knee_L_Joint", "wrist_yaw_L_Joint", "wrist_pitch_L_Joint", "wrist_roll_L_Joint"],
+      "right": ["abad_R_Joint", "hip_R_Joint", "yaw_R_Joint", "knee_R_Joint", "wrist_yaw_R_Joint", "wrist_pitch_R_Joint", "wrist_roll_R_Joint"]
+    }
+  },
+  "quality": {
+    "holdout_count": 6,
+    "min_intrinsic_views": 12,
+    "min_extrinsic_views": 12,
+    "min_mount_rotation_span_deg": 20,
+    "min_secondary_rotation_rad": 0.12,
+    "min_board_area_ratio": 0.015,
+    "min_border_px": 3,
+    "min_laplacian_variance": 0,
+    "max_intrinsic_view_rms_px": 1.5,
+    "max_pnp_rms_px": 1.5,
+    "max_board_residual_m": 0.015,
+    "max_board_residual_deg": 2,
+    "max_tcp_pivot_residual_m": 0.005,
+    "rotation_weight_m_per_rad": 0.1,
+    "max_touch_error_m": 0.01
+  },
+  "validation": {"tip_in_wrist_m": null}
+}

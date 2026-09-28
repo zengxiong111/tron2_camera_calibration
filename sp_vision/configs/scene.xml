@@ -1,0 +1,904 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mujoco model="tron2_dach_revo3_supplied_step_brackets">
+  <compiler angle="radian" strippath="false" discardvisual="false" fusestatic="false" />
+  <asset>
+    <mesh name="base_Link" content_type="model/stl" file="meshes/tron2/base_Link.STL" />
+    <mesh name="base_2_Link" content_type="model/stl" file="meshes/tron2/base_2_Link.STL" />
+    <mesh name="base_3_Link" content_type="model/stl" file="meshes/tron2/base_3_Link.STL" />
+    <mesh name="head_base_Link" content_type="model/stl" file="meshes/tron2/head_base_Link.STL" />
+    <mesh name="head_yaw_Link" content_type="model/stl" file="meshes/tron2/head_yaw_Link.STL" />
+    <mesh name="head_pitch_Link" content_type="model/stl" file="meshes/tron2/head_pitch_Link.STL" />
+    <mesh name="proximal_pitch_L_Link" content_type="model/stl" file="meshes/tron2/proximal_pitch_L_Link.STL" />
+    <mesh name="proximal_roll_L_Link" content_type="model/stl" file="meshes/tron2/proximal_roll_L_Link.STL" />
+    <mesh name="proximal_yaw_L_Link" content_type="model/stl" file="meshes/tron2/proximal_yaw_L_Link.STL" />
+    <mesh name="proximal_yaw_L_Link_collision" content_type="model/stl" file="meshes/tron2/proximal_yaw_L_Link_collision.STL" />
+    <mesh name="elbow_L_Link" content_type="model/stl" file="meshes/tron2/elbow_L_Link.STL" />
+    <mesh name="wrist_yaw_L_Link" content_type="model/stl" file="meshes/tron2/wrist_yaw_L_Link.STL" />
+    <mesh name="wrist_pitch_L_Link" content_type="model/stl" file="meshes/tron2/wrist_pitch_L_Link.STL" />
+    <mesh name="wrist_roll_L_Link" content_type="model/stl" file="meshes/tron2/wrist_roll_L_Link.STL" />
+    <mesh name="wrist_roll_L_Link_collision" content_type="model/stl" file="meshes/tron2/wrist_roll_L_Link_collision.STL" />
+    <mesh name="proximal_pitch_R_Link" content_type="model/stl" file="meshes/tron2/proximal_pitch_R_Link.STL" />
+    <mesh name="proximal_roll_R_Link" content_type="model/stl" file="meshes/tron2/proximal_roll_R_Link.STL" />
+    <mesh name="proximal_yaw_R_Link" content_type="model/stl" file="meshes/tron2/proximal_yaw_R_Link.STL" />
+    <mesh name="proximal_yaw_R_Link_collision" content_type="model/stl" file="meshes/tron2/proximal_yaw_R_Link_collision.STL" />
+    <mesh name="elbow_R_Link" content_type="model/stl" file="meshes/tron2/elbow_R_Link.STL" />
+    <mesh name="wrist_yaw_R_Link" content_type="model/stl" file="meshes/tron2/wrist_yaw_R_Link.STL" />
+    <mesh name="wrist_pitch_R_Link" content_type="model/stl" file="meshes/tron2/wrist_pitch_R_Link.STL" />
+    <mesh name="wrist_roll_R_Link" content_type="model/stl" file="meshes/tron2/wrist_roll_R_Link.STL" />
+    <mesh name="wrist_roll_R_Link_collision" content_type="model/stl" file="meshes/tron2/wrist_roll_R_Link_collision.STL" />
+    <mesh name="adapter_left_v2_visual" content_type="model/stl" file="meshes/adapter_v2/left/adapter_left_v2_visual.stl" />
+    <mesh name="adapter_left_v2_convex_000" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_000.stl" />
+    <mesh name="adapter_left_v2_convex_001" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_001.stl" />
+    <mesh name="adapter_left_v2_convex_002" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_002.stl" />
+    <mesh name="adapter_left_v2_convex_003" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_003.stl" />
+    <mesh name="adapter_left_v2_convex_004" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_004.stl" />
+    <mesh name="adapter_left_v2_convex_005" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_005.stl" />
+    <mesh name="adapter_left_v2_convex_006" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_006.stl" />
+    <mesh name="adapter_left_v2_convex_007" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_007.stl" />
+    <mesh name="adapter_left_v2_convex_008" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_008.stl" />
+    <mesh name="adapter_left_v2_convex_009" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_009.stl" />
+    <mesh name="adapter_left_v2_convex_010" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_010.stl" />
+    <mesh name="adapter_left_v2_convex_011" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_011.stl" />
+    <mesh name="adapter_left_v2_convex_012" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_012.stl" />
+    <mesh name="adapter_left_v2_convex_013" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_013.stl" />
+    <mesh name="adapter_left_v2_convex_014" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_014.stl" />
+    <mesh name="adapter_left_v2_convex_015" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_015.stl" />
+    <mesh name="adapter_left_v2_convex_016" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_016.stl" />
+    <mesh name="adapter_left_v2_convex_017" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_017.stl" />
+    <mesh name="adapter_left_v2_convex_018" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_018.stl" />
+    <mesh name="adapter_left_v2_convex_019" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_019.stl" />
+    <mesh name="adapter_left_v2_convex_020" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_020.stl" />
+    <mesh name="adapter_left_v2_convex_021" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_021.stl" />
+    <mesh name="adapter_left_v2_convex_022" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_022.stl" />
+    <mesh name="adapter_left_v2_convex_023" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_023.stl" />
+    <mesh name="adapter_left_v2_convex_024" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_024.stl" />
+    <mesh name="adapter_left_v2_convex_025" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_025.stl" />
+    <mesh name="adapter_left_v2_convex_026" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_026.stl" />
+    <mesh name="adapter_left_v2_convex_027" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_027.stl" />
+    <mesh name="adapter_left_v2_convex_028" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_028.stl" />
+    <mesh name="adapter_left_v2_convex_029" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_029.stl" />
+    <mesh name="adapter_left_v2_convex_030" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_030.stl" />
+    <mesh name="adapter_left_v2_convex_031" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_031.stl" />
+    <mesh name="adapter_left_v2_convex_032" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_032.stl" />
+    <mesh name="adapter_left_v2_convex_033" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_033.stl" />
+    <mesh name="adapter_left_v2_convex_034" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_034.stl" />
+    <mesh name="adapter_left_v2_convex_035" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_035.stl" />
+    <mesh name="adapter_left_v2_convex_036" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_036.stl" />
+    <mesh name="adapter_left_v2_convex_037" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_037.stl" />
+    <mesh name="adapter_left_v2_convex_038" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_038.stl" />
+    <mesh name="adapter_left_v2_convex_039" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_039.stl" />
+    <mesh name="adapter_left_v2_convex_040" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_040.stl" />
+    <mesh name="adapter_left_v2_convex_041" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_041.stl" />
+    <mesh name="adapter_left_v2_convex_042" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_042.stl" />
+    <mesh name="adapter_left_v2_convex_043" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_043.stl" />
+    <mesh name="adapter_left_v2_convex_044" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_044.stl" />
+    <mesh name="adapter_left_v2_convex_045" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_045.stl" />
+    <mesh name="adapter_left_v2_convex_046" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_046.stl" />
+    <mesh name="adapter_left_v2_convex_047" content_type="model/stl" file="meshes/adapter_v2/left/collision/adapter_left_v2_convex_047.stl" />
+    <mesh name="revo3__hands__visual__left__base_link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__base_link.STL" />
+    <mesh name="revo3__hands__collision__left__part_000" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_000.obj" />
+    <mesh name="revo3__hands__collision__left__part_001" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_001.obj" />
+    <mesh name="revo3__hands__collision__left__part_002" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_002.obj" />
+    <mesh name="revo3__hands__collision__left__part_003" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_003.obj" />
+    <mesh name="revo3__hands__collision__left__part_004" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_004.obj" />
+    <mesh name="revo3__hands__collision__left__part_005" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_005.obj" />
+    <mesh name="revo3__hands__collision__left__part_006" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_006.obj" />
+    <mesh name="revo3__hands__collision__left__part_007" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_007.obj" />
+    <mesh name="revo3__hands__collision__left__part_008" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_008.obj" />
+    <mesh name="revo3__hands__collision__left__part_009" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_009.obj" />
+    <mesh name="revo3__hands__collision__left__part_010" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_010.obj" />
+    <mesh name="revo3__hands__collision__left__part_011" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_011.obj" />
+    <mesh name="revo3__hands__collision__left__part_012" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_012.obj" />
+    <mesh name="revo3__hands__collision__left__part_013" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_013.obj" />
+    <mesh name="revo3__hands__collision__left__part_014" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_014.obj" />
+    <mesh name="revo3__hands__collision__left__part_015" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_015.obj" />
+    <mesh name="revo3__hands__collision__left__part_016" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_016.obj" />
+    <mesh name="revo3__hands__collision__left__part_017" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_017.obj" />
+    <mesh name="revo3__hands__collision__left__part_018" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_018.obj" />
+    <mesh name="revo3__hands__collision__left__part_019" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_019.obj" />
+    <mesh name="revo3__hands__collision__left__part_020" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_020.obj" />
+    <mesh name="revo3__hands__collision__left__part_021" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_021.obj" />
+    <mesh name="revo3__hands__collision__left__part_022" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_022.obj" />
+    <mesh name="revo3__hands__collision__left__part_023" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_023.obj" />
+    <mesh name="revo3__hands__collision__left__part_024" content_type="model/obj" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__part_024.obj" />
+    <mesh name="revo3__hands__visual__left__left_thumb_CMP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_thumb_CMP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_thumb_CMP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_thumb_CMP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_thumb_CMR_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_thumb_CMR_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_thumb_CMR_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_thumb_CMR_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_thumb_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_thumb_MCP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_thumb_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_thumb_MCP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_thumb_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_thumb_PIP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_thumb_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_thumb_PIP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_thumb_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_thumb_DIP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_thumb_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_thumb_DIP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_index_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_index_MPR_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_index_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_index_MPR_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_index_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_index_MCP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_index_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_index_MCP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_index_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_index_PIP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_index_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_index_PIP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_index_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_index_DIP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_index_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_index_DIP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_middle_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_middle_MPR_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_middle_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_middle_MPR_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_middle_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_middle_MCP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_middle_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_middle_MCP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_middle_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_middle_PIP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_middle_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_middle_PIP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_middle_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_middle_DIP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_middle_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_middle_DIP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_ring_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_ring_MPR_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_ring_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_ring_MPR_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_ring_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_ring_MCP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_ring_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_ring_MCP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_ring_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_ring_PIP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_ring_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_ring_PIP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_ring_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_ring_DIP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_ring_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_ring_DIP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_little_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_little_MPR_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_little_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_little_MPR_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_little_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_little_MCP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_little_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_little_MCP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_little_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_little_PIP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_little_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_little_PIP_Link.STL" />
+    <mesh name="revo3__hands__visual__left__left_little_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/left/revo3__hands__visual__left__left_little_DIP_Link.STL" />
+    <mesh name="revo3__hands__collision__left__left_little_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/left/revo3__hands__collision__left__left_little_DIP_Link.STL" />
+    <mesh name="adapter_right_v2_visual" content_type="model/stl" file="meshes/adapter_v2/right/adapter_right_v2_visual.stl" />
+    <mesh name="adapter_right_v2_convex_000" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_000.stl" />
+    <mesh name="adapter_right_v2_convex_001" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_001.stl" />
+    <mesh name="adapter_right_v2_convex_002" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_002.stl" />
+    <mesh name="adapter_right_v2_convex_003" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_003.stl" />
+    <mesh name="adapter_right_v2_convex_004" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_004.stl" />
+    <mesh name="adapter_right_v2_convex_005" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_005.stl" />
+    <mesh name="adapter_right_v2_convex_006" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_006.stl" />
+    <mesh name="adapter_right_v2_convex_007" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_007.stl" />
+    <mesh name="adapter_right_v2_convex_008" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_008.stl" />
+    <mesh name="adapter_right_v2_convex_009" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_009.stl" />
+    <mesh name="adapter_right_v2_convex_010" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_010.stl" />
+    <mesh name="adapter_right_v2_convex_011" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_011.stl" />
+    <mesh name="adapter_right_v2_convex_012" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_012.stl" />
+    <mesh name="adapter_right_v2_convex_013" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_013.stl" />
+    <mesh name="adapter_right_v2_convex_014" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_014.stl" />
+    <mesh name="adapter_right_v2_convex_015" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_015.stl" />
+    <mesh name="adapter_right_v2_convex_016" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_016.stl" />
+    <mesh name="adapter_right_v2_convex_017" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_017.stl" />
+    <mesh name="adapter_right_v2_convex_018" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_018.stl" />
+    <mesh name="adapter_right_v2_convex_019" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_019.stl" />
+    <mesh name="adapter_right_v2_convex_020" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_020.stl" />
+    <mesh name="adapter_right_v2_convex_021" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_021.stl" />
+    <mesh name="adapter_right_v2_convex_022" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_022.stl" />
+    <mesh name="adapter_right_v2_convex_023" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_023.stl" />
+    <mesh name="adapter_right_v2_convex_024" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_024.stl" />
+    <mesh name="adapter_right_v2_convex_025" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_025.stl" />
+    <mesh name="adapter_right_v2_convex_026" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_026.stl" />
+    <mesh name="adapter_right_v2_convex_027" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_027.stl" />
+    <mesh name="adapter_right_v2_convex_028" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_028.stl" />
+    <mesh name="adapter_right_v2_convex_029" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_029.stl" />
+    <mesh name="adapter_right_v2_convex_030" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_030.stl" />
+    <mesh name="adapter_right_v2_convex_031" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_031.stl" />
+    <mesh name="adapter_right_v2_convex_032" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_032.stl" />
+    <mesh name="adapter_right_v2_convex_033" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_033.stl" />
+    <mesh name="adapter_right_v2_convex_034" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_034.stl" />
+    <mesh name="adapter_right_v2_convex_035" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_035.stl" />
+    <mesh name="adapter_right_v2_convex_036" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_036.stl" />
+    <mesh name="adapter_right_v2_convex_037" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_037.stl" />
+    <mesh name="adapter_right_v2_convex_038" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_038.stl" />
+    <mesh name="adapter_right_v2_convex_039" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_039.stl" />
+    <mesh name="adapter_right_v2_convex_040" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_040.stl" />
+    <mesh name="adapter_right_v2_convex_041" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_041.stl" />
+    <mesh name="adapter_right_v2_convex_042" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_042.stl" />
+    <mesh name="adapter_right_v2_convex_043" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_043.stl" />
+    <mesh name="adapter_right_v2_convex_044" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_044.stl" />
+    <mesh name="adapter_right_v2_convex_045" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_045.stl" />
+    <mesh name="adapter_right_v2_convex_046" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_046.stl" />
+    <mesh name="adapter_right_v2_convex_047" content_type="model/stl" file="meshes/adapter_v2/right/collision/adapter_right_v2_convex_047.stl" />
+    <mesh name="revo3__hands__visual__right__base_link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__base_link.STL" />
+    <mesh name="revo3__hands__collision__right__part_000" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_000.obj" />
+    <mesh name="revo3__hands__collision__right__part_001" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_001.obj" />
+    <mesh name="revo3__hands__collision__right__part_002" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_002.obj" />
+    <mesh name="revo3__hands__collision__right__part_003" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_003.obj" />
+    <mesh name="revo3__hands__collision__right__part_004" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_004.obj" />
+    <mesh name="revo3__hands__collision__right__part_005" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_005.obj" />
+    <mesh name="revo3__hands__collision__right__part_006" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_006.obj" />
+    <mesh name="revo3__hands__collision__right__part_007" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_007.obj" />
+    <mesh name="revo3__hands__collision__right__part_008" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_008.obj" />
+    <mesh name="revo3__hands__collision__right__part_009" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_009.obj" />
+    <mesh name="revo3__hands__collision__right__part_010" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_010.obj" />
+    <mesh name="revo3__hands__collision__right__part_011" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_011.obj" />
+    <mesh name="revo3__hands__collision__right__part_012" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_012.obj" />
+    <mesh name="revo3__hands__collision__right__part_013" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_013.obj" />
+    <mesh name="revo3__hands__collision__right__part_014" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_014.obj" />
+    <mesh name="revo3__hands__collision__right__part_015" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_015.obj" />
+    <mesh name="revo3__hands__collision__right__part_016" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_016.obj" />
+    <mesh name="revo3__hands__collision__right__part_017" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_017.obj" />
+    <mesh name="revo3__hands__collision__right__part_018" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_018.obj" />
+    <mesh name="revo3__hands__collision__right__part_019" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_019.obj" />
+    <mesh name="revo3__hands__collision__right__part_020" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_020.obj" />
+    <mesh name="revo3__hands__collision__right__part_021" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_021.obj" />
+    <mesh name="revo3__hands__collision__right__part_022" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_022.obj" />
+    <mesh name="revo3__hands__collision__right__part_023" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_023.obj" />
+    <mesh name="revo3__hands__collision__right__part_024" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_024.obj" />
+    <mesh name="revo3__hands__collision__right__part_025" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_025.obj" />
+    <mesh name="revo3__hands__collision__right__part_026" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_026.obj" />
+    <mesh name="revo3__hands__collision__right__part_027" content_type="model/obj" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__part_027.obj" />
+    <mesh name="revo3__hands__visual__right__right_thumb_CMP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_thumb_CMP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_thumb_CMP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_thumb_CMP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_thumb_CMR_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_thumb_CMR_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_thumb_CMR_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_thumb_CMR_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_thumb_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_thumb_MCP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_thumb_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_thumb_MCP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_thumb_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_thumb_PIP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_thumb_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_thumb_PIP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_thumb_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_thumb_DIP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_thumb_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_thumb_DIP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_index_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_index_MPR_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_index_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_index_MPR_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_index_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_index_MCP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_index_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_index_MCP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_index_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_index_PIP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_index_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_index_PIP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_index_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_index_DIP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_index_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_index_DIP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_middle_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_middle_MPR_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_middle_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_middle_MPR_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_middle_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_middle_MCP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_middle_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_middle_MCP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_middle_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_middle_PIP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_middle_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_middle_PIP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_middle_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_middle_DIP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_middle_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_middle_DIP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_ring_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_ring_MPR_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_ring_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_ring_MPR_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_ring_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_ring_MCP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_ring_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_ring_MCP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_ring_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_ring_PIP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_ring_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_ring_PIP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_ring_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_ring_DIP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_ring_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_ring_DIP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_little_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_little_MPR_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_little_MPR_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_little_MPR_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_little_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_little_MCP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_little_MCP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_little_MCP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_little_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_little_PIP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_little_PIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_little_PIP_Link.STL" />
+    <mesh name="revo3__hands__visual__right__right_little_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/visual/right/revo3__hands__visual__right__right_little_DIP_Link.STL" />
+    <mesh name="revo3__hands__collision__right__right_little_DIP_Link" content_type="model/stl" file="meshes/revo3/hands/collision/right/revo3__hands__collision__right__right_little_DIP_Link.STL" />
+    <mesh name="d435i_visual_m" content_type="model/obj" file="meshes/cameras/d435i_visual_m.obj" />
+    <mesh name="left_aligned_v3_m" content_type="model/stl" file="meshes/wrist_camera_brackets/supplied_aligned_v3/left_aligned_v3_m.stl" />
+    <mesh name="d405_visual_m" content_type="model/stl" file="meshes/cameras/d405_visual_m.stl" />
+    <mesh name="right_aligned_v3_m" content_type="model/stl" file="meshes/wrist_camera_brackets/supplied_aligned_v3/right_aligned_v3_m.stl" />
+    <texture name="camera_scene_floor" type="2d" builtin="checker" rgb1=".24 .28 .33" rgb2=".3 .35 .4" width="256" height="256" />
+    <material name="camera_scene_floor" texture="camera_scene_floor" texrepeat="8 8" />
+  </asset>
+  <worldbody>
+    <body name="base_Link" pos="0 0 1.20035">
+      <inertial pos="0.00385 -0.00011 0.11254" quat="0.685641 -0.173048 -0.174878 0.685105" mass="12.57" diaginertia="0.135813 0.118632 0.101515" />
+      <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="base_Link" />
+      <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="base_Link" group="3" />
+      <body name="base_imu">
+        <inertial pos="0 0 0" mass="0.01" diaginertia="1e-06 1e-06 1e-06" />
+      </body>
+      <body name="base_2_Link" pos="0.00056 -9e-05 -0.07285">
+        <inertial pos="0 0 -0.45862" quat="0.707107 0 0 0.707107" mass="10" diaginertia="0.811937 0.80635 0.017624" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="base_2_Link" />
+        <geom size="0.059 0.0425 0.49" pos="0 0 -0.45862" type="box" rgba="0.22 0.27 0.32 1" group="3" />
+        <body name="base_3_Link" pos="0 0 -0.9295">
+          <inertial pos="0 0 -0.05442" quat="0.5 0.5 -0.5 0.5" mass="20" diaginertia="1.6803 0.9485 0.9485" />
+          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="base_3_Link" />
+          <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="base_3_Link" group="3" />
+        </body>
+      </body>
+      <body name="head_base_Link" pos="0.04656 9e-05 0.26115">
+        <inertial pos="-0.0094 0 0.0033" quat="0.504117 0.504215 -0.495751 0.495847" mass="0.13" diaginertia="0.000246277 0.000150053 9.86e-05" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="head_base_Link" />
+        <body name="head_yaw_Link" pos="0 0 0.008">
+          <inertial pos="0.02452 0.00153 0.06142" quat="0.696669 0.194095 0.236667 0.64882" mass="0.84" diaginertia="0.00204426 0.00201554 0.000504942" />
+          <joint name="head_yaw_Joint" range="-1.5708 1.5708" actuatorfrcrange="-20 20" />
+          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="head_yaw_Link" />
+          <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="head_yaw_Link" group="3" />
+          <body name="head_pitch_Link" pos="0.051 0.03 0.097">
+            <inertial pos="0.00697 -0.03028 0.03063" quat="0.0176578 0.713106 -0.0130977 0.700712" mass="0.61" diaginertia="0.00235472 0.001711 0.00145461" />
+            <joint name="head_pitch_Joint" range="-0.785398 1.0472" actuatorfrcrange="-20 20" axis="0 1 0" />
+            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="head_pitch_Link" />
+            <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="head_pitch_Link" group="3" />
+            <body name="head_camera_mount_frame" pos="0.058 -0.0308 0.0408">
+              <body name="head_camera_bottom_screw_frame">
+                <body name="head_camera_link" pos="0.0106 0.0175 0.0125">
+                  <geom pos="0.0043 -0.0175 0" quat="0.5 0.5 0.5 0.5" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.16 0.18 0.21 1" density="0" mesh="d435i_visual_m" />
+                  <body name="head_camera_depth_frame">
+                    <body name="head_camera_depth_optical_frame" quat="0.5 -0.5 0.5 -0.5">
+                      <camera name="head_depth" quat="0 1 0 0" resolution="640 480" sensorsize="1 1" focalpixel="337.20964009 432.971461265" principalpixel="0 0" />
+                    </body>
+                  </body>
+                  <body name="head_camera_color_frame" pos="0 0.015 0">
+                    <body name="head_camera_color_optical_frame" quat="0.5 -0.5 0.5 -0.5">
+                      <camera name="head_color" quat="0 1 0 0" resolution="640 480" sensorsize="1 1" focalpixel="465.602889175 625.221375527" principalpixel="0 0" />
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="proximal_pitch_L_Link" pos="-0.00044 0.09178 0.05474">
+        <inertial pos="-0.00547 0.07014 -0.00611" quat="0.749537 0.661877 -0.00992031 0.00384555" mass="2.21" diaginertia="0.00438583 0.0035012 0.00307523" />
+        <joint name="proximal_pitch_L_Joint" range="-3.14159 2.60054" actuatorfrcrange="-150 150" axis="0 0.996195 -0.0871554" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="proximal_pitch_L_Link" />
+        <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="proximal_pitch_L_Link" group="3" />
+        <body name="proximal_roll_L_Link" pos="-0.032 0.0758 -0.00663">
+          <inertial pos="0.03124 0.00035 -0.08414" quat="0.700753 -0.0110253 -0.00230623 0.713315" mass="1.74" diaginertia="0.00545642 0.00476973 0.00305218" />
+          <joint name="proximal_roll_L_Joint" range="-0.261799 3.19395" actuatorfrcrange="-150 150" axis="1 0 0" />
+          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="proximal_roll_L_Link" />
+          <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="proximal_roll_L_Link" group="3" />
+          <body name="proximal_yaw_L_Link" pos="0.032 0 -0.1374">
+            <inertial pos="-0.00428 0.00216 -0.09174" quat="0.999861 0.014434 5.56061e-05 0.00830807" mass="1.15" diaginertia="0.00994191 0.00955689 0.00229096" />
+            <joint name="proximal_yaw_L_Joint" range="-3.66519 1.48353" actuatorfrcrange="-60 60" />
+            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="proximal_yaw_L_Link" />
+            <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="proximal_yaw_L_Link_collision" group="3" />
+            <body name="elbow_L_Link" pos="0.004 0.02972 -0.2126">
+              <inertial pos="-0.00061 -0.0264 -0.00455" quat="0.701938 0.0619435 0.0367289 0.708588" mass="1.11" diaginertia="0.00150918 0.00127816 0.00107445" />
+              <joint name="elbow_L_Joint" range="-2.61799 0.523599" actuatorfrcrange="-70 70" axis="0 1 0" />
+              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="elbow_L_Link" />
+              <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="elbow_L_Link" group="3" />
+              <body name="wrist_yaw_L_Link" pos="-0.004 -0.02972 -0.0685">
+                <inertial pos="-0.00013 0.00206 -0.06635" quat="0.999818 0.0178355 0.00131601 -0.00666706" mass="1.15" diaginertia="0.00312787 0.00297465 0.00103898" />
+                <joint name="wrist_yaw_L_Joint" range="-1.74533 1.39626" actuatorfrcrange="-20 20" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="wrist_yaw_L_Link" />
+                <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="wrist_yaw_L_Link" group="3" />
+                <body name="wrist_pitch_L_Link" pos="0 0.0367 -0.1743">
+                  <inertial pos="0.00426 -0.0363 0.00013" quat="0.572769 0.473017 0.483797 0.462742" mass="0.44" diaginertia="0.000257393 0.00025519 0.000227077" />
+                  <joint name="wrist_pitch_L_Joint" range="-0.785398 0.785398" actuatorfrcrange="-20 20" axis="0 1 0" />
+                  <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="wrist_pitch_L_Link" />
+                  <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="wrist_pitch_L_Link" group="3" />
+                  <body name="wrist_roll_L_Link" pos="0.0317 -0.0367 0">
+                    <inertial pos="-0.02867 -0.00014 -0.04311" quat="0.619771 0.344122 0.34551 0.614888" mass="0.24" diaginertia="0.000365175 0.000271569 0.000253636" />
+                    <joint name="wrist_roll_L_Joint" range="-1.5708 1.5708" actuatorfrcrange="-20 20" axis="1 0 0" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="wrist_roll_L_Link" />
+                    <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="wrist_roll_L_Link_collision" group="3" />
+                    <body name="left_adapter_link" pos="-0.0317 0 -0.0812" quat="0.5 -0.5 -0.5 0.5">
+                      <inertial pos="-9.42017e-07 0.0107775 -0.000222626" quat="0.49872 0.501257 0.498624 0.501391" mass="0.103445" diaginertia="7.68082e-05 5.96619e-05 3.80438e-05" />
+                      <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.94 0.43 0.12 1" density="0" mesh="adapter_left_v2_visual" />
+                      <geom name="adapter_left_v2_convex_000" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_000" group="3" />
+                      <geom name="adapter_left_v2_convex_001" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_001" group="3" />
+                      <geom name="adapter_left_v2_convex_002" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_002" group="3" />
+                      <geom name="adapter_left_v2_convex_003" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_003" group="3" />
+                      <geom name="adapter_left_v2_convex_004" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_004" group="3" />
+                      <geom name="adapter_left_v2_convex_005" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_005" group="3" />
+                      <geom name="adapter_left_v2_convex_006" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_006" group="3" />
+                      <geom name="adapter_left_v2_convex_007" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_007" group="3" />
+                      <geom name="adapter_left_v2_convex_008" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_008" group="3" />
+                      <geom name="adapter_left_v2_convex_009" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_009" group="3" />
+                      <geom name="adapter_left_v2_convex_010" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_010" group="3" />
+                      <geom name="adapter_left_v2_convex_011" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_011" group="3" />
+                      <geom name="adapter_left_v2_convex_012" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_012" group="3" />
+                      <geom name="adapter_left_v2_convex_013" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_013" group="3" />
+                      <geom name="adapter_left_v2_convex_014" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_014" group="3" />
+                      <geom name="adapter_left_v2_convex_015" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_015" group="3" />
+                      <geom name="adapter_left_v2_convex_016" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_016" group="3" />
+                      <geom name="adapter_left_v2_convex_017" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_017" group="3" />
+                      <geom name="adapter_left_v2_convex_018" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_018" group="3" />
+                      <geom name="adapter_left_v2_convex_019" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_019" group="3" />
+                      <geom name="adapter_left_v2_convex_020" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_020" group="3" />
+                      <geom name="adapter_left_v2_convex_021" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_021" group="3" />
+                      <geom name="adapter_left_v2_convex_022" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_022" group="3" />
+                      <geom name="adapter_left_v2_convex_023" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_023" group="3" />
+                      <geom name="adapter_left_v2_convex_024" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_024" group="3" />
+                      <geom name="adapter_left_v2_convex_025" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_025" group="3" />
+                      <geom name="adapter_left_v2_convex_026" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_026" group="3" />
+                      <geom name="adapter_left_v2_convex_027" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_027" group="3" />
+                      <geom name="adapter_left_v2_convex_028" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_028" group="3" />
+                      <geom name="adapter_left_v2_convex_029" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_029" group="3" />
+                      <geom name="adapter_left_v2_convex_030" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_030" group="3" />
+                      <geom name="adapter_left_v2_convex_031" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_031" group="3" />
+                      <geom name="adapter_left_v2_convex_032" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_032" group="3" />
+                      <geom name="adapter_left_v2_convex_033" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_033" group="3" />
+                      <geom name="adapter_left_v2_convex_034" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_034" group="3" />
+                      <geom name="adapter_left_v2_convex_035" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_035" group="3" />
+                      <geom name="adapter_left_v2_convex_036" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_036" group="3" />
+                      <geom name="adapter_left_v2_convex_037" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_037" group="3" />
+                      <geom name="adapter_left_v2_convex_038" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_038" group="3" />
+                      <geom name="adapter_left_v2_convex_039" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_039" group="3" />
+                      <geom name="adapter_left_v2_convex_040" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_040" group="3" />
+                      <geom name="adapter_left_v2_convex_041" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_041" group="3" />
+                      <geom name="adapter_left_v2_convex_042" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_042" group="3" />
+                      <geom name="adapter_left_v2_convex_043" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_043" group="3" />
+                      <geom name="adapter_left_v2_convex_044" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_044" group="3" />
+                      <geom name="adapter_left_v2_convex_045" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_045" group="3" />
+                      <geom name="adapter_left_v2_convex_046" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_046" group="3" />
+                      <geom name="adapter_left_v2_convex_047" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_left_v2_convex_047" group="3" />
+                      <body name="left_hand_base_link" pos="0 0.023855 0" quat="0.5 -0.5 0.5 0.5">
+                        <inertial pos="-0.00143242 0.00300504 0.0317401" quat="0.998668 -0.0437738 -0.0271485 0.00294799" mass="0.462" diaginertia="0.000690482 0.000522731 0.000380637" />
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__base_link" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_000" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_001" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_002" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_003" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_004" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_005" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_006" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_007" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_008" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_009" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_010" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_011" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_012" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_013" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_014" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_015" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_016" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_017" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_018" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_019" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_020" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_021" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_022" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_023" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__part_024" group="3" />
+                        <body name="left_palm" pos="0.0155 0 0.055" />
+                        <body name="left_thumb_CMP_Link" pos="0.002 -0.0195 0.051993">
+                          <inertial pos="0 0.00026731 0.00107805" quat="0.5 0.5 0.5 0.5" mass="0.026" diaginertia="2.29e-06 2.22e-06 2.03e-06" />
+                          <joint name="left_thumb_CMP_joint" range="0 1.9199" actuatorfrcrange="-0.35 0.35" />
+                          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_thumb_CMP_Link" />
+                          <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_thumb_CMP_Link" group="3" />
+                          <body name="left_thumb_CMR_Link" pos="0 -0.0095 0" quat="0.707388 0 0.706825 0">
+                            <inertial pos="0 -0.00601564 -0.00128632" quat="0.617602 0.344336 0.617602 0.344336" mass="0.012" diaginertia="9.62361e-07 9.17639e-07 5.7e-07" />
+                            <joint name="left_thumb_CMR_joint" range="0 2.0071" actuatorfrcrange="-0.35 0.35" axis="0 -1 0" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_thumb_CMR_Link" />
+                            <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_thumb_CMR_Link" group="3" />
+                            <body name="left_thumb_MCP_Link" pos="0 -0.0125 0">
+                              <inertial pos="1.261e-05 -0.022009 -0.00233774" quat="0.669588 0.742723 0.00340734 -0.00141505" mass="0.067" diaginertia="1.46001e-05 1.43031e-05 6.51687e-06" />
+                              <joint name="left_thumb_MCP_joint" range="0 0.8727" actuatorfrcrange="-0.35 0.35" axis="-1 0 0" />
+                              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_thumb_MCP_Link" />
+                              <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_thumb_MCP_Link" group="3" />
+                              <body name="left_thumb_PIP_Link" pos="0 -0.042087 -0.0013667">
+                                <inertial pos="8.855e-05 -0.0191548 0.00035637" quat="0.49356 0.506781 -0.482011 0.516949" mass="0.035" diaginertia="4.07065e-06 3.31145e-06 2.6879e-06" />
+                                <joint name="left_thumb_PIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-1 0 0" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_thumb_PIP_Link" />
+                                <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_thumb_PIP_Link" group="3" />
+                                <body name="left_thumb_DIP_Link" pos="0 -0.031985 -0.00087263">
+                                  <inertial pos="0.00015749 -0.0153601 -0.00123637" quat="0.570468 0.389253 -0.425732 0.584638" mass="0.01" diaginertia="1.63561e-06 1.49027e-06 8.74127e-07" />
+                                  <joint name="left_thumb_DIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-1 0 0" />
+                                  <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_thumb_DIP_Link" />
+                                  <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_thumb_DIP_Link" group="3" />
+                                  <body name="left_thumb_tip_Link" pos="0 -0.01 0.0098" />
+                                </body>
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                        <body name="left_index_MPR_Link" pos="-0.005442 -0.036871 0.097822">
+                          <inertial pos="-0.00256772 -0.00103533 0.00812466" quat="0 0.836576 0 0.547851" mass="0.013" diaginertia="1.17052e-06 1.02e-06 9.79475e-07" />
+                          <joint name="left_index_MPR_joint" range="-0.2618 0.2618" actuatorfrcrange="-0.35 0.35" axis="-0.998357 0.0572968 0" />
+                          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_index_MPR_Link" />
+                          <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_index_MPR_Link" group="3" />
+                          <body name="left_index_MCP_Link" pos="5.6148e-05 -0.00097833 0.01597">
+                            <inertial pos="0.00098089 -0.00138701 0.0234829" quat="0.998711 0.0303948 0.0196746 0.0355766" mass="0.0658" diaginertia="1.60708e-05 1.57464e-05 4.91282e-06" />
+                            <joint name="left_index_MCP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.0571902 0.996483 0.0612462" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_index_MCP_Link" />
+                            <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_index_MCP_Link" group="3" />
+                            <body name="left_index_PIP_Link" pos="0.00074519 -0.0028408 0.046916">
+                              <inertial pos="0.00221548 -0.00096377 0.0177505" quat="0.997002 0.0273569 0.066961 0.0274864" mass="0.031" diaginertia="3.10511e-06 2.61905e-06 2.34584e-06" />
+                              <joint name="left_index_PIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.0571902 0.996483 0.0612462" />
+                              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_index_PIP_Link" />
+                              <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_index_PIP_Link" group="3" />
+                              <body name="left_index_DIP_Link" pos="0.0013649 -0.0017312 0.029441">
+                                <inertial pos="-0.00043827 -0.00101802 0.0161651" quat="0.99329 0 0.115653 0" mass="0.008" diaginertia="5.69443e-07 5.2e-07 3.90557e-07" />
+                                <joint name="left_index_DIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.0571902 0.996483 0.0612462" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_index_DIP_Link" />
+                                <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_index_DIP_Link" group="3" />
+                                <body name="left_index_tip_Link" pos="0.0084 -0.0005 0.01" />
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                        <body name="left_middle_MPR_Link" pos="-0.0060223 -0.012496 0.10793">
+                          <inertial pos="-0.00261177 -0.00060398 0.00815409" quat="0 0.836576 0 0.547851" mass="0.012" diaginertia="1.17052e-06 1.02e-06 9.79475e-07" />
+                          <joint name="left_middle_MPR_joint" range="-0.2618 0.2618" actuatorfrcrange="-0.35 0.35" axis="-0.999817 0.019105 0" />
+                          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_middle_MPR_Link" />
+                          <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_middle_MPR_Link" group="3" />
+                          <body name="left_middle_MCP_Link" pos="0 -0.00032687 0.015997">
+                            <inertial pos="0.00090882 -0.00046345 0.0235221" quat="0.999763 0.00975857 0.0192672 0.00274174" mass="0.0658" diaginertia="1.60666e-05 1.57441e-05 4.90932e-06" />
+                            <joint name="left_middle_MCP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.019101 0.999609 0.020433" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_middle_MCP_Link" />
+                            <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_middle_MCP_Link" group="3" />
+                            <body name="left_middle_PIP_Link" pos="0.00059944 -0.00094917 0.046994">
+                              <inertial pos="0.00216316 -0.00032205 0.0177802" quat="0.99777 0.00306605 0.0659465 0.00986181" mass="0.031" diaginertia="3.11347e-06 2.61981e-06 2.34672e-06" />
+                              <joint name="left_middle_PIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.019101 0.999609 0.020433" />
+                              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_middle_PIP_Link" />
+                              <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_middle_PIP_Link" group="3" />
+                              <body name="left_middle_DIP_Link" pos="0.0012747 -0.00057846 0.02949">
+                                <inertial pos="-0.00048948 -0.00033967 0.0161921" quat="0.99329 0 0.115653 0" mass="0.01" diaginertia="5.69443e-07 5.2e-07 3.90557e-07" />
+                                <joint name="left_middle_DIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.019101 0.999609 0.020433" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_middle_DIP_Link" />
+                                <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_middle_DIP_Link" group="3" />
+                                <body name="left_middle_tip_Link" pos="0.0084 0 0.01" />
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                        <body name="left_ring_MPR_Link" pos="-0.0061966 0.012414 0.10384">
+                          <inertial pos="-0.00262656 -0.0001702 0.00816992" quat="0 0.836576 0 0.547851" mass="0.013" diaginertia="1.17052e-06 1.02e-06 9.79475e-07" />
+                          <joint name="left_ring_MPR_joint" range="-0.2618 0.2618" actuatorfrcrange="-0.35 0.35" axis="-0.999817 -0.019105 0" />
+                          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_ring_MPR_Link" />
+                          <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_ring_MPR_Link" group="3" />
+                          <body name="left_ring_MCP_Link" pos="0 0.00032687 0.015997">
+                            <inertial pos="0.00090883 0.00046347 0.0235221" quat="0.999763 0.00975857 0.0192672 0.00274174" mass="0.0658" diaginertia="1.60666e-05 1.57441e-05 4.90932e-06" />
+                            <joint name="left_ring_MCP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.019101 0.999609 -0.020433" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_ring_MCP_Link" />
+                            <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_ring_MCP_Link" group="3" />
+                            <body name="left_ring_PIP_Link" pos="0.00059944 0.00094917 0.046994">
+                              <inertial pos="0.00216317 0.00032218 0.0177802" quat="0.99777 0.00306605 0.0659465 0.00986181" mass="0.0332" diaginertia="3.11347e-06 2.61981e-06 2.34672e-06" />
+                              <joint name="left_ring_PIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.019101 0.999609 -0.020433" />
+                              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_ring_PIP_Link" />
+                              <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_ring_PIP_Link" group="3" />
+                              <body name="left_ring_DIP_Link" pos="0.0012747 0.00057846 0.02949">
+                                <inertial pos="-0.00048946 0.00034101 0.016192" quat="0.99329 0 0.115653 0" mass="0.01" diaginertia="5.69443e-07 5.2e-07 3.90557e-07" />
+                                <joint name="left_ring_DIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.019101 0.999609 -0.020433" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_ring_DIP_Link" />
+                                <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_ring_DIP_Link" group="3" />
+                                <body name="left_ring_tip_Link" pos="0.0084 0.000185 0.01" />
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                        <body name="left_little_MPR_Link" pos="-0.0052198 0.036409 0.090532">
+                          <inertial pos="-0.00261202 0.00026358 0.0081721" mass="0.013" diaginertia="4.2e-07 4.2e-07 4.2e-07" />
+                          <joint name="left_little_MPR_joint" range="-0.2618 0.2618" actuatorfrcrange="-0.35 0.35" axis="-0.998357 -0.0572968 0" />
+                          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_little_MPR_Link" />
+                          <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_little_MPR_Link" group="3" />
+                          <body name="left_little_MCP_Link" pos="5.6148e-05 0.00097833 0.01597">
+                            <inertial pos="0.00098089 0.00138702 0.0234829" quat="0.999763 0.00975857 0.0192672 0.00274174" mass="0.0658" diaginertia="1.60666e-05 1.57441e-05 4.90932e-06" />
+                            <joint name="left_little_MCP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.0571902 0.996483 -0.0612462" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_little_MCP_Link" />
+                            <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_little_MCP_Link" group="3" />
+                            <body name="left_little_PIP_Link" pos="0.00074519 0.0028408 0.046916">
+                              <inertial pos="0.00221549 0.0009639 0.0177505" quat="0.99777 0.00306605 0.0659465 0.00986181" mass="0.0332" diaginertia="3.11347e-06 2.61981e-06 2.34672e-06" />
+                              <joint name="left_little_PIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.0571902 0.996483 -0.0612462" />
+                              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_little_PIP_Link" />
+                              <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_little_PIP_Link" group="3" />
+                              <body name="left_little_DIP_Link" pos="0.0013649 0.0017312 0.029441">
+                                <inertial pos="-0.0004382 0.00101936 0.016165" quat="0.99329 0 0.115653 0" mass="0.01" diaginertia="5.69443e-07 5.2e-07 3.90557e-07" />
+                                <joint name="left_little_DIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.0571902 0.996483 -0.0612462" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__left__left_little_DIP_Link" />
+                                <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__left__left_little_DIP_Link" group="3" />
+                                <body name="left_little_tip_Link" pos="0.0084 0.0012185 0.01" />
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                    </body>
+                    <body name="left_wrist_camera_mount_frame" pos="-0.0317 0 -0.0753" quat="0.5 0.5 0.5 0.5">
+                      <inertial pos="-1.70091e-07 0.00106108 0.0505613" quat="0.707055 0.00860701 -0.00861671 0.707053" mass="0.0249423" diaginertia="1.22389e-05 9.43132e-06 3.1765e-06" />
+                      <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.16 0.2 0.24 1" density="0" mesh="left_aligned_v3_m" />
+                      <body name="left_wrist_camera_rod_end_frame">
+                        <body name="left_wrist_camera_plate_frame">
+                          <body name="left_wrist_camera_bottom_screw_frame" pos="0 -0.0126602 0.0890088" quat="-0.0616284 0.704416 -0.704416 -0.0616284">
+                            <body name="left_wrist_camera_link" pos="0.01085 0.009 0.021">
+                              <geom pos="0.0038 -0.009 0" quat="0.5 0.5 0.5 0.5" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.16 0.18 0.21 1" density="0" mesh="d405_visual_m" />
+                              <body name="left_wrist_camera_depth_frame">
+                                <body name="left_wrist_camera_depth_optical_frame" quat="0.5 -0.5 0.5 -0.5">
+                                  <camera name="left_wrist_depth" quat="0 1 0 0" resolution="640 480" sensorsize="1 1" focalpixel="337.20964009 432.971461265" principalpixel="0 0" />
+                                </body>
+                              </body>
+                              <body name="left_wrist_camera_color_frame">
+                                <body name="left_wrist_camera_color_optical_frame" quat="0.5 -0.5 0.5 -0.5">
+                                  <camera name="left_wrist_color" quat="0 1 0 0" resolution="640 480" sensorsize="1 1" focalpixel="337.20964009 432.971461265" principalpixel="0 0" />
+                                </body>
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="proximal_pitch_R_Link" pos="-0.00044 -0.09178 0.05474">
+        <inertial pos="-0.00547 -0.07014 -0.00611" quat="0.661877 0.749537 -0.00384555 0.00992031" mass="2.21" diaginertia="0.00438583 0.0035012 0.00307523" />
+        <joint name="proximal_pitch_R_Joint" range="-3.14159 2.60054" actuatorfrcrange="-150 150" axis="0 0.996195 0.0871554" />
+        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="proximal_pitch_R_Link" />
+        <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="proximal_pitch_R_Link" group="3" />
+        <body name="proximal_roll_R_Link" pos="-0.032 -0.0758 -0.00663">
+          <inertial pos="0.03124 -0.00035 -0.08414" quat="0.713315 -0.00230623 -0.0110253 0.700753" mass="1.74" diaginertia="0.00545642 0.00476973 0.00305218" />
+          <joint name="proximal_roll_R_Joint" range="-3.19395 0.261799" actuatorfrcrange="-150 150" axis="1 0 0" />
+          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="proximal_roll_R_Link" />
+          <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="proximal_roll_R_Link" group="3" />
+          <body name="proximal_yaw_R_Link" pos="0.032 0 -0.1374">
+            <inertial pos="-0.00428 -0.00216 -0.09174" quat="0.999861 -0.014434 5.56061e-05 -0.00830807" mass="1.15" diaginertia="0.00994191 0.00955689 0.00229096" />
+            <joint name="proximal_yaw_R_Joint" range="-1.48353 3.66519" actuatorfrcrange="-60 60" />
+            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="proximal_yaw_R_Link" />
+            <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="proximal_yaw_R_Link_collision" group="3" />
+            <body name="elbow_R_Link" pos="0.004 -0.02972 -0.2126">
+              <inertial pos="-0.00061 0.0264 -0.00455" quat="0.708588 0.0367289 0.0619435 0.701938" mass="1.11" diaginertia="0.00150918 0.00127816 0.00107445" />
+              <joint name="elbow_R_Joint" range="-2.61799 0.523599" actuatorfrcrange="-70 70" axis="0 1 0" />
+              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="elbow_R_Link" />
+              <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="elbow_R_Link" group="3" />
+              <body name="wrist_yaw_R_Link" pos="-0.004 0.02972 -0.0685">
+                <inertial pos="-0.00013 -0.00206 -0.06635" quat="0.999818 -0.0178355 0.00131601 0.00666706" mass="1.15" diaginertia="0.00312787 0.00297465 0.00103898" />
+                <joint name="wrist_yaw_R_Joint" range="-1.39626 1.74533" actuatorfrcrange="-20 20" />
+                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="wrist_yaw_R_Link" />
+                <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="wrist_yaw_R_Link" group="3" />
+                <body name="wrist_pitch_R_Link" pos="0 -0.0367 -0.1743">
+                  <inertial pos="0.00426 0.0363 0.00013" quat="0.462742 0.483797 0.473017 0.572769" mass="0.44" diaginertia="0.000257393 0.00025519 0.000227077" />
+                  <joint name="wrist_pitch_R_Joint" range="-0.785398 0.785398" actuatorfrcrange="-20 20" axis="0 1 0" />
+                  <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="wrist_pitch_R_Link" />
+                  <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="wrist_pitch_R_Link" group="3" />
+                  <body name="wrist_roll_R_Link" pos="0.0317 0.0367 0">
+                    <inertial pos="-0.02867 0.00014 -0.04311" quat="0.614888 0.34551 0.344122 0.619771" mass="0.24" diaginertia="0.000365175 0.000271569 0.000253636" />
+                    <joint name="wrist_roll_R_Joint" range="-1.5708 1.5708" actuatorfrcrange="-20 20" axis="1 0 0" />
+                    <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" mesh="wrist_roll_R_Link" />
+                    <geom type="mesh" rgba="0.22 0.27 0.32 1" mesh="wrist_roll_R_Link_collision" group="3" />
+                    <body name="right_adapter_link" pos="-0.0317 0 -0.0812" quat="0.5 -0.5 0.5 -0.5">
+                      <inertial pos="-9.42023e-07 0.0107775 0.000217946" quat="0.501405 0.498573 0.501307 0.498708" mass="0.103445" diaginertia="7.68084e-05 5.96618e-05 3.8044e-05" />
+                      <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.94 0.43 0.12 1" density="0" mesh="adapter_right_v2_visual" />
+                      <geom name="adapter_right_v2_convex_000" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_000" group="3" />
+                      <geom name="adapter_right_v2_convex_001" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_001" group="3" />
+                      <geom name="adapter_right_v2_convex_002" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_002" group="3" />
+                      <geom name="adapter_right_v2_convex_003" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_003" group="3" />
+                      <geom name="adapter_right_v2_convex_004" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_004" group="3" />
+                      <geom name="adapter_right_v2_convex_005" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_005" group="3" />
+                      <geom name="adapter_right_v2_convex_006" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_006" group="3" />
+                      <geom name="adapter_right_v2_convex_007" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_007" group="3" />
+                      <geom name="adapter_right_v2_convex_008" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_008" group="3" />
+                      <geom name="adapter_right_v2_convex_009" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_009" group="3" />
+                      <geom name="adapter_right_v2_convex_010" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_010" group="3" />
+                      <geom name="adapter_right_v2_convex_011" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_011" group="3" />
+                      <geom name="adapter_right_v2_convex_012" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_012" group="3" />
+                      <geom name="adapter_right_v2_convex_013" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_013" group="3" />
+                      <geom name="adapter_right_v2_convex_014" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_014" group="3" />
+                      <geom name="adapter_right_v2_convex_015" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_015" group="3" />
+                      <geom name="adapter_right_v2_convex_016" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_016" group="3" />
+                      <geom name="adapter_right_v2_convex_017" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_017" group="3" />
+                      <geom name="adapter_right_v2_convex_018" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_018" group="3" />
+                      <geom name="adapter_right_v2_convex_019" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_019" group="3" />
+                      <geom name="adapter_right_v2_convex_020" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_020" group="3" />
+                      <geom name="adapter_right_v2_convex_021" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_021" group="3" />
+                      <geom name="adapter_right_v2_convex_022" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_022" group="3" />
+                      <geom name="adapter_right_v2_convex_023" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_023" group="3" />
+                      <geom name="adapter_right_v2_convex_024" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_024" group="3" />
+                      <geom name="adapter_right_v2_convex_025" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_025" group="3" />
+                      <geom name="adapter_right_v2_convex_026" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_026" group="3" />
+                      <geom name="adapter_right_v2_convex_027" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_027" group="3" />
+                      <geom name="adapter_right_v2_convex_028" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_028" group="3" />
+                      <geom name="adapter_right_v2_convex_029" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_029" group="3" />
+                      <geom name="adapter_right_v2_convex_030" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_030" group="3" />
+                      <geom name="adapter_right_v2_convex_031" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_031" group="3" />
+                      <geom name="adapter_right_v2_convex_032" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_032" group="3" />
+                      <geom name="adapter_right_v2_convex_033" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_033" group="3" />
+                      <geom name="adapter_right_v2_convex_034" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_034" group="3" />
+                      <geom name="adapter_right_v2_convex_035" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_035" group="3" />
+                      <geom name="adapter_right_v2_convex_036" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_036" group="3" />
+                      <geom name="adapter_right_v2_convex_037" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_037" group="3" />
+                      <geom name="adapter_right_v2_convex_038" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_038" group="3" />
+                      <geom name="adapter_right_v2_convex_039" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_039" group="3" />
+                      <geom name="adapter_right_v2_convex_040" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_040" group="3" />
+                      <geom name="adapter_right_v2_convex_041" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_041" group="3" />
+                      <geom name="adapter_right_v2_convex_042" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_042" group="3" />
+                      <geom name="adapter_right_v2_convex_043" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_043" group="3" />
+                      <geom name="adapter_right_v2_convex_044" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_044" group="3" />
+                      <geom name="adapter_right_v2_convex_045" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_045" group="3" />
+                      <geom name="adapter_right_v2_convex_046" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_046" group="3" />
+                      <geom name="adapter_right_v2_convex_047" type="mesh" rgba="0.94 0.43 0.12 1" mesh="adapter_right_v2_convex_047" group="3" />
+                      <body name="right_hand_base_link" pos="0 0.023855 0" quat="0.5 -0.5 -0.5 -0.5">
+                        <inertial pos="-0.00345736 0.00054338 0.0398347" quat="0.996346 -0.045093 -0.0695971 0.020412" mass="0.462" diaginertia="0.000814368 0.00061153 0.000403262" />
+                        <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__base_link" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_000" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_001" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_002" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_003" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_004" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_005" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_006" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_007" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_008" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_009" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_010" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_011" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_012" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_013" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_014" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_015" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_016" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_017" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_018" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_019" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_020" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_021" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_022" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_023" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_024" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_025" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_026" group="3" />
+                        <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__part_027" group="3" />
+                        <body name="right_palm" pos="0.0155 0 0.055" />
+                        <body name="right_thumb_CMP_Link" pos="0.002 0.0195 0.051993">
+                          <inertial pos="0 0 0" quat="0.5 0.5 0.5 0.5" mass="0.026" diaginertia="2.29e-06 2.22e-06 2.03e-06" />
+                          <joint name="right_thumb_CMP_joint" range="0 1.9199" actuatorfrcrange="-0.35 0.35" axis="0 0 -1" />
+                          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_thumb_CMP_Link" />
+                          <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_thumb_CMP_Link" group="3" />
+                          <body name="right_thumb_CMR_Link" pos="0 0.0095 0" quat="0.707388 0 0.706825 0">
+                            <inertial pos="0 0.00601571 -0.00128638" quat="0.344336 0.617602 0.344336 0.617602" mass="0.012" diaginertia="9.62361e-07 9.17639e-07 5.7e-07" />
+                            <joint name="right_thumb_CMR_joint" range="0 2.0071" actuatorfrcrange="-0.35 0.35" axis="0 -1 0" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_thumb_CMR_Link" />
+                            <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_thumb_CMR_Link" group="3" />
+                            <body name="right_thumb_MCP_Link" pos="0 0.0125 0">
+                              <inertial pos="1.27e-05 0.0220088 -0.00233775" quat="0.742723 0.669588 0.00141505 -0.00340734" mass="0.067" diaginertia="1.46001e-05 1.43031e-05 6.51687e-06" />
+                              <joint name="right_thumb_MCP_joint" range="0 0.8727" actuatorfrcrange="-0.35 0.35" axis="1 0 0" />
+                              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_thumb_MCP_Link" />
+                              <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_thumb_MCP_Link" group="3" />
+                              <body name="right_thumb_PIP_Link" pos="0.0001 0.042087 -0.0013667">
+                                <inertial pos="2.72468e-05 0.019664 -0.000959025" quat="0.506781 0.49356 -0.516949 0.482011" mass="0.035" diaginertia="4.07065e-06 3.31145e-06 2.6879e-06" />
+                                <joint name="right_thumb_PIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="1 0 0" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_thumb_PIP_Link" />
+                                <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_thumb_PIP_Link" group="3" />
+                                <body name="right_thumb_DIP_Link" pos="0.000125 0.032 -0.00052077">
+                                  <inertial pos="-6.365e-05 0.015338 -0.00158245" quat="0.389253 0.570468 -0.584638 0.425732" mass="0.01" diaginertia="1.63561e-06 1.49027e-06 8.74127e-07" />
+                                  <joint name="right_thumb_DIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="1 0 0" />
+                                  <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_thumb_DIP_Link" />
+                                  <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_thumb_DIP_Link" group="3" />
+                                  <body name="right_thumb_tip_Link" pos="0 0.01 0.0098" />
+                                </body>
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                        <body name="right_index_MPR_Link" pos="-0.005442 0.036871 0.097822">
+                          <inertial pos="-0.00223219 0.000719586 0.00541673" mass="0.013" diaginertia="4.2e-07 4.2e-07 4.2e-07" />
+                          <joint name="right_index_MPR_joint" range="-0.2618 0.2618" actuatorfrcrange="-0.35 0.35" axis="0.998357 -0.0572968 0" />
+                          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_index_MPR_Link" />
+                          <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_index_MPR_Link" group="3" />
+                          <body name="right_index_MCP_Link" pos="5.6148e-05 0.00097833 0.01597">
+                            <inertial pos="-2.40856e-05 0.00140938 0.0229088" quat="0.999323 -0.0309223 -0.000579171 -0.0199378" mass="0.0658" diaginertia="1.19204e-05 1.167e-05 3.72965e-06" />
+                            <joint name="right_index_MCP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.0571902 0.996483 -0.0612462" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_index_MCP_Link" />
+                            <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_index_MCP_Link" group="3" />
+                            <body name="right_index_PIP_Link" pos="0.00074566 0.0028407 0.046916">
+                              <inertial pos="0.000370302 0.00104638 0.0182493" quat="0.999031 -0.0312879 0.0216722 -0.0220937" mass="0.0332" diaginertia="2.52172e-06 2.33148e-06 1.8368e-06" />
+                              <joint name="right_index_PIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.0571902 0.996483 -0.0612452" />
+                              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_index_PIP_Link" />
+                              <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_index_PIP_Link" group="3" />
+                              <body name="right_index_DIP_Link" pos="0.0013627 0.0017313 0.029441">
+                                <inertial pos="-0.000421265 0.000956968 0.0155552" quat="0.99598 0 -0.0895725 0" mass="0.01" diaginertia="6.4544e-07 5.7e-07 4.7456e-07" />
+                                <joint name="right_index_DIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.0571901 0.996482 -0.0612551" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_index_DIP_Link" />
+                                <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_index_DIP_Link" group="3" />
+                                <body name="right_index_tip_Link" pos="0.0084 0.0005 0.01" />
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                        <body name="right_middle_MPR_Link" pos="-0.0060223 0.012496 0.10793">
+                          <inertial pos="-0.00226228 0.000412101 0.00543633" mass="0.013" diaginertia="4.2e-07 4.2e-07 4.2e-07" />
+                          <joint name="right_middle_MPR_joint" range="-0.2618 0.2618" actuatorfrcrange="-0.35 0.35" axis="0.999817 -0.019105 0" />
+                          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_middle_MPR_Link" />
+                          <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_middle_MPR_Link" group="3" />
+                          <body name="right_middle_MCP_Link" pos="0 0.00032687 0.015997">
+                            <inertial pos="-9.58184e-05 0.000470873 0.0229471" quat="0.998253 -0.00892419 -0.00134653 0.0583869" mass="0.0658" diaginertia="1.19236e-05 1.1669e-05 3.73742e-06" />
+                            <joint name="right_middle_MCP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.019101 0.999609 -0.020433" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_middle_MCP_Link" />
+                            <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_middle_MCP_Link" group="3" />
+                            <body name="right_middle_PIP_Link" pos="0.00059991 0.00094912 0.046994">
+                              <inertial pos="0.000315792 0.000313741 0.0182776" quat="0.999765 0 0.0216829 0" mass="0.0332" diaginertia="2.5213e-06 2.33e-06 1.8287e-06" />
+                              <joint name="right_middle_PIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.019101 0.999609 -0.020432" />
+                              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_middle_PIP_Link" />
+                              <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_middle_PIP_Link" group="3" />
+                              <body name="right_middle_DIP_Link" pos="0.0012725 0.00057847 0.02949">
+                                <inertial pos="-0.000469438 0.000304802 0.0155808" quat="0.99598 0 -0.0895725 0" mass="0.01" diaginertia="6.4544e-07 5.7e-07 4.7456e-07" />
+                                <joint name="right_middle_DIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="0.019101 0.999609 -0.020443" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_middle_DIP_Link" />
+                                <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_middle_DIP_Link" group="3" />
+                                <body name="right_middle_tip_Link" pos="0.0084 0 0.01" />
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                        <body name="right_ring_MPR_Link" pos="-0.0062466 -0.012415 0.10384">
+                          <inertial pos="-0.00222213 0.000103944 0.00544685" mass="0.013" diaginertia="4.2e-07 4.2e-07 4.2e-07" />
+                          <joint name="right_ring_MPR_joint" range="-0.2618 0.2618" actuatorfrcrange="-0.35 0.35" axis="0.999817 0.019105 0" />
+                          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_ring_MPR_Link" />
+                          <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_ring_MPR_Link" group="3" />
+                          <body name="right_ring_MCP_Link" pos="0 -0.00032687 0.015997">
+                            <inertial pos="-4.58228e-05 -0.00046997 0.0229471" quat="0.999947 0.0100932 -0.00184442 0.00116036" mass="0.0658" diaginertia="1.19201e-05 1.16632e-05 3.73666e-06" />
+                            <joint name="right_ring_MCP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.019101 0.999609 0.020433" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_ring_MCP_Link" />
+                            <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_ring_MCP_Link" group="3" />
+                            <body name="right_ring_PIP_Link" pos="0.0006499 -0.00094821 0.046994">
+                              <inertial pos="0.000317848 -0.000421387 0.0182754" quat="0.999765 0 0.0216829 0" mass="0.0332" diaginertia="2.5213e-06 2.33e-06 1.8287e-06" />
+                              <joint name="right_ring_PIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.019101 0.999609 0.020434" />
+                              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_ring_PIP_Link" />
+                              <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_ring_PIP_Link" group="3" />
+                              <body name="right_ring_DIP_Link" pos="0.0012725 -0.00057823 0.02949">
+                                <inertial pos="-0.000468578 -0.000349897 0.0155798" quat="0.99598 0 -0.0895725 0" mass="0.01" diaginertia="6.4544e-07 5.7e-07 4.7456e-07" />
+                                <joint name="right_ring_DIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.019101 0.999609 0.020424" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_ring_DIP_Link" />
+                                <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_ring_DIP_Link" group="3" />
+                                <body name="right_ring_tip_Link" pos="0.0084 -0.000185 0.01" />
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                        <body name="right_little_MPR_Link" pos="-0.0052697 -0.036412 0.090532">
+                          <inertial pos="-0.00221174 -0.00020324 0.0054483" mass="0.013" diaginertia="4.2e-07 4.2e-07 4.2e-07" />
+                          <joint name="right_little_MPR_joint" range="-0.2618 0.2618" actuatorfrcrange="-0.35 0.35" axis="0.998357 0.0572968 0" />
+                          <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_little_MPR_Link" />
+                          <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_little_MPR_Link" group="3" />
+                          <body name="right_little_MCP_Link" pos="5.6148e-05 -0.00097833 0.01597">
+                            <inertial pos="2.58235e-05 -0.00140653 0.0229088" quat="0.999323 0.0309223 -0.000579171 0.0199378" mass="0.0658" diaginertia="1.19204e-05 1.167e-05 3.72965e-06" />
+                            <joint name="right_little_MCP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.0571902 0.996483 0.0612462" />
+                            <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_little_MCP_Link" />
+                            <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_little_MCP_Link" group="3" />
+                            <body name="right_little_PIP_Link" pos="0.00079558 -0.0028379 0.046916">
+                              <inertial pos="0.000376459 -0.00115365 0.0182427" quat="0.999031 0.0312879 0.0216722 0.0220937" mass="0.0332" diaginertia="2.52172e-06 2.33148e-06 1.8368e-06" />
+                              <joint name="right_little_PIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.0571902 0.996483 0.0612472" />
+                              <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_little_PIP_Link" />
+                              <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_little_PIP_Link" group="3" />
+                              <body name="right_little_DIP_Link" pos="0.0013627 -0.0017313 0.029441">
+                                <inertial pos="-0.000418722 -0.00100158 0.0155525" quat="0.99598 0 -0.0895725 0" mass="0.01" diaginertia="6.4544e-07 5.7e-07 4.7456e-07" />
+                                <joint name="right_little_DIP_joint" range="0 1.4835" actuatorfrcrange="-0.35 0.35" axis="-0.0571892 0.996484 0.0612372" />
+                                <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.82 0.86 0.89 1" density="0" mesh="revo3__hands__visual__right__right_little_DIP_Link" />
+                                <geom type="mesh" rgba="0.82 0.86 0.89 1" mesh="revo3__hands__collision__right__right_little_DIP_Link" group="3" />
+                                <body name="right_little_tip_Link" pos="0.0084 -0.0012185 0.01" />
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                    </body>
+                    <body name="right_wrist_camera_mount_frame" pos="-0.0317 0 -0.0753" quat="0.5 0.5 -0.5 -0.5">
+                      <inertial pos="-8.36021e-08 0.00106096 -0.050559" quat="0.707054 -0.00861292 0.00861729 0.707054" mass="0.0249394" diaginertia="1.22377e-05 9.43015e-06 3.17648e-06" />
+                      <geom type="mesh" contype="0" conaffinity="0" group="1" rgba="0.16 0.2 0.24 1" density="0" mesh="right_aligned_v3_m" />
+                      <body name="right_wrist_camera_rod_end_frame">
+                        <body name="right_wrist_camera_plate_frame">
+                          <body name="right_wrist_camera_bottom_screw_frame" pos="0 -0.00536698 -0.0476469" quat="-0.0616284 -0.704416 0.704416 -0.0616284">
+                            <body name="right_wrist_camera_link" pos="0.01085 0.009 0.021">
+                              <geom pos="0.0038 -0.009 0" quat="0.5 0.5 0.5 0.5" type="mesh" contype="0" conaffinity="0" group="1" rgba="0.16 0.18 0.21 1" density="0" mesh="d405_visual_m" />
+                              <body name="right_wrist_camera_depth_frame">
+                                <body name="right_wrist_camera_depth_optical_frame" quat="0.5 -0.5 0.5 -0.5">
+                                  <camera name="right_wrist_depth" quat="0 1 0 0" resolution="640 480" sensorsize="1 1" focalpixel="337.20964009 432.971461265" principalpixel="0 0" />
+                                </body>
+                              </body>
+                              <body name="right_wrist_camera_color_frame">
+                                <body name="right_wrist_camera_color_optical_frame" quat="0.5 -0.5 0.5 -0.5">
+                                  <camera name="right_wrist_color" quat="0 1 0 0" resolution="640 480" sensorsize="1 1" focalpixel="337.20964009 432.971461265" principalpixel="0 0" />
+                                </body>
+                              </body>
+                            </body>
+                          </body>
+                        </body>
+                      </body>
+                    </body>
+                  </body>
+                </body>
+              </body>
+            </body>
+          </body>
+        </body>
+      </body>
+      <body name="d435_Link" pos="0.0968 0.01759 -0.00409" quat="0.207918 0 0.978146 0">
+        <inertial pos="0 0 0" mass="0.001" diaginertia="1e-07 1e-07 1e-07" />
+        <geom size="0.0025 0.0025 0.0025" type="box" contype="0" conaffinity="0" group="1" rgba="0.22 0.27 0.32 1" density="0" />
+        <body name="d435_optical_frame" quat="0.5 -0.5 0.5 -0.5">
+          <inertial pos="0 0 0" mass="0.001" diaginertia="1e-07 1e-07 1e-07" />
+        </body>
+      </body>
+    </body>
+    <geom name="camera_floor" type="plane" size="3 3 .1" pos="0 0 -.001" material="camera_scene_floor" group="0" />
+    <light name="camera_key_light" pos="1 -1 3" dir="-.2 .2 -1" diffuse=".9 .9 .9" />
+    <light name="camera_fill_light" pos="-1 1 2" dir=".2 -.2 -1" diffuse=".55 .55 .55" />
+    <geom name="work_table" type="box" size=".45 .48 .025" pos=".72 0 .725" rgba=".53 .4 .26 1" group="0" />
+    <geom name="test_cube_0" type="box" size=".028 .028 .035" pos=".64 -0.22 .785" rgba=".9 .18 .14 1" group="0" />
+    <geom name="test_cube_1" type="box" size=".028 .028 .035" pos=".64 0 .785" rgba=".15 .75 .28 1" group="0" />
+    <geom name="test_cube_2" type="box" size=".028 .028 .035" pos=".64 0.22 .785" rgba=".1 .35 .9 1" group="0" />
+  </worldbody>
+  <visual>
+    <global offwidth="1280" offheight="960" />
+    <map znear="0.0005" zfar="10" />
+    <headlight ambient="0.3 0.3 0.3" diffuse="0.65 0.65 0.65" />
+  </visual>
+</mujoco>

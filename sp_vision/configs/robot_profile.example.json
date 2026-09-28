@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "profile_id": "REPLACE-with-installation-revision",
+  "robot": {
+    "model_xml": "scene.xml",
+    "base_body": "base_Link",
+    "wrist_bodies": {
+      "left": "REPLACE-left-wrist-link",
+      "right": "REPLACE-right-wrist-link"
+    },
+    "arm_joint_names": {
+      "left": [
+        "proximal_pitch_L_Joint",
+        "proximal_roll_L_Joint",
+        "proximal_yaw_L_Joint",
+        "elbow_L_Joint",
+        "wrist_yaw_L_Joint",
+        "wrist_pitch_L_Joint",
+        "wrist_roll_L_Joint"
+      ],
+      "right": [
+        "proximal_pitch_R_Joint",
+        "proximal_roll_R_Joint",
+        "proximal_yaw_R_Joint",
+        "elbow_R_Joint",
+        "wrist_yaw_R_Joint",
+        "wrist_pitch_R_Joint",
+        "wrist_roll_R_Joint"
+      ]
+    },
+    "head_joint_names": [
+      "head_pitch_Joint",
+      "head_yaw_Joint"
+    ],
+    "joint_lower": null,
+    "joint_upper": null,
+    "velocity_limits": null,
+    "acceleration_limits": null,
+    "urdf": "assembly.urdf",
+    "model_hash": "REPLACE-with-model-hash-command-output",
+    "host": "REPLACE-with-control-host",
+    "port": 5000
+  },
+  "camera": {
+    "backend": "ros",
+    "identity": "REPLACE-physical-camera-serial",
+    "width": 640,
+    "height": 480,
+    "intrinsics": null,
+    "distortion": null,
+    "depth_intrinsics": null,
+    "depth_to_color": null,
+    "color_topic": "/camera/top/color/image_raw/compressed",
+    "depth_topic": "/camera/top/depth/image_rect_raw",
+    "joint_state_topic": "/joint_states",
+    "ros_master_uri": "http://REPLACE-robot-master:11311",
+    "ros_ip": "REPLACE-this-workstation-IP",
+    "max_frame_age_s": 1.0
+  },
+  "calibration": {
+    "id": "UNVERIFIED",
+    "source": "real",
+    "verified": false,
+    "camera_to_base": [
+      [
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ],
+    "head_q2": null,
+    "head_tolerance_rad": 0.01
+  },
+  "vision": {
+    "mesh_id": "REPLACE-registered-mesh-id",
+    "mask_endpoint": "tcp://127.0.0.1:5560",
+    "pose_endpoint": "tcp://127.0.0.1:5557",
+    "timeout_ms": 120000,
+    "min_confidence": 0.5
+  },
+  "scene": {
+    "table_z_m": null,
+    "clearance_m": null,
+    "object_radius_m": null
+  },
+  "pregrasp": {
+    "left": {
+      "symmetry": "axial",
+      "wrist_to_tcp_pose7": null,
+      "up_axis_object": [
+        0,
+        0,
+        1
+      ],
+      "radius_m": null,
+      "axial_offset_m": 0,
+      "standoff_m": null,
+      "lift_clearance_m": 0.05
+    },
+    "right": {
+      "symmetry": "axial",
+      "wrist_to_tcp_pose7": null,
+      "up_axis_object": [
+        0,
+        0,
+        1
+      ],
+      "radius_m": null,
+      "axial_offset_m": 0,
+      "standoff_m": null,
+      "lift_clearance_m": 0.05
+    }
+  },
+  "execution": {
+    "allow_real": false,
+    "hold_behavior_verified": false,
+    "publish_hz": 500,
+    "observation_max_age_s": 120
+  }
+}

@@ -1,0 +1,9 @@
+data/
+local-*.json
+head_config.json
+wrist_config.json
+configs/head_config.json
+configs/wrist_config.json
+configs/robot_profile.json
+__pycache__/
+*.pyc
