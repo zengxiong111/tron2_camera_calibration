@@ -34,7 +34,7 @@ include = ["sp_vision*"]
 exclude = ["sp_vision.test_*"]
 
 [tool.setuptools.package-data]
-sp_vision = ["configs/*.json", "configs/*.urdf", "configs/*.xml", "*.md"]
+sp_vision = ["configs/*.example.json", "configs/*.urdf", "configs/*.xml", "*.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["sp_vision"]

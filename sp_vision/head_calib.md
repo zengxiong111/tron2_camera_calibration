@@ -1,5 +1,7 @@
 # Minimal Head-Camera Calibration Experiment
 
+The `tron2-deploy state` commands below are optional examples for installations that already have the separate deployment package; this calibration package does not install that command. You can instead supply state JSON from your own read-only controller logger with fourteen finite `arm_q14` values in the configured left-then-right joint order. Use measured feedback, not target commands. Run script examples from `sp_vision/` after installing the repository.
+
 [简体中文](head_calib.zh-CN.md)
 
 Controller payload identification (`m`, `mc_x`, `mc_y`, `mc_z`) is not used by this image, joint-angle, and FK calibration. It does not belong in this experiment's JSON or the URDF camera transform. If drag teaching is used to position the robot, configure the current payload separately in the robot controller and confirm its readback before that operation.
@@ -72,7 +74,7 @@ The example config references the bundled `configs/assembly.urdf`, `configs/scen
 Rigidly fix the board where the camera and arm can both reach it. Do not move it during this dataset.
 
 ```bash
-.venv/bin/python calibration.py \
+python calibration.py \
   --config configs/head_config.json capture \
   --pattern 7x10 --square-m 0.021 \
   --session data/head_camera_session --count 40
@@ -94,7 +96,7 @@ Move through combinations spanning positive and negative yaw and pitch, and wait
 ## 2. Solve intrinsics
 
 ```bash
-.venv/bin/python calibration.py \
+python calibration.py \
   --config configs/head_config.json intrinsics \
   --pattern 7x10 --square-m 0.021 \
   --session data/head_camera_session \
@@ -106,7 +108,7 @@ Require `passed: true`. Review per-view RMS, the saved diagnostic overlays, and 
 ## 3. Solve camera-to-pitch extrinsics
 
 ```bash
-.venv/bin/python calibration.py \
+python calibration.py \
   --config configs/head_config.json extrinsics \
   --pattern 7x10 --square-m 0.021 \
   --session data/head_camera_session \
@@ -139,16 +141,16 @@ Use a sharp point rigidly fixed relative to the wrist. With a dexterous hand, pr
 Touch one fixed point at four clearly different wrist orientations and read state after each settles:
 
 ```bash
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/tcp/pose-01.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/tcp/pose-02.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/tcp/pose-03.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/tcp/pose-04.json
 
-.venv/bin/python calibration.py \
+python calibration.py \
   --config configs/head_config.json pivot --side left \
   --states data/tcp/pose-{01,02,03,04}.json \
   --output data/head_camera_session/tcp/head_tcp_pivot.json
@@ -161,7 +163,7 @@ Require `passed: true`. This fits touch-point position, not tool orientation.
 Without moving the board, capture one new image after calibration:
 
 ```bash
-.venv/bin/python calibration.py \
+python calibration.py \
   --config configs/head_config.json capture \
   --pattern 7x10 --square-m 0.021 \
   --session data/touch-validation --count 1
@@ -170,7 +172,7 @@ Without moving the board, capture one new image after calibration:
 Select three spread-out, non-collinear corners. Omit `--corner` for click-and-snap selection.
 
 ```bash
-.venv/bin/python calibration.py \
+python calibration.py \
   --config configs/head_config.json select-validation \
   --pattern 7x10 --square-m 0.021 \
   --frame data/touch-validation/view-001 \
@@ -183,14 +185,14 @@ Select three spread-out, non-collinear corners. Omit `--corner` for click-and-sn
 Inspect `selection.png`. Keep the board fixed, touch labeled points 1, 2, and 3 in order, and read state in the same order. The head may move after imaging: prediction uses the image-synchronized `head_q2`, while later head motion is recorded only as a diagnostic and does not affect the error gate.
 
 ```bash
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/touch-validation/state-01.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/touch-validation/state-02.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/touch-validation/state-03.json
 
-.venv/bin/python calibration.py \
+python calibration.py \
   --config configs/head_config.json validate \
   --selection data/head_camera_validation/head_selection.json \
   --side right --tcp data/head_camera_session/tcp/head_tcp_pivot.json \
@@ -242,7 +244,7 @@ Inspect `head_recheck_selection.png` and confirm that the labels match the same 
 ## Offline check
 
 ```bash
-.venv/bin/python -m pytest -q test_calibration.py
+python -m pytest -q test_calibration.py
 ```
 
 This checks 7×10 SB detection, hand-eye transform direction, final-model FK, yaw/pitch origin behavior, and URDF/XML agreement without connecting to hardware.

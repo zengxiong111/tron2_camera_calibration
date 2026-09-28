@@ -104,7 +104,7 @@ print(f"PASS installed adapter imports: {bridge_capture.__module__}, {rigid.__mo
             contents = contents.replace("import calibration as subject", "import sp_vision.calibration as subject")
             contents = contents.replace("import calibration_wrist as wrist", "import sp_vision.calibration_wrist as wrist")
             (test_package_dir / source_test.name).write_text(contents, encoding="utf-8")
-        result = run([str(python), "-m", "pytest", "-q", "-c", "/dev/null", str(test_package_dir)],
+        result = run([str(python), "-m", "pytest", "-q", "-p", "no:cacheprovider", str(test_package_dir)],
                      cwd=work, env=clean_env)
         print(result.stdout.strip())
         if "passed" not in result.stdout:

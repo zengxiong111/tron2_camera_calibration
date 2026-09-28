@@ -54,4 +54,7 @@ python sp_vision/capture_ros2_image.py --help
 
 ## 许可证
 
+贡献者：[AcSg999](https://github.com/AcSg999)、[Shukashuki](https://github.com/Shukashuki)。来源署名见[贡献者说明](CONTRIBUTORS.zh-CN.md)。
+
+
 MIT。原始版权声明保留在 [LICENSE](LICENSE) 中。

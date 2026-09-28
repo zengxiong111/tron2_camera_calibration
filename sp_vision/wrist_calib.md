@@ -1,5 +1,7 @@
 # Right wrist camera calibration
 
+The `tron2-deploy state` commands below are optional examples for installations that already have the separate deployment package; this calibration package does not install that command. You can instead supply state JSON from your own read-only controller logger with fourteen finite `arm_q14` values in the configured left-then-right joint order. Use measured feedback, not target commands. Run script examples from `sp_vision/` after installing the repository.
+
 [简体中文](wrist_calib.zh-CN.md)
 
 This is a separate, read-only experiment for the right wrist color camera. Run commands from this directory. Images and results go under `data/wrist_camera_session/`, which is ignored by Git. The bundled model assets keep offline calibration independent from the parent repository. The code never moves the robot.
@@ -30,7 +32,7 @@ cp configs/wrist_config.example.json configs/wrist_config.json
 The camera and `/joint_states` are ROS 2 Foxy topics on `guest@10.192.1.4`. The script connects by SSH and accepts an image only when its timestamp is within 100 ms of a fresh joint sample. The ROS 2 first four joints use `abad`, `hip`, `yaw`, `knee` names, while the URDF uses `proximal_pitch`, `proximal_roll`, `proximal_yaw`, `elbow`. The configured name list maps them into the **same 14-value order used by the controller `arm_q14` in head touch validation**. The names differ; the vector order does not. Capture saves both the named ROS 2 values and that ordered vector. Physical FK accuracy still needs the held-out board and independent touch checks.
 
 ```bash
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json probe
+python calibration_wrist.py --config configs/wrist_config.json probe
 ```
 
 `probe` saves a synchronized image and named joint JSON under `data/wrist_camera_session/` without requiring a checkerboard. It also reads the same controller `arm_q14` used by head validation before and after the image, then reports `mapping_check.passed` only if the arm stayed still and each mapped ROS 2 value agrees within 0.005 rad. A failed or unavailable controller comparison does not mean image capture failed. The image/joint `state_skew_ms` is a separate check with a 100 ms limit.
@@ -40,13 +42,13 @@ Rigidly fix a flat 7×10 inner-corner checkerboard with measured 0.021 m squares
 ## Capture, fit and check
 
 ```bash
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   capture --session data/wrist_camera_session --count 40
 
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   intrinsics --session data/wrist_camera_session
 
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   extrinsics --session data/wrist_camera_session
 ```
 
@@ -57,20 +59,20 @@ In the capture window, `s` saves an accepted image, `f` reverses checkerboard co
 To recalibrate the TCP, keep one rigid tip against one fixed point and read measured arm state at four clearly different wrist orientations. A dexterous fingertip is usable only if every finger joint remains at the same pose; the state files do not record finger joints. Move through the robot's existing reviewed interface and run one read-only state command after each pose settles:
 
 ```bash
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_session/tcp/pose-01.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_session/tcp/pose-02.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_session/tcp/pose-03.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_session/tcp/pose-04.json
 ```
 
 The wrist command reuses the head workflow's fixed-point solver and returns the tip position in `wrist_roll_R_Link`:
 
 ```bash
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   pivot --states data/wrist_camera_session/tcp/pose-{01,02,03,04}.json \
   --output data/wrist_camera_session/tcp/wrist_tcp_pivot.json
 ```
@@ -84,10 +86,10 @@ If you already refitted the pivot through the head workflow and saved `data/head
 After fitting extrinsics, keep the checkerboard fixed in the base frame and capture a **new** wrist image that was not used for fitting. The right arm may move after this image; predictions use the joint state synchronized to that image. Select three spread-out, non-collinear physical inner corners that the tip can touch:
 
 ```bash
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   capture --session data/wrist_camera_validation --count 1
 
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   select-validation --frame data/wrist_camera_validation/view-001 \
   --output data/wrist_camera_validation/wrist_selection.json
 ```
@@ -97,14 +99,14 @@ Each completed `capture --count 1` replaces the previous validation image with a
 Inspect the numbers in `data/wrist_camera_validation/wrist_selection.png` against the physical corners. Keep the board fixed and use the same tip and finger pose as in TCP fitting. Touch corners 1, 2, and 3 in order and read state after each pose settles:
 
 ```bash
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_validation/state-01.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_validation/state-02.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_validation/state-03.json
 
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   validate --selection data/wrist_camera_validation/wrist_selection.json \
    --side right --tcp data/wrist_camera_session/tcp/wrist_tcp_pivot.json \
   --states data/wrist_camera_validation/state-{01,02,03}.json \

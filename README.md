@@ -54,4 +54,7 @@ See [head calibration](sp_vision/head_calib.md) and [right wrist calibration](sp
 
 ## License
 
+Contributors: [AcSg999](https://github.com/AcSg999) and [Shukashuki](https://github.com/Shukashuki). See [CONTRIBUTORS.md](CONTRIBUTORS.md) for source attribution.
+
+
 MIT. The original copyright notice is retained in [LICENSE](LICENSE).

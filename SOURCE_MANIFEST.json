@@ -11,68 +11,90 @@
     "license_matches_source": true,
     "baseline_snapshot_label": "original_import_sha256 values are the SHA256 hashes of files copied from source_commit before local changes.",
     "live_capture_status": "untested; no camera, robot, or ROS capture was executed.",
-    "asset_scope": "Bundled URDF/MJCF snapshots provide kinematic transforms; referenced meshes are not included, so complete MuJoCo visualization/rendering is unavailable."
+    "asset_scope": "Bundled URDF/MJCF snapshots provide kinematic transforms; referenced meshes are not included, so complete MuJoCo visualization/rendering is unavailable.",
+    "mesh_dependency_audit": {
+      "assembly_urdf_references": 265,
+      "assembly_urdf_meshes_present": 0,
+      "scene_xml_references": 265,
+      "scene_xml_meshes_present": 0,
+      "note": "These snapshot files are consumed by mesh-independent URDF/MJCF kinematic FK. They do not support complete MuJoCo rendering, collision or physics."
+    }
   },
   "copied_files": [
     {
       "path": "sp_vision/.gitignore",
-      "original_import_sha256": "e79f1bd316f7bcbbb50931b1ae425b8ba45bce72def7319aaac59ada2aa72e76"
+      "original_import_sha256": "e79f1bd316f7bcbbb50931b1ae425b8ba45bce72def7319aaac59ada2aa72e76",
+      "destination_sha256": "e79f1bd316f7bcbbb50931b1ae425b8ba45bce72def7319aaac59ada2aa72e76"
     },
     {
       "path": "sp_vision/calibration.py",
-      "original_import_sha256": "e96ac37a9704384108f510ea6c7a1c9327964f5d315ad44add57ad551a519386"
+      "original_import_sha256": "e96ac37a9704384108f510ea6c7a1c9327964f5d315ad44add57ad551a519386",
+      "destination_sha256": "6041d5ba8a91b7380f075f700edfddb6792cf77de664daceafbb11d7c2bc6c2b"
     },
     {
       "path": "sp_vision/calibration_wrist.py",
-      "original_import_sha256": "cce1ed52a365f017cfc0f7d6fa4308b364ec4a5b9daff88244488962a8d93fcc"
+      "original_import_sha256": "cce1ed52a365f017cfc0f7d6fa4308b364ec4a5b9daff88244488962a8d93fcc",
+      "destination_sha256": "22cd4a99f3ef7f2c5afa3c40c40fa395add0c87fbc594f8e9da009b2f3966887"
     },
     {
       "path": "sp_vision/capture_ros2_image.py",
-      "original_import_sha256": "340ae4a235bef85f998bcc6c938447e3870fd2ceaabfc4ab1586f574fb362974"
+      "original_import_sha256": "340ae4a235bef85f998bcc6c938447e3870fd2ceaabfc4ab1586f574fb362974",
+      "destination_sha256": "6e92fb970781db77f9048707aaee004d9e76d35bb2c02609efdec81fb066124d"
     },
     {
       "path": "sp_vision/configs/assembly.urdf",
-      "original_import_sha256": "180faad7e72463812158cbbb984a970b8df60c8bce812d337d945eda522ca16d"
+      "original_import_sha256": "180faad7e72463812158cbbb984a970b8df60c8bce812d337d945eda522ca16d",
+      "destination_sha256": "180faad7e72463812158cbbb984a970b8df60c8bce812d337d945eda522ca16d"
     },
     {
       "path": "sp_vision/configs/head_config.example.json",
-      "original_import_sha256": "520ddcc15fe213e65059f6bfe7a10e0d919156449594f4dbf23163e2f4c23254"
+      "original_import_sha256": "520ddcc15fe213e65059f6bfe7a10e0d919156449594f4dbf23163e2f4c23254",
+      "destination_sha256": "520ddcc15fe213e65059f6bfe7a10e0d919156449594f4dbf23163e2f4c23254"
     },
     {
       "path": "sp_vision/configs/robot_profile.example.json",
-      "original_import_sha256": "0f8899a468d029e9cc26bd5bac53a5ac9945e4ccf34e96e83329851ce0323c51"
+      "original_import_sha256": "0f8899a468d029e9cc26bd5bac53a5ac9945e4ccf34e96e83329851ce0323c51",
+      "destination_sha256": "0f8899a468d029e9cc26bd5bac53a5ac9945e4ccf34e96e83329851ce0323c51"
     },
     {
       "path": "sp_vision/configs/scene.xml",
-      "original_import_sha256": "bdc87c0a548384213c4ce2319090f7fe80f6861afe1de40a7de967cb9ba9eab0"
+      "original_import_sha256": "bdc87c0a548384213c4ce2319090f7fe80f6861afe1de40a7de967cb9ba9eab0",
+      "destination_sha256": "bdc87c0a548384213c4ce2319090f7fe80f6861afe1de40a7de967cb9ba9eab0"
     },
     {
       "path": "sp_vision/configs/wrist_config.example.json",
-      "original_import_sha256": "c6ecabde210a85691ad64a294746cff5609113d0511844327f9301e6c5d76e7c"
+      "original_import_sha256": "c6ecabde210a85691ad64a294746cff5609113d0511844327f9301e6c5d76e7c",
+      "destination_sha256": "4d09484b91ab41a26a388095a73f6b7809b4cf8770dbe04c57d49728fd835bbe"
     },
     {
       "path": "sp_vision/head_calib.md",
-      "original_import_sha256": "9d30dc7b9c5d70d621c56c347eed1cb50c376afbecdcc27763c3fa95e84a98db"
+      "original_import_sha256": "9d30dc7b9c5d70d621c56c347eed1cb50c376afbecdcc27763c3fa95e84a98db",
+      "destination_sha256": "7a12ef836dfedc178c8cf6633002528a2a40afc01edf28fa12701566e40cacf9"
     },
     {
       "path": "sp_vision/head_calib.zh-CN.md",
-      "original_import_sha256": "0baf49d542c035ca647b6b06b1fa25292a51145dc1c2f2364ef3290a8dedbe7d"
+      "original_import_sha256": "0baf49d542c035ca647b6b06b1fa25292a51145dc1c2f2364ef3290a8dedbe7d",
+      "destination_sha256": "b3b90d116e3ce00ae01735a8f8f145700ea961b901dcd1dc4047ce835d05ebbd"
     },
     {
       "path": "sp_vision/test_calibration.py",
-      "original_import_sha256": "1bbcf61e1d70ac93edeff7fdcd3ba8b8d63c5031983592821c3557589f7b8d3c"
+      "original_import_sha256": "1bbcf61e1d70ac93edeff7fdcd3ba8b8d63c5031983592821c3557589f7b8d3c",
+      "destination_sha256": "1bbcf61e1d70ac93edeff7fdcd3ba8b8d63c5031983592821c3557589f7b8d3c"
     },
     {
       "path": "sp_vision/test_calibration_wrist.py",
-      "original_import_sha256": "65fdff9ad962742bdbc0072400b1f47dfe1f26005e750dbe980e9cd38cefcaae"
+      "original_import_sha256": "65fdff9ad962742bdbc0072400b1f47dfe1f26005e750dbe980e9cd38cefcaae",
+      "destination_sha256": "65fdff9ad962742bdbc0072400b1f47dfe1f26005e750dbe980e9cd38cefcaae"
     },
     {
       "path": "sp_vision/wrist_calib.md",
-      "original_import_sha256": "6e8d2aaa4a3ec40e560a5a9b8f2ecfc5037e8b2ef98fdca2e5cddce04efbffb2"
+      "original_import_sha256": "6e8d2aaa4a3ec40e560a5a9b8f2ecfc5037e8b2ef98fdca2e5cddce04efbffb2",
+      "destination_sha256": "d5f94fdaccbda007d26e83cc72cd360d74322ef94662be468711e654834bd79d"
     },
     {
       "path": "sp_vision/wrist_calib.zh-CN.md",
-      "original_import_sha256": "809b3ff9c9d298f2ed540b69b0435f4db05288df16a185daae0ce3c02e405014"
+      "original_import_sha256": "809b3ff9c9d298f2ed540b69b0435f4db05288df16a185daae0ce3c02e405014",
+      "destination_sha256": "c90085018092efa4102ae43a6f0fe1776285d323fada31f79a3410e0aa7502cd"
     }
   ],
   "live_capture_status": "untested",
@@ -83,19 +105,48 @@
       "source_sha256": "cc379144ae094e9bc8dd9c12dfca30aec0b62673395b15fc8bccacbafa7fc49f",
       "upstream_source": "hardware/tron2_rgbd.py from https://github.com/Shukashuki/dexpipe at 1e4a810de477bda7f621db553ecd496bb0884f2f",
       "upstream_sha256": "0df4731dc3cea60ed45b39e00047015137d47b87ff14611b163e295d1aacb9fc",
-      "relationship": "adapted from the deployment RGB-D bridge adapter; see parent SOURCE_MANIFEST.json port record."
+      "relationship": "adapted from the deployment RGB-D bridge adapter; see parent SOURCE_MANIFEST.json port record.",
+      "destination_sha256": "6af2864373c80305fcb202301cac94305eb76554cc8e86f8ac4695d892ce86dd"
     },
     {
       "destination": "sp_vision/adapters/validation.py",
-      "source_reference": "local minimal rigid-transform validation helper; no direct upstream source claimed."
+      "source_reference": "src/tron2_deployment/config.py rigid helper at parent source commit",
+      "destination_sha256": "133a73c3f30ae59ef5136c9bfaeaf51597aad696bd720b64216e64aced14a13e",
+      "source_sha256": "e81def3249243a0a2267eefbd4bcec85dc32de8aade215fb5eea48584e703f97",
+      "relationship": "small validation-only rigid-transform helper based on the deployment config validator."
     },
     {
       "destination": "sp_vision/adapters/arm_state.py",
-      "source_reference": "deployment robot-feedback helper lineage; local implementation hash to be recorded after implementation is complete."
+      "source_reference": "third_party/tron2_env/src/tron2_env/transport/websocket.py and config.py at parent source commit",
+      "destination_sha256": "818e2e7a6ef9e61cebbc2f136d345a1911d8245d2bf9e72dc7e71c6cddee049e",
+      "source_sha256": {
+        "websocket.py": "3aef687ea04eb504895e65d33b213d14e1bd30726b45b082f506754d25fc0481",
+        "config.py": "ff03f10d6ef017f8167be3169aa48a4c8b83e7ca33c225dd5223ea0fdc4cfb67"
+      },
+      "upstream_repository": "https://github.com/limxdynamics/tron2_env",
+      "upstream_commit": "03e39d3f7d66dcb096b41f03612fdab2f8c10ea5",
+      "relationship": "small read-only adapter that uses the upstream feedback transport and joint layout; it only requests joint state and returns arm q14."
     }
   ],
   "final_destinations": {
-    "status": "pending_final_hashes_after_local_edits",
-    "files": []
+    "status": "captured_after_local_changes",
+    "files": [
+      {
+        "path": "sp_vision/adapters/rgbd.py",
+        "sha256": "6af2864373c80305fcb202301cac94305eb76554cc8e86f8ac4695d892ce86dd"
+      },
+      {
+        "path": "sp_vision/adapters/arm_state.py",
+        "sha256": "818e2e7a6ef9e61cebbc2f136d345a1911d8245d2bf9e72dc7e71c6cddee049e"
+      },
+      {
+        "path": "sp_vision/adapters/validation.py",
+        "sha256": "133a73c3f30ae59ef5136c9bfaeaf51597aad696bd720b64216e64aced14a13e"
+      },
+      {
+        "path": "sp_vision/adapters/__init__.py",
+        "sha256": "e8b4ba2c3a76680b7de5db31ad3776752e8303de5504d378e295fcbc0337359e"
+      }
+    ]
   }
 }

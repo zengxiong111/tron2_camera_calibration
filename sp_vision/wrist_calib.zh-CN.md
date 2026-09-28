@@ -1,5 +1,7 @@
 # 左/右腕相机标定
 
+以下 `tron2-deploy state` 命令是已有独立部署包时的可选示例，本标定包不提供该命令。也可使用自己的只读控制器记录工具提供状态 JSON，其中 `arm_q14` 为按配置左臂再右臂顺序排列的十四个有限关节角。必须使用测量反馈，不能用目标指令代替。安装本仓库后，脚本示例均从 `sp_vision/` 目录运行。
+
 [English](README_wrist.md)
 
 这是右手腕彩色相机的独立只读实验。从本目录运行命令，图像和结果保存于 `data/wrist_camera_session/`；该目录不会进入 Git。模型文件随本目录提供，离线标定不再依赖外部仓库。程序不驱动机器人。
@@ -30,7 +32,7 @@ cp configs/wrist_config.example.json configs/wrist_config.json
 相机和 `/joint_states` 位于 `guest@10.192.1.4` 的 ROS 2 Foxy 环境。脚本通过 SSH 连接，仅接收时间戳相差不超过 100 ms 的新图像与关节状态。ROS 2 的前四个关节名是 `abad`、`hip`、`yaw`、`knee`，URDF 对应位置写作 `proximal_pitch`、`proximal_roll`、`proximal_yaw`、`elbow`。配置中的名称列表把它们排成**头部触点验证读取的控制器 `arm_q14` 的同一 14 维顺序**：名称不同，向量顺序并未改变。采集同时保存 ROS 2 原始名称和值、以及排好顺序的向量。FK 的实物精度仍需用留出集棋盘图像和独立触碰检查。
 
 ```bash
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json probe
+python calibration_wrist.py --config configs/wrist_config.json probe
 ```
 
 `probe` 不要求画面中有棋盘，会把同步图像和带名称的关节 JSON 保存到 `data/wrist_camera_session/`。它还会在拍照前后读取头部验证所用的同一控制器 `arm_q14`；只有手臂保持静止且 ROS 2 映射值逐项相差不超过 0.005 rad，`mapping_check.passed` 才为 `true`。控制器比较失败或不可用，不代表图像获取失败。图像与 ROS 2 关节状态的 `state_skew_ms` 是另一项检查，阈值为 100 ms。
@@ -40,13 +42,13 @@ cp configs/wrist_config.example.json configs/wrist_config.json
 ## 采样、拟合与检查
 
 ```bash
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   capture --session data/wrist_camera_session --count 40
 
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   intrinsics --session data/wrist_camera_session
 
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   extrinsics --session data/wrist_camera_session
 ```
 
@@ -57,20 +59,20 @@ cp configs/wrist_config.example.json configs/wrist_config.json
 若要重新标定 TCP，用同一支相对右腕刚性不动的尖端抵住同一个固定点，在至少四个明显不同的腕部朝向下读取实测状态。灵巧手指尖只有在所有手指关节始终保持同一姿态时才能作为尖端；状态文件不记录手指关节。每次由已有的受审核界面调整姿态，稳定后运行一次只读状态命令：
 
 ```bash
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_session/tcp/pose-01.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_session/tcp/pose-02.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_session/tcp/pose-03.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_session/tcp/pose-04.json
 ```
 
 腕部程序直接复用头部流程的固定点拟合器，输出 `wrist_roll_R_Link` 中的尖端位置：
 
 ```bash
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   pivot --states data/wrist_camera_session/tcp/pose-{01,02,03,04}.json \
   --output data/wrist_camera_session/tcp/wrist_tcp_pivot.json
 ```
@@ -84,10 +86,10 @@ cp configs/wrist_config.example.json configs/wrist_config.json
 外参拟合后，保持棋盘在基座中固定，用腕部相机拍摄一张**不参与求解**的新图像。拍照后右臂可以移动；预测使用图像保存时同步的关节状态。选择三个分散、不共线且能用尖端接触的实体内角点：
 
 ```bash
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   capture --session data/wrist_camera_validation --count 1
 
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   select-validation --frame data/wrist_camera_validation/view-001 \
   --output data/wrist_camera_validation/wrist_selection.json
 ```
@@ -97,14 +99,14 @@ cp configs/wrist_config.example.json configs/wrist_config.json
 先检查 `data/wrist_camera_validation/wrist_selection.png` 的编号是否对应将要触碰的实体角点。保持棋盘固定，用与 TCP 拟合时相同的尖端和手指姿态，按编号 1、2、3 触碰；每次稳定后读取一次状态：
 
 ```bash
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_validation/state-01.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_validation/state-02.json
-.venv/bin/tron2-deploy state --profile configs/robot_profile.example.json \
+tron2-deploy state --profile configs/robot_profile.example.json \
   --output data/wrist_camera_validation/state-03.json
 
-.venv/bin/python calibration_wrist.py --config configs/wrist_config.json \
+python calibration_wrist.py --config configs/wrist_config.json \
   validate --selection data/wrist_camera_validation/wrist_selection.json \
   --side right --tcp data/wrist_camera_session/tcp/wrist_tcp_pivot.json \
   --states data/wrist_camera_validation/state-{01,02,03}.json \
