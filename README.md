@@ -1,5 +1,8 @@
 # TRON2 Camera Calibration
 
+Fixed tabletop height: [frame contract](TABLETOP_FRAME_CONTRACT.md) · [中文](TABLETOP_FRAME_CONTRACT.zh-CN.md)
+
+
 [简体中文](README.zh-CN.md)
 
 Standalone Python tools for offline calibration of the TRON2 moving head color camera and right wrist color camera. The package contains the calibration code and kinematic snapshots needed by the solvers; it does not contain a robot controller, ROS installation, camera recordings, or local robot profiles.

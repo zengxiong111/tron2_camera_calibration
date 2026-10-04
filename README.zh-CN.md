@@ -1,5 +1,8 @@
 # TRON2 相机标定
 
+固定桌面高度：[坐标系约束](TABLETOP_FRAME_CONTRACT.zh-CN.md) · [English](TABLETOP_FRAME_CONTRACT.md)
+
+
 [English](README.md)
 
 本项目提供独立的 Python 工具，用于离线标定 TRON2 可动头部彩色相机和右腕彩色相机。软件包包含求解器所需的代码和运动学模型快照；不包含机器人控制器、ROS 安装、相机录像或本机机器人配置。
