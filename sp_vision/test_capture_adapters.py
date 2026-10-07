@@ -3,10 +3,12 @@ import json
 from pathlib import Path
 import subprocess
 import sys
+import threading
 from types import ModuleType, SimpleNamespace
 
 import cv2
 import numpy as np
+import pytest
 
 
 SP_ROOT = Path(__file__).parent
@@ -127,3 +129,93 @@ def test_wrist_remote_capture_uses_ros_setup_from_settings(monkeypatch):
     assert captured["command"][-2:] == ["operator@camera-host", "bash -s"]
     assert "source '/opt/ros/custom/setup.bash'" in captured["script"]
     assert "export ROS_DOMAIN_ID=23" in captured["script"]
+
+
+def _install_fake_tron2_env(monkeypatch, states, timestamp=1000):
+    """Inject a feedback-only fake controller transport and return its instances."""
+    created = []
+    config_module = ModuleType("tron2_env.config")
+
+    class Tron2Config:
+        def __init__(self, **kwargs):
+            self.values = kwargs
+
+    config_module.Tron2Config = Tron2Config
+    transport_module = ModuleType("tron2_env.transport.websocket")
+
+    class FakeTransport:
+        def __init__(self, config):
+            self.config = config
+            self.joint_states = {"timestamp": timestamp, "states": list(states)}
+            self._state_lock = threading.Lock()
+            self.disconnected = False
+            created.append(self)
+
+        def is_connected(self):
+            return True
+
+        def disconnect(self):
+            self.disconnected = True
+
+    transport_module.WebsocketTransport = FakeTransport
+    package = ModuleType("tron2_env")
+    package.__path__ = []
+    transport_package = ModuleType("tron2_env.transport")
+    transport_package.__path__ = []
+    monkeypatch.setitem(sys.modules, "tron2_env", package)
+    monkeypatch.setitem(sys.modules, "tron2_env.config", config_module)
+    monkeypatch.setitem(sys.modules, "tron2_env.transport", transport_package)
+    monkeypatch.setitem(sys.modules, "tron2_env.transport.websocket", transport_module)
+    return created
+
+
+def test_read_state_returns_arm_head_and_timestamp(monkeypatch):
+    from sp_vision.adapters.arm_state import read_state
+
+    _install_fake_tron2_env(monkeypatch, list(range(18)))
+    state = read_state({"host": "example.invalid", "port": 5000}, timeout_s=1)
+    assert state["arm_q14"] == list(range(7)) + list(range(8, 15))
+    assert state["head_q2"] == [16, 17]
+    assert state["timestamp_s"] == 1.0
+    assert state["source"] == "real"
+
+
+def test_state_command_writes_controller_state_json(tmp_path, monkeypatch):
+    _install_fake_tron2_env(monkeypatch, list(range(18)))
+    (tmp_path / "robot_profile.json").write_text(
+        json.dumps({"robot": {"host": "example.invalid", "port": 5000}}), encoding="utf-8")
+    config = {
+        "schema_version": 1,
+        "board": {"columns": 7, "rows": 10, "square_m": 0.021},
+        "capture": {"profile": "robot_profile.json", "state_profile": "robot_profile.json", "timeout_s": 2},
+        "_path": tmp_path / "head_config.json",
+    }
+    output = tmp_path / "tcp" / "pose-01.json"
+    calibration.state_command(config, output)
+    recorded = json.loads(output.read_text(encoding="utf-8"))
+    assert recorded["arm_q14"] == list(range(7)) + list(range(8, 15))
+    assert recorded["head_q2"] == [16, 17]
+    assert recorded["timestamp_s"] == 1.0
+
+
+def test_state_command_requires_a_deployment_profile(tmp_path):
+    config = {"capture": {}, "_path": tmp_path / "head_config.json"}
+    with pytest.raises(ValueError):
+        calibration.controller_robot(config)
+
+
+def test_state_command_is_wired_into_both_clis():
+    head = calibration.build_parser().parse_args(["state", "--output", "pose.json"])
+    assert head.command == "state"
+    assert head.output == Path("pose.json")
+    wrist = calibration_wrist.parser().parse_args(["state", "--output", "pose.json"])
+    assert wrist.command == "state"
+    assert wrist.output == Path("pose.json")
+
+
+def test_example_configs_point_at_a_controller_state_profile():
+    configs = SP_ROOT / "configs"
+    head = json.loads((configs / "head_config.example.json").read_text(encoding="utf-8"))
+    wrist = json.loads((configs / "wrist_config.example.json").read_text(encoding="utf-8"))
+    assert head["capture"]["state_profile"]
+    assert wrist["capture"]["state_profile"]

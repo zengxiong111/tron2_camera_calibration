@@ -29,12 +29,12 @@
     {
       "path": "sp_vision/calibration.py",
       "original_import_sha256": "e96ac37a9704384108f510ea6c7a1c9327964f5d315ad44add57ad551a519386",
-      "destination_sha256": "6041d5ba8a91b7380f075f700edfddb6792cf77de664daceafbb11d7c2bc6c2b"
+      "destination_sha256": "6c7afce2245f36fd8227d24488584c618369645dcd1a628a7217f24a25172217"
     },
     {
       "path": "sp_vision/calibration_wrist.py",
       "original_import_sha256": "cce1ed52a365f017cfc0f7d6fa4308b364ec4a5b9daff88244488962a8d93fcc",
-      "destination_sha256": "22cd4a99f3ef7f2c5afa3c40c40fa395add0c87fbc594f8e9da009b2f3966887"
+      "destination_sha256": "5fa17623d8b1d169411f137e3d5dbe19e21a80eae146ca4a616ad2273bc24aba"
     },
     {
       "path": "sp_vision/capture_ros2_image.py",
@@ -49,7 +49,7 @@
     {
       "path": "sp_vision/configs/head_config.example.json",
       "original_import_sha256": "520ddcc15fe213e65059f6bfe7a10e0d919156449594f4dbf23163e2f4c23254",
-      "destination_sha256": "520ddcc15fe213e65059f6bfe7a10e0d919156449594f4dbf23163e2f4c23254"
+      "destination_sha256": "3fc8c63cc967f4cda27b2a823eb4c3af1db6897d3453140e753edcf461135505"
     },
     {
       "path": "sp_vision/configs/robot_profile.example.json",
@@ -69,12 +69,12 @@
     {
       "path": "sp_vision/head_calib.md",
       "original_import_sha256": "9d30dc7b9c5d70d621c56c347eed1cb50c376afbecdcc27763c3fa95e84a98db",
-      "destination_sha256": "1dfd1af0a6ed35a9de734661918cf2a151692a98ff34191e3b1c3a082734d901"
+      "destination_sha256": "53fd04535c6e3b66e942bbedb11bf09ecd94df2e669924ec959ffd95e231c345"
     },
     {
       "path": "sp_vision/head_calib.zh-CN.md",
       "original_import_sha256": "0baf49d542c035ca647b6b06b1fa25292a51145dc1c2f2364ef3290a8dedbe7d",
-      "destination_sha256": "d66d4c20ab185e334124e9f8e362af4a1e6448aca40281bbd526c65501c4c317"
+      "destination_sha256": "c83fa8eed66e0b0d8d246cffb723e084aceb36e4a6678aebed90c7d4f4d1397a"
     },
     {
       "path": "sp_vision/test_calibration.py",
@@ -89,12 +89,12 @@
     {
       "path": "sp_vision/wrist_calib.md",
       "original_import_sha256": "6e8d2aaa4a3ec40e560a5a9b8f2ecfc5037e8b2ef98fdca2e5cddce04efbffb2",
-      "destination_sha256": "6ca4d01e75e927bf8c184873c624bb5581ab2af3698cd67880b755f2d51a8ef0"
+      "destination_sha256": "7deffbdeb886866416b82e0af1b4c234a54cfc17554d00207c06b97503ad9267"
     },
     {
       "path": "sp_vision/wrist_calib.zh-CN.md",
       "original_import_sha256": "809b3ff9c9d298f2ed540b69b0435f4db05288df16a185daae0ce3c02e405014",
-      "destination_sha256": "b69feac3a3e0310213e5087754e477515ab4c4f15e43d7b5a79d81f2d2caed16"
+      "destination_sha256": "9f65f0101e04c560538649c5abe44eb459c27e7524c354b4c7a6ebc0234ef033"
     }
   ],
   "live_capture_status": "untested",
@@ -118,7 +118,7 @@
     {
       "destination": "sp_vision/adapters/arm_state.py",
       "source_reference": "third_party/tron2_env/src/tron2_env/transport/websocket.py and config.py at parent source commit",
-      "destination_sha256": "818e2e7a6ef9e61cebbc2f136d345a1911d8245d2bf9e72dc7e71c6cddee049e",
+      "destination_sha256": "cf66e0ad0e5c2fb7346238d998306024d6e3198fff0695f99382ebb60fa84030",
       "source_sha256": {
         "websocket.py": "3aef687ea04eb504895e65d33b213d14e1bd30726b45b082f506754d25fc0481",
         "config.py": "ff03f10d6ef017f8167be3169aa48a4c8b83e7ca33c225dd5223ea0fdc4cfb67"
@@ -126,6 +126,15 @@
       "upstream_repository": "https://github.com/limxdynamics/tron2_env",
       "upstream_commit": "03e39d3f7d66dcb096b41f03612fdab2f8c10ea5",
       "relationship": "small read-only adapter that uses the upstream feedback transport and joint layout; it only requests joint state and returns arm q14."
+    }
+  ],
+  "migrated_scripts": [
+    {
+      "destination": "scripts/install.sh",
+      "source_reference": "scripts/install.sh at parent source commit",
+      "source_sha256": "75893cd1690eb7ab4d982499076491ea8e2d13264df4489fa7b22fd4789eaa9d",
+      "destination_sha256": "b62f490c5379bc21eeefa4661e1306484b9304bf3992e2dc01578937ed3d5fc1",
+      "relationship": "adapted from the deployment installer: drops the deployment-only third_party/tron2_env path and the constraints file, installs '.[test,live]' instead of '.[bridge,dev,ros]', and validates the three sp-vision-* entrypoints instead of tron2-deploy."
     }
   ],
   "final_destinations": {
@@ -137,7 +146,7 @@
       },
       {
         "path": "sp_vision/adapters/arm_state.py",
-        "sha256": "818e2e7a6ef9e61cebbc2f136d345a1911d8245d2bf9e72dc7e71c6cddee049e"
+        "sha256": "cf66e0ad0e5c2fb7346238d998306024d6e3198fff0695f99382ebb60fa84030"
       },
       {
         "path": "sp_vision/adapters/validation.py",
@@ -146,6 +155,10 @@
       {
         "path": "sp_vision/adapters/__init__.py",
         "sha256": "e8b4ba2c3a76680b7de5db31ad3776752e8303de5504d378e295fcbc0337359e"
+      },
+      {
+        "path": "scripts/install.sh",
+        "sha256": "b62f490c5379bc21eeefa4661e1306484b9304bf3992e2dc01578937ed3d5fc1"
       }
     ]
   }

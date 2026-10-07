@@ -2,7 +2,7 @@
 
 [English](head_calib.md)
 
-按 [README](../README.zh-CN.md) 安装后，先从仓库根目录执行 `cd sp_vision`，再运行以下脚本示例。配置中的相对路径以 JSON 所在目录为基准，数据及结果路径以当前工作目录为基准。命令只读取传感器或执行离线求解，不驱动机器人。
+按 [README](../README.zh-CN.md) 跑一次 `scripts/install.sh` 后（正是该步骤生成 `.venv/bin/python`），先在仓库根目录执行 `source .venv/bin/activate`，再执行 `cd sp_vision` 运行以下脚本示例；下文命令中的 `python` 即该环境解释器。配置中的相对路径以 JSON 所在目录为基准，数据及结果路径以当前工作目录为基准。命令只读取传感器或执行离线求解，不驱动机器人。
 
 ## ROS 2 相机单帧诊断
 
@@ -62,11 +62,11 @@ cp configs/robot_profile.example.json configs/robot_profile.json
 
 若本机配置选择 WebSocket 桥接后端而非 ROS Noetic，请在此目录运行 `python -m pip install -e '..[live]'` 安装该可选 Python 依赖。
 
-将本地配置保留在示例旁边，使模型相对路径正确解析。实时采集前，将 `head_config.json` 的 `capture.profile` 改为 `robot_profile.json`，并填写该 profile 的相机内参、畸变、深度内参、深度到彩色变换和所选 ROS/bridge 连接参数。示例中的占位符和 null 不能直接用于采集。离线处理已有图像无需连接相机。路径示例：
+将本地配置保留在示例旁边，使模型相对路径正确解析。实时采集前，将 `head_config.json` 的 `capture.profile` 改为 `robot_profile.json`，并填写该 profile 的相机内参、畸变、深度内参、深度到彩色变换和所选 ROS/bridge 连接参数。示例中的占位符和 null 不能直接用于采集。离线处理已有图像无需连接相机。记录控制器状态前，还要在该 profile 中填写 `robot.host` 和 `robot.port`（默认端口 `5000`），并让 `capture.state_profile` 指向它。路径示例：
 
 ```json
 {
-  "capture": {"profile": "robot_profile.json"},
+  "capture": {"profile": "robot_profile.json", "state_profile": "robot_profile.json", "timeout_s": 8},
   "robot": {
     "urdf": "assembly.urdf",
     "model_xml": "scene.xml",
@@ -76,7 +76,7 @@ cp configs/robot_profile.example.json configs/robot_profile.json
 }
 ```
 
-相对路径均相对于该配置 JSON 所在目录。Python 依赖通过上述安装命令提供；ROS 系统依赖和可选厂商传输环境需要另行准备。
+相对路径均相对于该配置 JSON 所在目录。Python 依赖通过上述安装命令提供；ROS 系统依赖和可选厂商传输环境需要另行准备。`state` 子命令读取控制器反馈，需要兼容的外部 `tron2_env` 环境；只做离线求解时无需安装。
 
 ## 一、采集约 40 个头姿
 
@@ -200,7 +200,24 @@ T_base_camera(q_yaw, q_pitch)
 
 最终验证需要一个相对腕部刚性不动、能重复接触内角点的尖端。带灵巧手时建议安装刚性探针；也可以使用固定姿态的指尖，但整个 TCP 标定和验证期间所有手指关节必须保持完全相同。当前状态文件只记录 `arm_q14` 和头部关节，不记录手指关节，因此手指一旦移动，验证立即失效。
 
-用同一个右臂尖端抵住同一个固定点，改变至少四种明显不同的腕部朝向。每次稳定后，通过控制器的只读反馈记录工具保存 `data/tcp/pose-01.json` 至 `pose-04.json`。每份 JSON 必须包含 `arm_q14`：按配置左臂再右臂顺序排列的十四个有限实测关节角，单位 rad。本包不提供通用状态记录 CLI。下方 TCP 拟合与验证均使用同一右臂探针。
+用同一个右臂尖端抵住同一个固定点，改变至少四种明显不同的腕部朝向。每次稳定后，用 `state` 子命令只读取控制器反馈并保存 `data/tcp/pose-01.json` 至 `pose-04.json`；该命令不发送任何运动指令：
+
+```bash
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/tcp/pose-01.json
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/tcp/pose-02.json
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/tcp/pose-03.json
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/tcp/pose-04.json
+```
+
+每份 JSON 包含 `arm_q14`（按配置左臂再右臂顺序排列的十四个有限实测关节角，单位 rad）、同步 `head_q2` 和 `timestamp_s`。下方 TCP 拟合与验证均使用同一右臂探针。
 
 离线拟合腕部坐标中的尖端位置：
 
@@ -237,7 +254,19 @@ python calibration.py \
   --output data/head_camera_validation/head_selection.json
 ```
 
-先打开 `head_selection.png`，确认编号 1、2、3 与将要触碰的实体角点完全一致。保持棋盘不动，通过机器人已有的受审核控制界面，让同一个已标定尖端依次接触 1、2、3，并按同一顺序保存实测 `arm_q14` 至 `data/touch-validation/state-01.json` 至 `state-03.json`。预测使用拍照时同步保存的头姿；拍照后的头部运动仅作为诊断记录。
+先打开 `head_selection.png`，确认编号 1、2、3 与将要触碰的实体角点完全一致。保持棋盘不动，通过机器人已有的受审核控制界面，让同一个已标定尖端依次接触 1、2、3，并按同一顺序用 `state` 子命令保存实测关节角至 `data/touch-validation/state-01.json` 至 `state-03.json`。预测使用拍照时同步保存的头姿；拍照后的头部运动仅作为诊断记录。
+
+```bash
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/touch-validation/state-01.json
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/touch-validation/state-02.json
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/touch-validation/state-03.json
+```
 
 程序不会发送任何运动命令。现场必须有人监护，使用低速和可重复定位的尖端，避免碰撞或推动棋盘。
 

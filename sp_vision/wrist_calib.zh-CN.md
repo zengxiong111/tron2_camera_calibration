@@ -2,7 +2,7 @@
 
 [English](wrist_calib.md)
 
-按 [README](../README.zh-CN.md) 安装后，先从仓库根目录执行 `cd sp_vision`，再运行以下脚本示例。配置中的相对路径以 JSON 所在目录为基准，数据及结果路径以当前工作目录为基准。命令只读取传感器或执行离线求解，不驱动机器人。
+按 [README](../README.zh-CN.md) 跑一次 `scripts/install.sh` 后（正是该步骤生成 `.venv/bin/python`），先在仓库根目录执行 `source .venv/bin/activate`，再执行 `cd sp_vision` 运行以下脚本示例；下文命令中的 `python` 即该环境解释器。配置中的相对路径以 JSON 所在目录为基准，数据及结果路径以当前工作目录为基准。命令只读取传感器或执行离线求解，不驱动机器人。
 
 这是右手腕彩色相机的独立只读流程。从本目录运行命令，图像和结果保存于 `data/wrist_camera_session/`；该目录不会进入 Git。模型文件随本目录提供，离线标定不再依赖外部仓库。程序不驱动机器人。
 
@@ -33,7 +33,7 @@ cp configs/wrist_config.example.json configs/wrist_config.json
 python calibration_wrist.py --config configs/wrist_config.json probe
 ```
 
-若需控制器交叉比较，将 `configs/robot_profile.example.json` 复制为 `configs/robot_profile.json`，填写 `robot.host` 和 `robot.port`，并把 `wrist_config.json` 的 `capture.state_profile` 改为 `robot_profile.json`。该比较需要兼容的外部 `tron2_env` 环境。
+控制器交叉比较与 `state` 子命令都需要兼容的外部 `tron2_env` 环境。将 `configs/robot_profile.example.json` 复制为 `configs/robot_profile.json`，填写 `robot.host` 和 `robot.port`，并把 `wrist_config.json` 的 `capture.state_profile` 改为 `robot_profile.json`。
 
 `probe` 不要求画面中有棋盘，会把同步图像和带名称的关节 JSON 保存到 `data/wrist_camera_session/`。它还会在拍照前后读取头部验证所用的同一控制器 `arm_q14`；只有手臂保持静止且 ROS 2 映射值逐项相差不超过 0.005 rad，`mapping_check.passed` 才为 `true`。控制器比较失败或不可用，不代表图像获取失败。图像与 ROS 2 关节状态的 `state_skew_ms` 是另一项检查，阈值为 100 ms。
 
@@ -56,7 +56,20 @@ python calibration_wrist.py --config configs/wrist_config.json \
 
 ## 标定右臂触点 TCP
 
-若要重新标定 TCP，用同一支相对右腕刚性不动的尖端抵住同一个固定点，在至少四个明显不同的腕部朝向下读取实测状态。灵巧手指尖只有在所有手指关节始终保持同一姿态时才能作为尖端；状态文件不记录手指关节。每次稳定后，通过控制器只读反馈工具保存 `data/wrist_camera_session/tcp/pose-01.json` 至 `pose-04.json`。每份 JSON 必须包含 `arm_q14`：按配置左臂再右臂顺序排列的十四个有限实测关节角，单位 rad。本包不提供通用状态记录 CLI。
+若要重新标定 TCP，用同一支相对右腕刚性不动的尖端抵住同一个固定点，在至少四个明显不同的腕部朝向下读取实测状态。灵巧手指尖只有在所有手指关节始终保持同一姿态时才能作为尖端；状态文件不记录手指关节。每次稳定后，用 `state` 子命令只读取控制器反馈并保存 `data/wrist_camera_session/tcp/pose-01.json` 至 `pose-04.json`；该命令不发送任何运动指令：
+
+```bash
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_session/tcp/pose-01.json
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_session/tcp/pose-02.json
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_session/tcp/pose-03.json
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_session/tcp/pose-04.json
+```
+
+每份 JSON 必须包含 `arm_q14`：按配置左臂再右臂顺序排列的十四个有限实测关节角，单位 rad，以及同步的 `head_q2` 和 `timestamp_s`。
 
 腕部程序直接复用头部流程的固定点拟合器，输出 `wrist_roll_R_Link` 中的尖端位置：
 
@@ -83,7 +96,18 @@ python calibration_wrist.py --config configs/wrist_config.json \
 
 这条 `capture --count 1` 每次完整保存后都会用新的 `view-001` 覆盖旧验证图像；按 `q` 退出则保留旧图。重拍后必须重新运行 `select-validation`，使 `wrist_selection.json` 和 `wrist_selection.png` 对应新图；旧触点状态是否还能使用，取决于棋盘和实体角点是否保持不动。
 
-先检查 `data/wrist_camera_validation/wrist_selection.png` 的编号是否对应将要触碰的实体角点。保持棋盘固定，用与 TCP 拟合时相同的尖端和手指姿态，按编号 1、2、3 触碰；每次稳定后将实测 `arm_q14` 保存到 `data/wrist_camera_validation/state-01.json` 至 `state-03.json`：
+先检查 `data/wrist_camera_validation/wrist_selection.png` 的编号是否对应将要触碰的实体角点。保持棋盘固定，用与 TCP 拟合时相同的尖端和手指姿态，按编号 1、2、3 触碰；每次稳定后用 `state` 子命令将实测状态保存到 `data/wrist_camera_validation/state-01.json` 至 `state-03.json`：
+
+```bash
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_validation/state-01.json
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_validation/state-02.json
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_validation/state-03.json
+```
+
+再用这些状态执行比较：
 
 ```bash
 python calibration_wrist.py --config configs/wrist_config.json \

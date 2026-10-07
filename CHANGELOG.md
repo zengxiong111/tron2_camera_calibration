@@ -2,6 +2,21 @@
 
 This file records version-level changes. See [简体中文](CHANGELOG.zh-CN.md).
 
+## [Unreleased]
+
+### Added
+- Add `scripts/install.sh`, adapted from the deployment installer: it creates `.venv/bin/python` and the three `sp-vision-*` entrypoints, installs `'.[test,live]'`, runs `pip check` and validates each entrypoint with `--help`.
+
+### Fixed
+- Restore the runnable `state` subcommand for `sp-vision-head` and `sp-vision-wrist`. It records measured controller `arm_q14`/`head_q2` feedback to JSON for TCP pivot fitting and touch validation, replacing guide text that deferred to an unavailable external state recorder. It reads feedback only and sends no motion command.
+- Document `capture.state_profile` in `head_config.example.json` and in the head/wrist guides.
+
+### Documentation
+- Make `scripts/install.sh` the documented installation step: it produces `.venv/bin/python`, which the README and both calibration guides call, and offline calibration needs only that environment. The README also records the installer's limits (Python 3.10+ with `venv`/`ensurepip`, OpenCV shared libraries, reachable index, existing-`.venv` handling, and that it installs neither ROS nor `tron2_env`).
+
+### Notes & Caveats
+- The `state` command needs the external `tron2_env` runtime, like the wrist `probe` comparison; offline solving still does not.
+
 ## [0.1.0] - 2026-09-28
 
 ### Features

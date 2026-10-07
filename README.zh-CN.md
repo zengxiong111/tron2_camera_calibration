@@ -9,24 +9,43 @@
 
 ## 安装
 
-需要 Python 3.10 或更新版本。克隆仓库，进入根目录后安装：
+需要 Python 3.10 或更新版本。克隆仓库后在根目录跑一次安装脚本，**这一步生成 `.venv/bin/python`**，以及 `sp-vision-head`、`sp-vision-wrist`、`sp-vision-capture` 三个命令行入口；本 README 和标定指南中的所有命令都使用该解释器：
 
 ```bash
 git clone https://github.com/zengxiong111/tron2_camera_calibration.git
 cd tron2_camera_calibration
-python -m pip install .
+bash scripts/install.sh
 ```
 
-开发和测试环境：
+`scripts/install.sh` 依次执行：`python3.10 -I -m venv .venv` 创建虚拟环境 → 用 `.venv/bin/python` 升级 pip → 安装本包及 `test`、`live` 辅助依赖（即 `'.[test,live]'`）→ `pip check` → 校验三个 `sp-vision-* --help` 入口。需要手工建环境时，等价命令是：
 
 ```bash
-python -m pip install -e '.[test]'
-python -m pytest -q
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install '.[test,live]'
 ```
 
-基础依赖也列在 `requirements.txt`，供使用 requirements 文件的环境安装。一般建议使用 `pip install -e .` 安装项目。
+安装脚本的边界：
 
-离线求解需要 NumPy、SciPy 和包含 contrib 模块的 OpenCV。头部相机通过桥接器实时采集还需要执行 `pip install '.[live]'`（即 `websockets` 客户端）。默认的头部相机 ROS 后端在本机使用 ROS 1 Noetic，需要系统安装 `rospy`、`message_filters`、`sensor_msgs`，并能连接 ROS master。独立的右腕采集流程和 `sp-vision-capture` 工具使用配置相机主机上的 ROS 2 Foxy，需要该主机安装 `rclpy` 和 `sensor_msgs`；这些 ROS 系统包不会由本 Python 包安装。可选的控制器状态探测需要单独提供的 `tron2_env` 运行环境及其传输依赖，离线标定不依赖它。
+- 需要 `PATH` 上有 Python 3.10 或更新版本。Ubuntu 20.04 的系统 Python 3.8 不行，也不要改写 `/usr/bin/python3`；用 `TRON2_PYTHON=/path/to/python3.10 bash scripts/install.sh` 指定其他解释器。
+- 该解释器必须带 `venv`/`ensurepip` 模块（Debian/Ubuntu 上通常是 `python3.10-venv` 软件包）。
+- OpenCV 需要系统共享库：Ubuntu 上先执行 `sudo apt install -y libgl1 libglib2.0-0`，否则 `import cv2` 会因缺少 `libGL.so.1` 失败。
+- 需要能访问软件源，默认 `https://pypi.org/simple`；用 `TRON2_PIP_INDEX_URL` 可换源。该选择只对脚本自身及其构建子进程生效，不改写全局 pip 配置。
+- `.venv` 已存在时脚本**只校验解释器版本，不会重建**；版本低于 3.10 会直接报错退出（请保留原环境，另建一份检出）。要强制重建需先手动删除 `.venv`。
+- 脚本**不安装 ROS，也不安装可选的 `tron2_env` 运行时**（见下）。
+
+开发和测试时把可编辑安装装进同一个环境：
+
+```bash
+.venv/bin/python -m pip install -e '.[test]'
+.venv/bin/python -m pytest -q
+```
+
+下文命令中出现的 `python` 均指该虚拟环境的解释器：先执行一次 `source .venv/bin/activate` 后继续用 `python`，或在仓库根目录显式调用 `.venv/bin/python`（例如 `.venv/bin/python sp_vision/calibration.py ...`）。`.venv` 已被 Git 忽略，也不进入 wheel 包，每个检出创建一次即可。不要与提供 `opencv-python` 或 headless OpenCV wheel 的环境混用，因为本项目以 `opencv-contrib-python` 作为唯一的 `cv2` 提供者。
+
+基础依赖也列在 `requirements.txt`，供使用 requirements 文件的环境安装。
+
+离线标定只需要这个虚拟环境：有 NumPy、SciPy 和带 contrib 的 OpenCV，就足以求解头部与腕部内外参、TCP pivot 与触点验证。头部相机通过桥接器实时采集还需要 `websockets` 客户端（已随 `'.[live]'` 装好）。默认的头部相机 ROS 后端在本机使用 ROS 1 Noetic，需要系统安装 `rospy`、`message_filters`、`sensor_msgs`，并能连接 ROS master。独立的右腕采集流程和 `sp-vision-capture` 工具使用配置相机主机上的 ROS 2 Foxy，需要该主机安装 `rclpy` 和 `sensor_msgs`；这些 ROS 系统包不会由本 Python 包或安装脚本安装。可选的控制器状态命令（`state` 记录姿态、`probe` 做腕部映射对比）需要单独提供的 `tron2_env` 运行环境及其传输依赖，离线标定不依赖它们。
 
 ## 命令
 
@@ -58,7 +77,7 @@ python sp_vision/capture_ros2_image.py --help
 | [更新记录](CHANGELOG.zh-CN.md) | 版本历史和兼容说明 |
 | [来源清单](SOURCE_MANIFEST.json) | 源提交、原始及修改后文件哈希、模型资产范围 |
 
-标定指南的脚本示例从 `sp_vision/` 目录运行。触点验证所需的状态 JSON 使用控制器实测反馈，由外部记录工具保存。仓库不分发标定数据集或历史拟合结果。
+标定指南的脚本示例从 `sp_vision/` 目录运行。触点验证读取 `state` 子命令生成的 JSON，该命令只采样控制器反馈，不发送运动指令。仓库不分发标定数据集或历史拟合结果。
 
 ## 工作流与证据范围
 

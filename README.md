@@ -9,24 +9,43 @@ Standalone Python tools for offline calibration of the TRON2 moving head color c
 
 ## Install
 
-Python 3.10 or newer is required. Clone the repository, enter its root and install:
+Python 3.10 or newer is required. Clone the repository and run the installer once from its root; **this is the step that produces `.venv/bin/python`** together with the `sp-vision-head`, `sp-vision-wrist` and `sp-vision-capture` runtime units, which every command in this README and in the calibration guides uses:
 
 ```bash
 git clone https://github.com/zengxiong111/tron2_camera_calibration.git
 cd tron2_camera_calibration
-python -m pip install .
+bash scripts/install.sh
 ```
 
-For development and tests:
+`scripts/install.sh` runs, in order: `python3.10 -I -m venv .venv` to create the virtual environment, pip upgrade through `.venv/bin/python`, installation of this package with the `test` and `live` extras (`'.[test,live]'`), `pip check`, then a `--help` check of all three `sp-vision-*` entrypoints. To build the environment by hand instead:
 
 ```bash
-python -m pip install -e '.[test]'
-python -m pytest -q
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install '.[test,live]'
 ```
 
-The same base dependencies are listed in `requirements.txt` for environments that use requirements files. `pip install -e .` is the recommended project installation command.
+Limits of the installer:
 
-The offline solvers need NumPy, SciPy and OpenCV's contrib modules. Head-camera live capture through its bridge backend additionally needs `pip install '.[live]'` (the `websockets` client). The configured head-camera ROS backend uses ROS 1 Noetic locally and needs the system `rospy`, `message_filters` and `sensor_msgs` packages, plus a reachable ROS master. The separate right-wrist capture workflow and `sp-vision-capture` utility use ROS 2 Foxy on the configured camera host and require `rclpy` and `sensor_msgs` there; neither ROS generation is installed by this Python package. The optional controller-state probe uses the separately provided `tron2_env` runtime (and its transport dependencies) and is not needed for offline calibration.
+- A Python 3.10-or-newer executable must be on `PATH`. Ubuntu 20.04's system Python 3.8 is not usable, and `/usr/bin/python3` must not be repointed; select another interpreter with `TRON2_PYTHON=/path/to/python3.10 bash scripts/install.sh`.
+- That interpreter needs the `venv`/`ensurepip` modules (on Debian/Ubuntu usually the `python3.10-venv` package).
+- OpenCV needs system shared libraries: on Ubuntu run `sudo apt install -y libgl1 libglib2.0-0` first, or `import cv2` fails on a missing `libGL.so.1`.
+- A package index must be reachable; the default is `https://pypi.org/simple`, and `TRON2_PIP_INDEX_URL` selects another one. That choice only affects the installer and its build subprocesses and does not rewrite the global pip configuration.
+- When `.venv` already exists the installer **only validates its interpreter, it never rebuilds it**; an environment older than 3.10 makes it fail outright (keep it and use a separate checkout). Delete `.venv` manually to force a rebuild.
+- The installer **does not install ROS or the optional `tron2_env` runtime** (see below).
+
+For development and tests, install the editable copy into the same environment:
+
+```bash
+.venv/bin/python -m pip install -e '.[test]'
+.venv/bin/python -m pytest -q
+```
+
+A bare `python` in the commands below means that virtual environment's interpreter: run `source .venv/bin/activate` once and keep using `python`, or call `.venv/bin/python` explicitly from the repository root (for example `.venv/bin/python sp_vision/calibration.py ...`). `.venv` is Git-ignored and is not part of the wheel, so create it once per checkout. Keep it separate from any environment that provides `opencv-python` or a headless OpenCV wheel, because this project uses `opencv-contrib-python` as its only `cv2` provider.
+
+The same base dependencies are listed in `requirements.txt` for environments that use requirements files.
+
+Offline calibration needs nothing beyond this virtual environment: NumPy, SciPy and OpenCV's contrib modules are enough to solve the head and wrist intrinsics/extrinsics, the TCP pivot and the touch validation. Head-camera live capture through its bridge backend additionally needs the `websockets` client (already installed by `'.[live]'`). The configured head-camera ROS backend uses ROS 1 Noetic locally and needs the system `rospy`, `message_filters` and `sensor_msgs` packages, plus a reachable ROS master. The separate right-wrist capture workflow and `sp-vision-capture` utility use ROS 2 Foxy on the configured camera host and require `rclpy` and `sensor_msgs` there; neither ROS generation is installed by this Python package or by the installer. The optional controller-state commands (`state` to record a pose, `probe` for the wrist mapping comparison) use the separately provided `tron2_env` runtime (and its transport dependencies) and are not needed for offline calibration.
 
 ## Commands
 
@@ -58,7 +77,7 @@ Packaged example configurations and model snapshots are under `sp_vision/configs
 | [Changelog](CHANGELOG.md) | Version history and compatibility notes |
 | [Source manifest](SOURCE_MANIFEST.json) | Source commits, original and edited file hashes, model asset scope |
 
-Calibration guides run script examples from `sp_vision/`. They describe the state JSON inputs required for touch validation; measured controller feedback must be recorded externally. No calibration datasets or previous fit results are distributed here.
+Calibration guides run script examples from `sp_vision/`. Touch validation reads state JSON produced by the read-only `state` command, which samples controller feedback without sending motion commands. No calibration datasets or previous fit results are distributed here.
 
 ## Workflows and evidence limits
 

@@ -3,7 +3,7 @@ include CONTRIBUTORS.md CONTRIBUTORS.zh-CN.md
 include SOURCE_MANIFEST.json requirements.txt
 recursive-include sp_vision *.py *.md
 recursive-include sp_vision/configs *.example.json *.urdf *.xml
-recursive-include scripts *.py
+recursive-include scripts *.py *.sh
 recursive-include .github *.yml
 exclude sp_vision/configs/head_config.json
 exclude sp_vision/configs/wrist_config.json

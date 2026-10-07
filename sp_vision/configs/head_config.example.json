@@ -6,7 +6,9 @@
     "square_m": 0.021
   },
   "capture": {
-    "profile": "robot_profile.example.json"
+    "profile": "robot_profile.example.json",
+    "state_profile": "robot_profile.example.json",
+    "timeout_s": 8
   },
   "robot": {
     "urdf": "assembly.urdf",

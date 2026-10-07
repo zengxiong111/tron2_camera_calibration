@@ -2,7 +2,7 @@
 
 [简体中文](head_calib.zh-CN.md)
 
-From the repository root, run `cd sp_vision`, then run the script examples after installing the repository as described in the [README](../README.md). Configuration paths resolve relative to their JSON file; data and results resolve relative to the current working directory. The commands read sensors or solve offline and do not move the robot.
+After running `scripts/install.sh` as described in the [README](../README.md) — that is the step that produces `.venv/bin/python` — run `source .venv/bin/activate` from the repository root, then `cd sp_vision` and run the script examples below; `python` in these commands is that environment's interpreter. Configuration paths resolve relative to their JSON file; data and results resolve relative to the current working directory. The commands read sensors or solve offline and do not move the robot.
 
 ## ROS 2 one-frame camera diagnostic
 
@@ -61,7 +61,7 @@ cp configs/robot_profile.example.json configs/robot_profile.json
 
 If the profile selects the WebSocket bridge backend instead of ROS Noetic, install its optional Python dependency from this directory with `python -m pip install -e '..[live]'`.
 
-Keep the local config beside the example so `assembly.urdf` and `scene.xml` resolve correctly. For live capture, set `capture.profile` in `head_config.json` to `robot_profile.json` and fill its camera intrinsics, distortion, depth intrinsics, depth-to-color transform and selected ROS/bridge connection settings. Example placeholders and null fields are not a runnable camera profile. Offline solving of previously recorded views does not need a live camera profile. The XML is used for kinematic cross-checks; referenced meshes are not included.
+Keep the local config beside the example so `assembly.urdf` and `scene.xml` resolve correctly. For live capture, set `capture.profile` in `head_config.json` to `robot_profile.json` and fill its camera intrinsics, distortion, depth intrinsics, depth-to-color transform and selected ROS/bridge connection settings. Example placeholders and null fields are not a runnable camera profile. Offline solving of previously recorded views does not need a live camera profile. The XML is used for kinematic cross-checks; referenced meshes are not included. Before recording controller state, also fill `robot.host` and `robot.port` (default `5000`) in that profile and point `capture.state_profile` at it; the `state` command needs a compatible external `tron2_env` runtime and is not required for offline solving.
 
 ## 1. Capture 40 views
 
@@ -132,7 +132,24 @@ Task yaw and pitch therefore need not match a calibration pose; use the live joi
 
 Use a sharp point rigidly fixed relative to the wrist. With a dexterous hand, prefer a rigid probe. A fingertip is valid only if every finger joint remains fixed throughout pivot fitting and validation, because state JSON does not contain finger joints.
 
-Touch one fixed point at four clearly different right-wrist orientations and save measured state after each settles to `data/tcp/pose-01.json` through `pose-04.json`. Each state JSON must contain `arm_q14`: fourteen finite measured joint angles in radians, ordered by the configured left-arm joint list followed by the right-arm list. Record them with your controller's read-only feedback logger; this package has no general state-recording CLI. Keep the same right-arm probe for the pivot and validation examples below.
+Touch one fixed point at four clearly different right-wrist orientations. After each pose settles, save measured state to `data/tcp/pose-01.json` through `pose-04.json` with the `state` command, which only reads controller feedback and sends no motion:
+
+```bash
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/tcp/pose-01.json
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/tcp/pose-02.json
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/tcp/pose-03.json
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/tcp/pose-04.json
+```
+
+Each state JSON contains `arm_q14` (fourteen finite measured joint angles in radians, ordered by the configured left-arm joint list followed by the right-arm list), a synchronized `head_q2`, and `timestamp_s`. Keep the same right-arm probe for the pivot and validation examples below.
 
 ```bash
 python calibration.py \
@@ -167,7 +184,19 @@ python calibration.py \
   --output data/head_camera_validation/head_selection.json
 ```
 
-Inspect `head_selection.png`. Keep the board fixed, touch labeled points 1, 2, and 3 in order, and save measured `arm_q14` state in the same order to `data/touch-validation/state-01.json` through `state-03.json`. The head may move after imaging: prediction uses the image-synchronized `head_q2`, while later head motion is recorded only as a diagnostic and does not affect the error gate.
+Inspect `head_selection.png`. Keep the board fixed, touch labeled points 1, 2, and 3 in order, and save measured joint state in the same order to `data/touch-validation/state-01.json` through `state-03.json` with the `state` command. The head may move after imaging: prediction uses the image-synchronized `head_q2`, while later head motion is recorded only as a diagnostic and does not affect the error gate.
+
+```bash
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/touch-validation/state-01.json
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/touch-validation/state-02.json
+python calibration.py \
+  --config configs/head_config.json state \
+  --output data/touch-validation/state-03.json
+```
 
 ```bash
 python calibration.py \

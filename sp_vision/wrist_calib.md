@@ -2,7 +2,7 @@
 
 [简体中文](wrist_calib.zh-CN.md)
 
-From the repository root, run `cd sp_vision`, then run the script examples after installing the repository as described in the [README](../README.md). Configuration paths resolve relative to their JSON file; data and results resolve relative to the current working directory. The commands read sensors or solve offline and do not move the robot.
+After running `scripts/install.sh` as described in the [README](../README.md) — that is the step that produces `.venv/bin/python` — run `source .venv/bin/activate` from the repository root, then `cd sp_vision` and run the script examples below; `python` in these commands is that environment's interpreter. Configuration paths resolve relative to their JSON file; data and results resolve relative to the current working directory. The commands read sensors or solve offline and do not move the robot.
 
 This is a separate, read-only workflow for the right wrist color camera. Run commands from this directory. Images and results go under `data/wrist_camera_session/`, which is ignored by Git. The bundled model assets keep offline calibration independent from the parent repository. The code never moves the robot.
 
@@ -33,7 +33,7 @@ Set `capture.host`, `ros_setup`, `ros_domain_id`, `color_topic` and `joint_topic
 python calibration_wrist.py --config configs/wrist_config.json probe
 ```
 
-For the optional controller comparison, copy `configs/robot_profile.example.json` to `configs/robot_profile.json`, fill `robot.host` and `robot.port`, and set `capture.state_profile` in `wrist_config.json` to `robot_profile.json`. This comparison requires a compatible external `tron2_env` runtime.
+For the optional controller comparison and the `state` command, copy `configs/robot_profile.example.json` to `configs/robot_profile.json`, fill `robot.host` and `robot.port`, and set `capture.state_profile` in `wrist_config.json` to `robot_profile.json`. Both require a compatible external `tron2_env` runtime.
 
 `probe` saves a synchronized image and named joint JSON under `data/wrist_camera_session/` without requiring a checkerboard. It also reads the same controller `arm_q14` used by head validation before and after the image, then reports `mapping_check.passed` only if the arm stayed still and each mapped ROS 2 value agrees within 0.005 rad. A failed or unavailable controller comparison does not mean image capture failed. The image/joint `state_skew_ms` is a separate check with a 100 ms limit.
 
@@ -56,7 +56,20 @@ In the capture window, `s` saves an accepted image, `f` reverses checkerboard co
 
 ## Calibrate the right-arm touch TCP
 
-To recalibrate the TCP, keep one rigid tip against one fixed point and read measured arm state at four clearly different wrist orientations. A dexterous fingertip is usable only if every finger joint remains at the same pose; the state files do not record finger joints. After each pose settles, save measured feedback to `data/wrist_camera_session/tcp/pose-01.json` through `pose-04.json`. Each JSON needs `arm_q14`: fourteen finite measured joint angles in radians, in the configured left-arm order followed by the right-arm order. Use your controller's read-only logger; this package has no general state-recording CLI.
+To recalibrate the TCP, keep one rigid tip against one fixed point. A dexterous fingertip is usable only if every finger joint remains at the same pose; the state files do not record finger joints. After each pose settles, save measured state to `data/wrist_camera_session/tcp/pose-01.json` through `pose-04.json` with the `state` command, which only reads controller feedback and sends no motion:
+
+```bash
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_session/tcp/pose-01.json
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_session/tcp/pose-02.json
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_session/tcp/pose-03.json
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_session/tcp/pose-04.json
+```
+
+Each state JSON contains `arm_q14`: fourteen finite measured joint angles in radians, in the configured left-arm order followed by the right-arm order, plus a synchronized `head_q2` and `timestamp_s`.
 
 The wrist command reuses the head workflow's fixed-point solver and returns the tip position in `wrist_roll_R_Link`:
 
@@ -83,7 +96,18 @@ python calibration_wrist.py --config configs/wrist_config.json \
 
 Each completed `capture --count 1` replaces the previous validation image with a new `view-001`; quitting with `q` preserves the old image. After recapturing, rerun `select-validation` so `wrist_selection.json` and `wrist_selection.png` match the new image. Previous touch states are usable only if the board and physical corners stayed fixed.
 
-Inspect the numbers in `data/wrist_camera_validation/wrist_selection.png` against the physical corners. Keep the board fixed and use the same tip and finger pose as in TCP fitting. Touch corners 1, 2, and 3 in order and save measured `arm_q14` to `data/wrist_camera_validation/state-01.json` through `state-03.json` after each pose settles:
+Inspect the numbers in `data/wrist_camera_validation/wrist_selection.png` against the physical corners. Keep the board fixed and use the same tip and finger pose as in TCP fitting. Touch corners 1, 2, and 3 in order and save measured state to `data/wrist_camera_validation/state-01.json` through `state-03.json` with the `state` command after each pose settles:
+
+```bash
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_validation/state-01.json
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_validation/state-02.json
+python calibration_wrist.py --config configs/wrist_config.json \
+  state --output data/wrist_camera_validation/state-03.json
+```
+
+Then compare the predictions with those states:
 
 ```bash
 python calibration_wrist.py --config configs/wrist_config.json \

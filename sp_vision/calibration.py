@@ -1360,6 +1360,51 @@ def validate_command(config, selection_path, side, state_paths, tcp_path, output
     return passed
 
 
+def _import_state_adapter():
+    try:
+        if __package__:
+            from .adapters.arm_state import read_state
+        else:
+            from adapters.arm_state import read_state
+    except ImportError as error:
+        raise RuntimeError(
+            "controller state recording requires the optional tron2_env package; "
+            "offline calibration commands do not."
+        ) from error
+    return read_state
+
+
+def controller_robot(config):
+    """Return the robot block of the deployment profile used for state capture."""
+    value = config.get("capture", {}).get("state_profile")
+    if not value:
+        raise ValueError("capture.state_profile must point to a deployment robot profile")
+    profile = read_json(config_path(config, value))
+    robot = profile.get("robot")
+    if not isinstance(robot, dict) or "host" not in robot:
+        raise ValueError(f"{value} is not a deployment robot profile with robot.host")
+    return robot
+
+
+def state_command(config, output: Path) -> None:
+    """Record one controller arm_q14/head_q2 sample, mirroring `tron2-deploy state`.
+
+    This replaces the deployment state command that the standalone package no
+    longer ships: it reads only feedback, writes the sampled joints to JSON and
+    sends no motion command. Pivot and touch validation consume these files.
+    """
+    read_state = _import_state_adapter()
+    timeout = float(config.get("capture", {}).get("timeout_s", 8.0))
+    state = read_state(controller_robot(config), timeout_s=timeout)
+    write_json(output, state)
+    print(json.dumps({
+        "output": str(output),
+        "arm_q14": state["arm_q14"],
+        "head_q2": state["head_q2"],
+        "timestamp_s": state["timestamp_s"],
+    }, indent=2))
+
+
 def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -1407,6 +1452,14 @@ def build_parser():
     validate.add_argument("--states", required=True, nargs=3, type=Path)
     validate.add_argument("--tcp", type=Path, help="passed pivot JSON; otherwise use config value")
     validate.add_argument("--output", type=Path, default=Path.cwd() / "data" / "head_camera_validation" / "head_validation.json")
+
+    state = commands.add_parser("state", help="record one read-only controller arm/head state as JSON")
+    state.add_argument(
+        "--output",
+        required=True,
+        type=Path,
+        help="destination state JSON, for example data/tcp/pose-01.json",
+    )
     return parser
 
 
@@ -1447,12 +1500,15 @@ def main(argv=None):
         return 0 if validate_command(
             config, args.selection, args.side, args.states, args.tcp, args.output
         ) else 1
+    if args.command == "state":
+        state_command(config, args.output)
+        return 0
     raise AssertionError(args.command)
 
 
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
-    except (ValueError, OSError, cv2.error) as error:
+    except (ValueError, OSError, RuntimeError, cv2.error) as error:
         print(f"error: {error}", file=sys.stderr)
         raise SystemExit(2)

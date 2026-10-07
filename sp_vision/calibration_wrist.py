@@ -498,6 +498,13 @@ def parser() -> argparse.ArgumentParser:
     validation.add_argument("--states", required=True, type=Path, nargs=3)
     validation.add_argument("--tcp", type=Path)
     validation.add_argument("--output", type=Path, default=DEFAULT_SESSION / "wrist_validation.json")
+    state = commands.add_parser("state", help="record one read-only controller arm/head state as JSON")
+    state.add_argument(
+        "--output",
+        required=True,
+        type=Path,
+        help="destination state JSON, for example data/wrist_camera_session/tcp/pose-01.json",
+    )
     return result
 
 
@@ -521,6 +528,8 @@ def main(argv=None) -> int:
     elif args.command == "validate":
         return 0 if validate_command(config, args.selection, args.side, args.states,
                                      args.tcp, args.output) else 1
+    elif args.command == "state":
+        common.state_command(config, args.output)
     return 0
 
 
