@@ -157,6 +157,28 @@ PY
 - `radial_monotonicity.minimum_radial_derivative` 必须大于零；
 - `diagnostics/intrinsics/*.png` 中所有角点顺序正确。
 
+### `head_intrinsics.json` 字段含义（腕部内参同结构）
+
+| 字段 | 类型 | 含义 |
+| --- | --- | --- |
+| `schema_version` | int | 结果文件结构版本，当前为 `1`；与配置文件顶层的 `schema_version` 是两回事。 |
+| `kind` | str | 结果类型标识，内参固定为 `sp_vision_intrinsics`。 |
+| `passed` | bool | 是否全部通过质量门限。为 `false` 时不要拿它去求外参。 |
+| `image_size` | `[宽, 高]` | 参与拟合的图像像素尺寸。内参只对该分辨率有效。 |
+| `pattern` | object | 棋盘几何：`columns`、`rows` 为**内角点**列数/行数，`square_m` 为实测方格边长（米）。 |
+| `camera_matrix` | 3×3 | 内参矩阵 `K`，行序为 `[[fx, 0, cx], [0, fy, cy], [0, 0, 1]]`，单位像素。 |
+| `distortion` | 长度 5 | OpenCV 五参数畸变 `[k1, k2, p1, p2, k3]`：`k1`/`k2`/`k3` 为径向项，`p1`/`p2` 为切向项。 |
+| `rms_px` | float | 全部训练帧的整体重投影 RMS，单位像素。 |
+| `intrinsic_std` | 长度 4 | `calibrateCameraExtended` 给出的 `[fx, fy, cx, cy]` 标准差；数值明显偏大的那一项说明该自由度激励不足。 |
+| `training_views` | 字符串数组 | 质量剔除后真正参与拟合的 `view-*` 目录名。 |
+| `training_view_rms_px` | 映射 | 每个训练帧的重投影 RMS（像素），用于发现单帧突增。 |
+| `holdout_views` | 字符串数组 | 留作验证、未参与拟合的帧名。 |
+| `rejected_views` | 数组 | 被剔除的帧，每条为 `{view, reason}`，再附带 `rms_px`（帧重投影误差过大）或 `metrics`（检测质量不合格，键含义见下表）。 |
+| `radial_monotonicity` | object | `max_normalized_radius`（视野内最大归一化半径）与 `minimum_radial_derivative`（畸变映射导数最小值，**必须大于 0**）。 |
+| `detector` | str | 实际使用的检测器与标志位，例如 `cv2.findChessboardCornersSB(NORMALIZE_IMAGE\|EXHAUSTIVE\|ACCURACY)`。 |
+
+`rejected_views[].metrics` 中的键：`accepted`（是否通过）、`detected`（是否检测到棋盘）、`topology_ok`（角点拓扑与叉积方向是否一致）、`board_area_ratio`（棋盘凸包面积占画面比例）、`border_margin_px`（角点到画面边缘的最小像素距离）、`laplacian_variance`（清晰度指标）、`corner_count`（检测到的内角点数）、`flip_180`（保存时是否做过 180° 反转），检测失败时还有 `reason`。
+
 RMS 小并不能弥补姿态覆盖不足。焦距或主点与相机出厂值相差异常大时，应先检查棋盘尺寸、屏幕摩尔纹、角点方向和视角分布，不要继续求外参。优先使用平整的实体印刷板，不要把电脑屏幕上的棋盘作为最终标定板。
 
 ## 三、求解相机到 pitch 轴外参
@@ -179,13 +201,28 @@ T_base_pitch(i) · T_pitch_camera · T_camera_board(i)
 
 程序比较 OpenCV 的多种 hand-eye 初值，再对 `T_pitch_camera` 和固定的 `T_base_board` 做联合鲁棒优化。它要求 yaw、pitch 都有足够角度跨度，并用最后 6 帧检查未参与求解的棋盘位姿是否仍保持固定。
 
-输出中的关键字段为：
+### `head_extrinsics.json` 字段含义
 
-- `T_pitch_camera`：实际标定结果，运行时应使用它；
-- `nominal_T_pitch_camera`：最终 URDF 中的名义安装值，仅供比较；
-- `calibrated_from_nominal`：实测与名义安装的差异；
-- `training`、`holdout`：每帧 PnP、平移和旋转残差；
-- `model_consistency`：`configs/assembly.urdf` 与 `configs/scene.xml` 的链一致性检查。
+| 字段 | 类型 | 含义 |
+| --- | --- | --- |
+| `schema_version` | int | 结果文件结构版本。 |
+| `kind` | str | 固定为 `sp_vision_pitch_camera_extrinsics`，用于确认这是头部外参结果。 |
+| `passed` | bool | 训练集与留出集是否都满足平移/旋转残差门限。 |
+| `frame_convention` | str | 约定说明：`T_A_B` 表示把 B 坐标映射到 A 坐标。 |
+| `T_pitch_camera` | 4×4 | **标定结果**：`head_pitch_Link` ← 彩色光学相机，运行时应使用它。 |
+| `nominal_T_pitch_camera` | 4×4 | 同一变换在 URDF 中的名义安装值，仅供比较，不是求解约束。 |
+| `calibrated_from_nominal` | object | 实测与名义值的差异：`translation_m`、`rotation_rad`，以及 `delta_transform`（`nominal⁻¹ · T_pitch_camera`）。 |
+| `T_base_board` | 4×4 | 固定棋盘在 `base_Link` 中的位姿（联合求解的中间量）。跨次比较可判断棋盘是否被移动。 |
+| `head_joint_names` | 数组 | 本次所用头部关节名及其顺序。 |
+| `pitch_link` | str | 被当作外参父坐标系的 pitch 连杆名。 |
+| `training` | 数组 | 训练帧逐条 `{view, pnp_rms_px, translation_m, rotation_rad}`；后两项是 `T_base_board` 的一致性残差。 |
+| `holdout` | 数组 | 留出帧，结构同 `training`，未参与求解，用于独立检查。 |
+| `rejected` | 数组 | 训练与留出中因检测/同步/PnP 超限被剔除的帧 `{view, reason}`。 |
+| `outliers` | 数组 | 训练帧中被鲁棒剔除的自洽性离群帧 `{view, translation_m, rotation_rad}`。 |
+| `head_span_rad` | 长度 2 | 训练集上各头部关节角的极差（按 `head_joint_names` 顺序），用于判断激励是否足够。 |
+| `solver` | object | `initial_method`（5 种 OpenCV hand-eye 初值中选中的）、`initial_score`、`optimizer_success`、`optimizer_cost`、`method_failures`。 |
+| `model_consistency` | object | `assembly.urdf` 与 `scene.xml` 的链一致性：`passed`、`tolerance`、`maximum_error`，以及 `samples[]`（每样本含 `head_q2`、`pitch_translation_m`、`pitch_rotation_rad`、`camera_translation_m`、`camera_rotation_rad`）。不一致时程序直接停止，不会写出结果。 |
+| `quality_limits` | object | 写出本结果时使用的门限 `max_board_residual_m`、`max_board_residual_deg`。 |
 
 运行时相机在基座中的动态位姿为：
 
@@ -336,6 +373,37 @@ python -m pytest -q test_calibration.py
 ```
 
 测试覆盖 7×10 SB 角点检测、hand-eye 数学方向、最终 URDF 的头部 FK、yaw 引起 pitch 原点移动而 pitch 不移动自身原点，以及 `configs/assembly.urdf`/`configs/scene.xml` 的头部相机链一致性。测试不连接相机或机器人。
+
+## 如何获得更好的标定效果
+
+棋盘本身：
+
+- 用平整的**实体印刷板**，四角不要翘曲；不要用显示器上的棋盘做最终标定（摩尔纹与像素栅格会污染角点）。
+- 用卡尺实测方格边长再填 `square_m`；量多格取平均比量单格更稳。
+- 确认内角点数与 JSON 一致（本流程为 7×10），印刷图案四周至少留约一个方格宽的白边。
+- 棋盘必须**刚性固定**（夹具或支架），整个内参+外参数据集期间不得移动，也不要手持。
+
+内参采集：
+
+- 训练帧数量建议 20 张以上（默认门限为 12 训练 + 6 留出）；质量剔除会减少实际帧数，多采几张更稳。
+- 覆盖要广：棋盘尽量出现在画面中心、四角与边缘，`board_area_ratio` 在大（约 0.3）到小（约 0.05）之间变化，并覆盖不同工作距离。
+- 姿态以**倾斜**为主：板面相对光轴倾斜约 20°–45° 的视角，比正对相机的视角更有信息量。
+- 先看 `intrinsic_std`：某项偏大说明该方向激励不足，补采相应姿态，而不是靠降低门限。
+- 出结果后必看 `radial_monotonicity.minimum_radial_derivative > 0`，否则畸变模型在视野内非单调，内参不可用。
+
+外参采集（头部）：
+
+- 固定棋盘的同时，头部 yaw 与 pitch 都要有明显跨度（默认每关节极差 ≥ 0.20 rad ≈ 11.5°），两个方向都要覆盖正负。
+- 保存前等头部完全停止；每帧保存的是与图像同步的 `head_q2`，回退或超差的帧会被拒绝。
+- `outliers` 为空是理想情况；出现离群帧时优先查角点顺序（是否需要按 `f` 翻转 180°）与图像/关节同步，而不是直接接受结果。
+- 记下 `T_base_board`：下次标定时若它明显变化，说明棋盘被移动过。
+
+通用：
+
+- 图像尺寸、对焦、缩放设置在整段数据内保持不变；混用不同分辨率会在求解开始时直接报错。
+- 留出帧不要与训练帧几乎相同，否则留出检查给不出独立证据。
+- 移动过棋盘、相机或支架，或发生碰撞后，之前的内外参和 TCP 全部作废，需要重采重算。
+- `passed: true` 只表示离线门限满足，不等于实机验收；最终仍需独立触点验证。
 
 ## 常见失败
 

@@ -54,6 +54,51 @@ python calibration_wrist.py --config configs/wrist_config.json \
 
 In the capture window, `s` saves an accepted image, `f` reverses checkerboard corner order by 180°, `r` or Space reacquires, and `q` quits. Without `--append`, a complete capture replaces the session's previous `view-*` images; quitting early preserves them. Use `--append` to add views. The intrinsic fit reuses the head workflow's checkerboard detection, distortion fit, quality limits and holdout split. The extrinsic fit reuses its PnP and hand-eye solver, but uses synchronized `T_base_wrist_roll(q)` for every view. It checks the nominal URDF/MJCF camera chain and evaluates held-out views against the board pose fitted from training views. Require `passed: true`; also inspect `training`, `holdout`, rejected views, and deviation from the nominal mount.
 
+### `wrist_intrinsics.json` fields
+
+The wrist intrinsics are written by the same code as the head intrinsics, so the fields are identical; see the `head_intrinsics.json` table in the [head guide](head_calib.md) for their meanings: `schema_version`, `kind`, `passed`, `image_size`, `pattern`, `camera_matrix` (3×3 `K`), `distortion` (`[k1, k2, p1, p2, k3]`), `rms_px`, `intrinsic_std` (`[fx, fy, cx, cy]` standard deviations), `training_views`, `training_view_rms_px`, `holdout_views`, `rejected_views`, `radial_monotonicity`, `detector`. The wrist result adds two fields so another camera's result cannot be reused here:
+
+| Field | Meaning |
+| --- | --- |
+| `camera_frame` | Camera frame the result belongs to; must equal `robot.camera_frame` (`right_wrist_camera_color_optical_frame`). |
+| `color_topic` | Colour topic used during calibration; must equal `capture.color_topic`. |
+
+The extrinsics solve and `select-validation` cross-check these two fields and fail loudly on a mismatch instead of silently reusing a result.
+
+### `wrist_extrinsics.json` fields
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `schema_version` | int | Structure version of this result file. |
+| `kind` | str | Fixed tag `sp_vision_right_wrist_extrinsics`. |
+| `passed` | bool | Whether both training and holdout satisfy the translation/rotation residual limits. |
+| `mount_link` | str | Extrinsics parent frame; must be `wrist_roll_R_Link`. |
+| `camera_frame` | str | The calibrated wrist camera frame. |
+| `T_wrist_roll_camera` | 4×4 | **The calibration result**: `wrist_roll_R_Link` ← wrist colour camera. Use this at runtime. |
+| `nominal_T_wrist_roll_camera` | 4×4 | The URDF nominal mount, for comparison only. |
+| `T_base_board` | 4×4 | The fixed board's pose in the base frame (a jointly solved quantity); comparing it across runs reveals whether the board moved. |
+| `calibrated_from_nominal` | object | `translation_m` and `rotation_deg` — note this is **degrees**, unlike the head extrinsics which use radians. |
+| `training` | list | Per-view `{view, pnp_rms_px, translation_m, rotation_rad}`. |
+| `holdout` | list | Held-out views, same shape as `training`, not used for the solve. |
+| `rejected` | list | Views dropped by detection, synchronization or PnP limits, as `{view, reason}`. |
+| `outliers` | list | Robustly discarded inconsistent views, as `{view, translation_m, rotation_rad}`. |
+| `mount_rotation_span_deg` | float | Wrist orientation span in degrees, showing whether the pose excitation was sufficient. |
+| `secondary_rotation_rad` | float | Second singular value of the rotation-axis distribution; too small means every pose rotates about nearly one axis. |
+| `solver` | object | Same as the head: `initial_method`, `initial_score`, `optimizer_success`, `optimizer_cost`, `method_failures`. |
+| `model_consistency` | object | URDF/MJCF consistency of this wrist camera chain: `passed`, `translation_m`, `rotation_deg`. |
+
+## Getting a better calibration
+
+Board and image-quality requirements match the head workflow (physical printed board, caliper-measured square side, rigidly fixed and never handheld, mostly 20°–45° tilted poses, coverage of the centre and edges, no moiré or blur). Wrist-specific points:
+
+- Prefer 20 or more training poses and rotate the wrist about **at least two non-parallel** axes; the default orientation span requirement is ≥ 20° (`min_mount_rotation_span_deg`).
+- Insufficient excitation fails early (`insufficient wrist orientation spread`, `nearly about one axis`). Add poses instead of loosening the limits.
+- Keep the resize setting constant: intrinsics are resolution-specific, so a resized image needs its own calibration and cannot reuse the raw stream's `CameraInfo`.
+- Confirm the intrinsics `passed: true` with `radial_monotonicity.minimum_radial_derivative > 0` before solving extrinsics.
+- Read `calibrated_from_nominal`: a deviation far beyond assembly tolerance points at the solve or the data. Check corner order and synchronization rather than accepting it.
+- Moving the board, changing the resize, or refitting the wrist camera invalidates both the intrinsics and the extrinsics.
+- `passed: true` only means the offline gates were met; the independent touch validation is still the final check.
+
 ## Calibrate the right-arm touch TCP
 
 To recalibrate the TCP, keep one rigid tip against one fixed point. A dexterous fingertip is usable only if every finger joint remains at the same pose; the state files do not record finger joints. After each pose settles, save measured state to `data/wrist_camera_session/tcp/pose-01.json` through `pose-04.json` with the `state` command, which only reads controller feedback and sends no motion:

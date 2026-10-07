@@ -54,6 +54,51 @@ python calibration_wrist.py --config configs/wrist_config.json \
 
 采集窗口中，`s` 保存通过检查的图像，`f` 将棋盘角点顺序旋转 180°，`r` 或空格重新取图，`q` 退出。不加 `--append` 时，完整采集成功后覆盖该 session 的旧 `view-*`；中途退出会保留旧图。需要追加视角时加 `--append`。内参拟合复用头部流程的棋盘检测、畸变拟合、质量阈值及留出集划分。外参拟合复用 PnP 与手眼求解，但每张图都使用同步的 `T_base_wrist_roll(q)`。程序检查 URDF/MJCF 中的名义相机链，并用未参与拟合的图像检查训练所得棋盘位姿。要求结果 `passed: true`；同时检查 `training`、`holdout`、被拒绝视角及相对名义安装值的偏差。
 
+### `wrist_intrinsics.json` 字段含义
+
+腕部内参与头部内参由同一段代码写出，字段完全一致，逐项含义见[头部指南](head_calib.zh-CN.md)的 `head_intrinsics.json` 字段表：`schema_version`、`kind`、`passed`、`image_size`、`pattern`、`camera_matrix`（3×3 内参 `K`）、`distortion`（`[k1, k2, p1, p2, k3]`）、`rms_px`、`intrinsic_std`（`[fx, fy, cx, cy]` 标准差）、`training_views`、`training_view_rms_px`、`holdout_views`、`rejected_views`、`radial_monotonicity`、`detector`。腕部额外写两个字段，防止别的相机结果被误用到这里：
+
+| 字段 | 含义 |
+| --- | --- |
+| `camera_frame` | 该结果所属的相机坐标系名，应等于配置里的 `robot.camera_frame`（`right_wrist_camera_color_optical_frame`）。 |
+| `color_topic` | 标定时使用的彩色话题，应等于 `capture.color_topic`。 |
+
+外参求解与 `select-validation` 会交叉校验这两个字段；不匹配时直接报错，不会静默沿用。
+
+### `wrist_extrinsics.json` 字段含义
+
+| 字段 | 类型 | 含义 |
+| --- | --- | --- |
+| `schema_version` | int | 结果文件结构版本。 |
+| `kind` | str | 固定为 `sp_vision_right_wrist_extrinsics`。 |
+| `passed` | bool | 训练集与留出集是否都满足平移/旋转残差门限。 |
+| `mount_link` | str | 外参父坐标系，应为 `wrist_roll_R_Link`。 |
+| `camera_frame` | str | 被标定的腕部相机坐标系。 |
+| `T_wrist_roll_camera` | 4×4 | **标定结果**：`wrist_roll_R_Link` ← 腕部彩色相机，运行时应使用它。 |
+| `nominal_T_wrist_roll_camera` | 4×4 | URDF 名义安装值，仅供比较。 |
+| `T_base_board` | 4×4 | 固定棋盘在基座中的位姿（联合求解量）；跨次比较可判断棋盘是否被移动。 |
+| `calibrated_from_nominal` | object | `translation_m` 与 `rotation_deg`（注意这里是**度**，与头部外参用弧度不同）。 |
+| `training` | 数组 | 逐帧 `{view, pnp_rms_px, translation_m, rotation_rad}`。 |
+| `holdout` | 数组 | 留出帧，结构同 `training`，未参与求解。 |
+| `rejected` | 数组 | 因检测/同步/PnP 超限被剔除的帧 `{view, reason}`。 |
+| `outliers` | 数组 | 被鲁棒剔除的自洽性离群帧 `{view, translation_m, rotation_rad}`。 |
+| `mount_rotation_span_deg` | float | 腕部姿态跨度（度），判断姿态激励是否足够。 |
+| `secondary_rotation_rad` | float | 旋转轴分布的次要奇异值；过小说明所有姿态几乎绕同一轴转动。 |
+| `solver` | object | 与头部相同：`initial_method`、`initial_score`、`optimizer_success`、`optimizer_cost`、`method_failures`。 |
+| `model_consistency` | object | 该腕部相机链的 URDF/MJCF 一致性：`passed`、`translation_m`、`rotation_deg`。 |
+
+## 如何获得更好的标定效果
+
+棋盘与图像质量的要求与头部流程相同（实体印刷板、卡尺实测方格边长、刚性固定不得手持、以 20°–45° 倾斜姿态为主、覆盖画面中心与边缘、避免摩尔纹和模糊）。右腕额外注意：
+
+- 建议采集 20 帧以上的训练姿态，并让腕部绕**至少两个不平行**的轴转动；姿态跨度默认需 ≥ 20°（`min_mount_rotation_span_deg`）。
+- 约束不足时程序会在求解早期就报错（`insufficient wrist orientation spread`、`nearly about one axis`），不要靠放宽门限绕过，补采姿态即可。
+- 保持缩放设置不变：内参对分辨率敏感，缩放后的图像必须单独标定，不能复用原始流的 `CameraInfo`。
+- 先确认内参 `passed: true` 且 `radial_monotonicity.minimum_radial_derivative > 0`，再求外参。
+- 看 `calibrated_from_nominal`：偏差远大于装配公差说明求解或数据有问题，先查角点顺序与同步，而不是接受结果。
+- 移动过棋盘、改变缩放、或重新拆装腕部相机后，内参与外参都要重算。
+- `passed: true` 只表示离线门限通过；最终判定仍以独立触点验证为准。
+
 ## 标定右臂触点 TCP
 
 若要重新标定 TCP，用同一支相对右腕刚性不动的尖端抵住同一个固定点，在至少四个明显不同的腕部朝向下读取实测状态。灵巧手指尖只有在所有手指关节始终保持同一姿态时才能作为尖端；状态文件不记录手指关节。每次稳定后，用 `state` 子命令只读取控制器反馈并保存 `data/wrist_camera_session/tcp/pose-01.json` 至 `pose-04.json`；该命令不发送任何运动指令：

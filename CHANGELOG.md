@@ -13,6 +13,7 @@ This file records version-level changes. See [简体中文](CHANGELOG.zh-CN.md).
 
 ### Documentation
 - Make `scripts/install.sh` the documented installation step: it produces `.venv/bin/python`, which the README and both calibration guides call, and offline calibration needs only that environment. The README also records the installer's limits (Python 3.10+ with `venv`/`ensurepip`, OpenCV shared libraries, reachable index, existing-`.venv` handling, and that it installs neither ROS nor `tron2_env`).
+- Document every field of the `head_intrinsics.json`, `wrist_intrinsics.json`, `head_extrinsics.json` and `wrist_extrinsics.json` results in the calibration guides, and add a "getting a better calibration" section covering board choice, pose coverage, excitation limits and the triggers that invalidate a solve.
 
 ### Notes & Caveats
 - The `state` command needs the external `tron2_env` runtime, like the wrist `probe` comparison; offline solving still does not.

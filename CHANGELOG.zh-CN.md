@@ -13,6 +13,7 @@
 
 ### 文档
 - 把 `scripts/install.sh` 写成文档化的安装步骤：它生成 `.venv/bin/python`，README 与两个标定指南都调用该解释器，离线标定只需要这个环境。README 同时记录脚本的边界（Python 3.10+ 且带 `venv`/`ensurepip`、OpenCV 共享库、软件源可达、已存在 `.venv` 的处理方式，以及不安装 ROS 与 `tron2_env`）。
+- 在两个标定指南中逐个说明 `head_intrinsics.json`、`wrist_intrinsics.json`、`head_extrinsics.json`、`wrist_extrinsics.json` 的结果字段，并新增“如何获得更好的标定效果”一节，涵盖标定板选择、姿态覆盖、激励门限与使结果失效的情形。
 
 ### 注意事项
 - `state` 命令与腕部 `probe` 对比一样需要外部 `tron2_env` 运行环境；离线求解仍不依赖它。

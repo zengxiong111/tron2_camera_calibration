@@ -99,6 +99,28 @@ python calibration.py \
 
 Require `passed: true`. Review per-view RMS, the saved diagnostic overlays, and the radial-monotonicity result. Do not continue if focal length or principal point is implausibly different from factory values. Use a physical board; a checkerboard shown on a laptop introduces moiré and is unsuitable for final calibration.
 
+### `head_intrinsics.json` fields (the wrist intrinsics share this schema)
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `schema_version` | int | Structure version of this result file, currently `1`; unrelated to the config file's top-level `schema_version`. |
+| `kind` | str | Result tag; intrinsics always use `sp_vision_intrinsics`. |
+| `passed` | bool | Whether every quality gate was met. Do not solve extrinsics from a result with `false`. |
+| `image_size` | `[width, height]` | Pixel size of the fitted images. The intrinsics are valid only for this resolution. |
+| `pattern` | object | Board geometry: `columns`/`rows` are the **inner-corner** counts, `square_m` is the measured square side in metres. |
+| `camera_matrix` | 3×3 | Intrinsic matrix `K`, row order `[[fx, 0, cx], [0, fy, cy], [0, 0, 1]]`, in pixels. |
+| `distortion` | length 5 | OpenCV five-parameter distortion `[k1, k2, p1, p2, k3]`: `k1`/`k2`/`k3` radial, `p1`/`p2` tangential. |
+| `rms_px` | float | Overall reprojection RMS of all training views, in pixels. |
+| `intrinsic_std` | length 4 | `[fx, fy, cx, cy]` standard deviations from `calibrateCameraExtended`; a large entry means that degree of freedom is poorly excited. |
+| `training_views` | list[str] | The `view-*` directories that actually contributed after quality rejection. |
+| `training_view_rms_px` | map | Per-view reprojection RMS in pixels, for spotting a single outlier view. |
+| `holdout_views` | list[str] | Views held out of the fit. |
+| `rejected_views` | list | Rejected views as `{view, reason}` plus either `rms_px` (per-view reprojection too high) or `metrics` (detection quality failed; keys below). |
+| `radial_monotonicity` | object | `max_normalized_radius` (largest normalized radius in frame) and `minimum_radial_derivative`, which **must be greater than 0**. |
+| `detector` | str | Detector and flags actually used, for example `cv2.findChessboardCornersSB(NORMALIZE_IMAGE\|EXHAUSTIVE\|ACCURACY)`. |
+
+Keys inside `rejected_views[].metrics`: `accepted`, `detected`, `topology_ok`, `board_area_ratio`, `border_margin_px`, `laplacian_variance`, `corner_count`, `flip_180`, and `reason` when detection failed outright.
+
 ## 3. Solve camera-to-pitch extrinsics
 
 ```bash
@@ -118,6 +140,29 @@ T_base_pitch(i) · T_pitch_camera · T_camera_board(i)
 ```
 
 Require `passed: true`. Use `T_pitch_camera` as the measured result. `nominal_T_pitch_camera` is only the final-URDF reference; `training`, `holdout`, and `model_consistency` provide the essential checks.
+
+### `head_extrinsics.json` fields
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `schema_version` | int | Structure version of this result file. |
+| `kind` | str | Fixed tag `sp_vision_pitch_camera_extrinsics`. |
+| `passed` | bool | Whether both training and holdout satisfy the translation/rotation residual limits. |
+| `frame_convention` | str | States that `T_A_B` maps coordinates from frame B into frame A. |
+| `T_pitch_camera` | 4×4 | **The calibration result**: `head_pitch_Link` ← colour optical camera. Use this at runtime. |
+| `nominal_T_pitch_camera` | 4×4 | The same transform from the URDF, for comparison only; never a solver constraint. |
+| `calibrated_from_nominal` | object | Difference from nominal: `translation_m`, `rotation_rad`, and `delta_transform` (`nominal⁻¹ · T_pitch_camera`). |
+| `T_base_board` | 4×4 | The fixed board's pose in `base_Link` (a jointly solved quantity). Comparing it across runs reveals whether the board moved. |
+| `head_joint_names` | list | Head joint names and their order. |
+| `pitch_link` | str | The pitch link used as the extrinsics parent frame. |
+| `training` | list | Per-view `{view, pnp_rms_px, translation_m, rotation_rad}`; the last two are `T_base_board` consistency residuals. |
+| `holdout` | list | Held-out views, same shape as `training`, not used for the solve. |
+| `rejected` | list | Views dropped in training or holdout by detection, synchronization or PnP limits, as `{view, reason}`. |
+| `outliers` | list | Robustly discarded inconsistent training views, as `{view, translation_m, rotation_rad}`. |
+| `head_span_rad` | length 2 | Peak-to-peak range of each head joint over the training set (ordered by `head_joint_names`), showing whether excitation was sufficient. |
+| `solver` | object | `initial_method` (the chosen of five OpenCV hand-eye initializations), `initial_score`, `optimizer_success`, `optimizer_cost`, `method_failures`. |
+| `model_consistency` | object | `assembly.urdf` versus `scene.xml` chain check: `passed`, `tolerance`, `maximum_error`, and `samples[]` with `head_q2`, `pitch_translation_m`, `pitch_rotation_rad`, `camera_translation_m`, `camera_rotation_rad`. A disagreement aborts the run instead of writing a result. |
+| `quality_limits` | object | The `max_board_residual_m` and `max_board_residual_deg` limits used for this result. |
 
 At runtime:
 
@@ -255,7 +300,36 @@ python -m pytest -q test_calibration.py
 ```
 
 This checks 7×10 SB detection, hand-eye transform direction, final-model FK, yaw/pitch origin behavior, and URDF/XML agreement without connecting to hardware.
+## Getting a better calibration
 
+The board itself:
+
+- Use a flat **physical printed** board with no warped corners; a checkerboard shown on a display is unsuitable for a final calibration because moiré and the pixel grid corrupt the corners.
+- Measure the square side with calipers before filling in `square_m`; averaging over several squares is more stable than measuring one.
+- Confirm the inner-corner counts match the JSON (7×10 here) and leave at least about one square of white margin around the printed pattern.
+- Rigidly fix the board (clamp or stand). It must not move during the whole intrinsics-plus-extrinsics dataset, and it must not be held by hand.
+
+Intrinsics:
+
+- Prefer 20 or more training views (default gates are 12 training plus 6 holdout); quality rejection reduces the usable count, so capture extra.
+- Cover the frame: put the board near the centre, the corners and the edges, vary `board_area_ratio` between roughly 0.3 and 0.05, and vary the working distance.
+- Favour **tilted** poses: views around 20°–45° off the optical axis carry more information than head-on ones.
+- Read `intrinsic_std` first: one large entry means that direction is under-excited; add poses rather than loosening limits.
+- Always confirm `radial_monotonicity.minimum_radial_derivative > 0`; otherwise the distortion model is non-monotonic in frame and the intrinsics are unusable.
+
+Extrinsics (head):
+
+- With the board fixed, give both head yaw and pitch a clear range (default per-joint peak-to-peak ≥ 0.20 rad ≈ 11.5°), covering positive and negative directions.
+- Wait for the head to stop before saving; each frame stores the image-synchronized `head_q2`, and fallback or out-of-tolerance frames are rejected.
+- An empty `outliers` list is ideal. When outliers appear, check corner order (whether `f` should flip 180°) and image/joint synchronization before accepting the result.
+- Note `T_base_board`: if it changes noticeably in a later run, the board moved.
+
+General:
+
+- Keep image size, focus and resize settings constant across the dataset; mixing resolutions aborts the solve immediately.
+- Do not make holdout views nearly identical to training views, or the holdout check proves nothing.
+- Moving the board, the camera or its mount, or any collision invalidates the previous intrinsics, extrinsics and TCP; recapture and re-solve.
+- `passed: true` only means the offline gates were met, not that the physical setup is accepted; independent touch validation is still required.
 ## Common failures
 
 - `expected 70 inner corners`: check the inner-corner count and avoid blur, glare, occlusion, and display moiré.
