@@ -69,12 +69,12 @@
     {
       "path": "sp_vision/head_calib.md",
       "original_import_sha256": "9d30dc7b9c5d70d621c56c347eed1cb50c376afbecdcc27763c3fa95e84a98db",
-      "destination_sha256": "1e0d1d641a7291385d46b7da85503cd5ca52ec7474bdce8139c303eafca6f284"
+      "destination_sha256": "dc31f04933b529fa75c0a226d2d371c3a3c8545b4017a29f65ab1eac220eea26"
     },
     {
       "path": "sp_vision/head_calib.zh-CN.md",
       "original_import_sha256": "0baf49d542c035ca647b6b06b1fa25292a51145dc1c2f2364ef3290a8dedbe7d",
-      "destination_sha256": "ca5386abb71a1db3c1c0d86ea07205a743510ec493831967ac4a4aaa679656e7"
+      "destination_sha256": "df16a1b4b367ebc689ace49a61f6fde7050de19fd0d47225bdc23f6c6375c5b6"
     },
     {
       "path": "sp_vision/test_calibration.py",
@@ -89,12 +89,12 @@
     {
       "path": "sp_vision/wrist_calib.md",
       "original_import_sha256": "6e8d2aaa4a3ec40e560a5a9b8f2ecfc5037e8b2ef98fdca2e5cddce04efbffb2",
-      "destination_sha256": "4438bdcb77abc436b3bff35304af1e425435986e734036484a8bebbdbc05b53c"
+      "destination_sha256": "32e7d6841cc7b14375be04d5a3cf4ded05dfd4731d9df6d2973d133083664205"
     },
     {
       "path": "sp_vision/wrist_calib.zh-CN.md",
       "original_import_sha256": "809b3ff9c9d298f2ed540b69b0435f4db05288df16a185daae0ce3c02e405014",
-      "destination_sha256": "1bf9a64f041056b26ff7712d3e8ae646ef188b983825f1c9563206a1d7c93372"
+      "destination_sha256": "614f12a1c909a97fad1f3ffed8942d145df5b0b2319f76caa7789a5d2ab7a1aa"
     }
   ],
   "live_capture_status": "untested",

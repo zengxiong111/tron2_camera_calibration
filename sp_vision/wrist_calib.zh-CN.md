@@ -6,6 +6,10 @@
 
 这是右手腕彩色相机的独立只读流程。从本目录运行命令，图像和结果保存于 `data/wrist_camera_session/`；该目录不会进入 Git。模型文件随本目录提供，离线标定不再依赖外部仓库。程序不驱动机器人。
 
+## 已发布的标定结果
+
+本地最新头部（2026-09-23）和右腕（2026-10-05）内外参 JSON 已发布到 [calibration_results](../calibration_results/README.zh-CN.md)，附来源校验值及坐标系、单位说明。两组拟合均通过内部检查，但已记录的独立触点验证未达到 10 mm 阈值（头部 14.42 mm，右腕 12.26 mm）。复用前请阅读结果说明；发布不代表硬件验收通过。
+
 ## 坐标系与几何关系
 
 `configs/assembly.urdf` 中，相机支架固定在 `wrist_roll_R_Link`。它与 `wrist_pitch_R_Link` 之间还有可动的 `wrist_roll_R_Joint`：roll 的局部 X 轴与 pitch 的局部 Y 轴正交。因此应求解的常量是 **`T_wrist_roll_camera`**，即从 `right_wrist_camera_color_optical_frame` 到 `wrist_roll_R_Link` 的变换。URDF 中的数值只是名义安装参考，不是实测标定结果。对任一实测手臂状态：

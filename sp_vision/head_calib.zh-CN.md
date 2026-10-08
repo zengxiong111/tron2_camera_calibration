@@ -4,6 +4,10 @@
 
 按 [README](../README.zh-CN.md) 跑一次 `scripts/install.sh` 后（正是该步骤生成 `.venv/bin/python`），先在仓库根目录执行 `source .venv/bin/activate`，再执行 `cd sp_vision` 运行以下脚本示例；下文命令中的 `python` 即该环境解释器。配置中的相对路径以 JSON 所在目录为基准，数据及结果路径以当前工作目录为基准。命令只读取传感器或执行离线求解，不驱动机器人。
 
+## 已发布的标定结果
+
+本地最新头部（2026-09-23）和右腕（2026-10-05）内外参 JSON 已发布到 [calibration_results](../calibration_results/README.zh-CN.md)，附来源校验值及坐标系、单位说明。两组拟合均通过内部检查，但已记录的独立触点验证未达到 10 mm 阈值（头部 14.42 mm，右腕 12.26 mm）。复用前请阅读结果说明；发布不代表硬件验收通过。
+
 ## ROS 2 相机单帧诊断
 
 `sp-vision-capture` 诊断工具通过 SSH 从 ROS 2 Foxy 主机读取一张彩色图像。它与头部主标定流程不同：头部默认 RGB-D 后端通过本机 ROS 1 Noetic 订阅；右腕标定则有独立的 ROS 2 图像和关节状态采集路径。该单帧诊断不保存深度或同步头部状态，因此不能把结果当作头部标定数据。检查 ROS 2 数据流：

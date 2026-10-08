@@ -4,6 +4,10 @@
 
 After running `scripts/install.sh` as described in the [README](../README.md) — that is the step that produces `.venv/bin/python` — run `source .venv/bin/activate` from the repository root, then `cd sp_vision` and run the script examples below; `python` in these commands is that environment's interpreter. Configuration paths resolve relative to their JSON file; data and results resolve relative to the current working directory. The commands read sensors or solve offline and do not move the robot.
 
+## Published calibration results
+
+The latest local head (2026-09-23) and right wrist (2026-10-05) intrinsic/extrinsic JSON files are published in [calibration_results](../calibration_results/README.md), with source hashes and frame/units guidance. Both fits passed their internal checks, but recorded independent touch validation failed the 10 mm limit (head 14.42 mm; right wrist 12.26 mm). See the result guide before reuse; publication does not establish hardware acceptance.
+
 ## ROS 2 one-frame camera diagnostic
 
 The `sp-vision-capture` diagnostic reads one color image from a ROS 2 Foxy host over SSH. It is separate from the main head calibration, whose default RGB-D backend subscribes locally through ROS 1 Noetic. The right wrist calibration also uses its own ROS 2 image and joint-state acquisition path. Do not use this single-image diagnostic as a head calibration frame because it does not save depth or synchronized head state. To check a ROS 2 stream:

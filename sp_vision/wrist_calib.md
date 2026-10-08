@@ -6,6 +6,10 @@ After running `scripts/install.sh` as described in the [README](../README.md) â€
 
 This is a separate, read-only workflow for the right wrist color camera. Run commands from this directory. Images and results go under `data/wrist_camera_session/`, which is ignored by Git. The bundled model assets keep offline calibration independent from the parent repository. The code never moves the robot.
 
+## Published calibration results
+
+The latest local head (2026-09-23) and right wrist (2026-10-05) intrinsic/extrinsic JSON files are published in [calibration_results](../calibration_results/README.md), with source hashes and frame/units guidance. Both fits passed their internal checks, but recorded independent touch validation failed the 10 mm limit (head 14.42 mm; right wrist 12.26 mm). See the result guide before reuse; publication does not establish hardware acceptance.
+
 ## Frames and geometry
 
 In `configs/assembly.urdf`, the camera bracket is fixed to `wrist_roll_R_Link`. `wrist_roll_R_Joint` is movable between that link and `wrist_pitch_R_Link`: its local X axis is orthogonal to the pitch joint's local Y axis. The constant to solve is therefore **`T_wrist_roll_camera`**, from `right_wrist_camera_color_optical_frame` into `wrist_roll_R_Link`. The URDF value is a nominal starting reference, not a measured calibration. At any measured arm state:

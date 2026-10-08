@@ -5,6 +5,7 @@ This file records version-level changes. See [简体中文](CHANGELOG.zh-CN.md).
 ## [Unreleased]
 
 ### Added
+- Publish the latest local head (2026-09-23) and right wrist (2026-10-05) intrinsics/extrinsics under `calibration_results/`, with byte-preserving JSON, a source/hash manifest, bilingual usage guidance and explicit failed independent touch-validation status.
 - Add `scripts/install.sh`, adapted from the deployment installer: it creates `.venv/bin/python` and the three `sp-vision-*` entrypoints, installs `'.[test,live]'`, runs `pip check` and validates each entrypoint with `--help`.
 
 ### Fixed

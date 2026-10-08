@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "published_on": "2026-10-08",
+  "timezone": "Asia/Shanghai",
+  "source_repository": "https://github.com/AcSg999/tron2_deployment_on_dc",
+  "source_checkout_commit": "fbc950ea779717c59c3bc46d46182d8fe2c11fa9",
+  "selection_basis": "Latest available result files per camera in sp_vision/data, selected by source file modification time and schema; result JSON does not embed solve time. Ignored result files are not tracked by source_checkout_commit.",
+  "files": [
+    {
+      "camera": "head",
+      "parameter_type": "intrinsics",
+      "source_path": "sp_vision/data/head-camera-session/intrinsics.json",
+      "published_path": "head/2026-09-23/head_intrinsics.json",
+      "source_last_modified": "2026-09-23T20:15:24.773091+08:00",
+      "sha256": "8866fb6b5867e49cb16ff4ed3556e3064d32a511c00139491e5d31c0bf00d3f6",
+      "kind": "sp_vision_intrinsics",
+      "fit_passed": true
+    },
+    {
+      "camera": "head",
+      "parameter_type": "extrinsics",
+      "source_path": "sp_vision/data/head-camera-session/extrinsics.json",
+      "published_path": "head/2026-09-23/head_extrinsics.json",
+      "source_last_modified": "2026-09-23T20:16:38.522681+08:00",
+      "sha256": "97d0e2eeb6adacedfa9a64199e2ec04ce92cbf2bec1307dbbd0bc82dc1816d54",
+      "kind": "sp_vision_pitch_camera_extrinsics",
+      "fit_passed": true
+    },
+    {
+      "camera": "right_wrist",
+      "parameter_type": "intrinsics",
+      "source_path": "sp_vision/data/wrist_camera_session/wrist_intrinsics.json",
+      "published_path": "right_wrist/2026-10-05/wrist_intrinsics.json",
+      "source_last_modified": "2026-10-05T19:42:24.120860+08:00",
+      "sha256": "08a5b1fcc2c80ef6991928f8176bd7d06a28ba705db85f7cc9d7cddbdad27c1a",
+      "kind": "sp_vision_intrinsics",
+      "fit_passed": true
+    },
+    {
+      "camera": "right_wrist",
+      "parameter_type": "extrinsics",
+      "source_path": "sp_vision/data/wrist_camera_session/wrist_extrinsics.json",
+      "published_path": "right_wrist/2026-10-05/wrist_extrinsics.json",
+      "source_last_modified": "2026-10-05T20:23:37.160379+08:00",
+      "sha256": "16a280293e0904395bfa35ffcbe165cb310ef53b8782cc407419e285441fa07b",
+      "kind": "sp_vision_right_wrist_extrinsics",
+      "fit_passed": true
+    }
+  ],
+  "independent_touch_validation": {
+    "head": {
+      "source_path": "sp_vision/data/touch-validation/report_0923.json",
+      "source_sha256": "1fbba55cdcf7d6a9f7c4cfd935ba3f4ad9486f3ae897261a14cf8e738dbaa9eb",
+      "source_last_modified": "2026-09-23T20:34:43.820024+08:00",
+      "passed": false,
+      "max_error_m": 0.014421725241723275,
+      "limit_m": 0.01,
+      "point_errors_m": [
+        0.014421725241723275,
+        0.013344652008128231,
+        0.01374087381639242
+      ]
+    },
+    "right_wrist": {
+      "source_path": "sp_vision/data/wrist_camera_validation/wrist_validation.json",
+      "source_sha256": "5f2231d3307e39c49b596740d53cb7365a4a55afa436ba96bc3b2bb3c8ada40c",
+      "source_last_modified": "2026-10-05T21:03:56.477415+08:00",
+      "passed": false,
+      "max_error_m": 0.012260709764966102,
+      "limit_m": 0.01,
+      "point_errors_m": [
+        0.008821095662000254,
+        0.009459710473727087,
+        0.012260709764966102
+      ]
+    }
+  }
+}

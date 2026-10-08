@@ -7,6 +7,10 @@ Fixed tabletop height: [frame contract](TABLETOP_FRAME_CONTRACT.md) · [中文](
 
 Standalone Python tools for offline calibration of the TRON2 moving head color camera and right wrist color camera. The package contains the calibration code and kinematic snapshots needed by the solvers; it does not contain a robot controller, ROS installation, camera recordings, or local robot profiles.
 
+## Published calibration results
+
+The latest local head (2026-09-23) and right wrist (2026-10-05) intrinsic/extrinsic JSON files are published in [calibration_results](calibration_results/README.md), with source hashes and frame/units guidance. Both fits passed their internal checks, but recorded independent touch validation failed the 10 mm limit (head 14.42 mm; right wrist 12.26 mm). See the result guide before reuse; publication does not establish hardware acceptance.
+
 ## Install
 
 Python 3.10 or newer is required. Clone the repository and run the installer once from its root; **this is the step that produces `.venv/bin/python`** together with the `sp-vision-head`, `sp-vision-wrist` and `sp-vision-capture` runtime units, which every command in this README and in the calibration guides uses:

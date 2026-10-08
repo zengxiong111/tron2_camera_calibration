@@ -5,6 +5,7 @@
 ## [Unreleased]
 
 ### 新增
+- 在 `calibration_results/` 发布本地最新头部（2026-09-23）和右腕（2026-10-05）内外参，保留 JSON 原始字节，并附来源/校验值清单、中英文使用说明及独立触点验证未通过的明确状态。
 - 新增 `scripts/install.sh`（由部署仓库的安装脚本改写）：创建 `.venv/bin/python` 与三个 `sp-vision-*` 入口，安装 `'.[test,live]'`，执行 `pip check`，并用 `--help` 逐个校验入口。
 
 ### 修复
