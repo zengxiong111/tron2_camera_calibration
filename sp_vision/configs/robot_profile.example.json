@@ -32,24 +32,97 @@
       "head_pitch_Joint",
       "head_yaw_Joint"
     ],
-    "joint_lower": null,
-    "joint_upper": null,
-    "velocity_limits": null,
-    "acceleration_limits": null,
+    "joint_lower": [
+      -3.14159,
+      -0.261799,
+      -3.66519,
+      -2.61799,
+      -1.7453,
+      -0.785398,
+      -1.5708,
+      -3.14159,
+      -3.19395,
+      -1.4835,
+      -2.61799,
+      -1.39626,
+      -0.785398,
+      -1.5708
+    ],
+    "joint_upper": [
+      2.6005,
+      3.19395,
+      1.4835,
+      0.2618,
+      1.39626,
+      0.785398,
+      1.5708,
+      2.6005,
+      0.261799,
+      3.66519,
+      0.2618,
+      1.7453,
+      0.785398,
+      1.5708
+    ],
+    "velocity_limits": [
+      18.3,
+      18.3,
+      22.52,
+      22.52,
+      17.8,
+      17.8,
+      17.8,
+      18.3,
+      18.3,
+      22.52,
+      22.52,
+      17.8,
+      17.8,
+      17.8
+    ],
+    "acceleration_limits":  [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
     "urdf": "assembly.urdf",
-    "model_hash": "REPLACE-with-model-hash-command-output",
-    "host": "REPLACE-with-control-host",
+    "model_hash": "d90c0d5a903ac2333b4410af9f2f6d0e9067dfb83847a25cabbf6eff623f1e65",
+    "host": "10.192.1.2",
     "port": 5000
   },
   "camera": {
-    "backend": "ros",
-    "identity": "REPLACE-physical-camera-serial",
+    "backend": "bridge",
+    "identity": "234322070358",
     "width": 640,
     "height": 480,
-    "intrinsics": null,
-    "distortion": null,
-    "depth_intrinsics": null,
-    "depth_to_color": null,
+    "intrinsics": [
+      [607.143676757812, 0.0, 318.693939208984],
+      [0.0, 606.600341796875, 252.772720336914],
+      [0.0, 0.0, 1.0]
+    ],
+    "distortion": [0.0, 0.0, 0.0, 0.0, 0.0],
+    "depth_intrinsics": [
+      [388.84130859375, 0.0, 322.685028076172],
+      [0.0, 388.84130859375, 239.198028564453],
+      [0.0, 0.0, 1.0]
+    ],
+    "depth_to_color": [
+      [0.999967, 0.00733031, -0.00360375, 0.0147424899041653],
+      [-0.00731906, 0.999968, 0.00312723, 0.000162730910233222],
+      [0.00362656, -0.00310075, 0.999989, 0.000378804572392255],
+      [0.0, 0.0, 0.0, 1.0]
+    ],
     "color_topic": "/camera/top/color/image_raw/compressed",
     "depth_topic": "/camera/top/depth/image_rect_raw",
     "joint_state_topic": "/joint_states",
@@ -87,7 +160,8 @@
         1
       ]
     ],
-    "head_q2": null,
+    "head_q2":[0.7303998470306396,
+    0.021500110626220703],
     "head_tolerance_rad": 0.01
   },
   "vision": {
@@ -98,9 +172,9 @@
     "min_confidence": 0.5
   },
   "scene": {
-    "table_z_m": null,
-    "clearance_m": null,
-    "object_radius_m": null
+    "table_z_m": 0.716,
+    "clearance_m": 0.95,
+    "object_radius_m": 0.1
   },
   "pregrasp": {
     "left": {
