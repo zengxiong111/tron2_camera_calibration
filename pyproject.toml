@@ -19,7 +19,7 @@ dependencies = [
 
 [project.optional-dependencies]
 live = ["websockets>=12,<17"]
-test = ["pytest>=7"]
+test = ["pytest>=7", "websockets>=12,<17"]
 
 [project.scripts]
 sp-vision-head = "sp_vision.calibration:main"
