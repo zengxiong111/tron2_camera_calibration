@@ -38,7 +38,7 @@ T_base_right_wrist_camera(q) = T_base_wrist_roll(q) · T_wrist_roll_camera
 
 应使用图像同步的关节角及匹配的运动学模型。`T_base_board` 是各自标定会话的固定棋盘位姿，并非通用物体位姿。`nominal_T_*` 是模型参考值，不是实测相机外参。来源部署仓库的头部指南（来源工作区中的 `sp_vision/head_calib.md`）记录了后续 D455 模型更新；9 月的头部 JSON 保留较早的名义变换和一致性检查，因此其中 `model_consistency` 通过并不代表兼容当前模型。验收前应针对实际使用的模型重新求解并执行独立验证。
 
-桌面任务须遵循[固定桌面坐标系约定](../TABLETOP_FRAME_CONTRACT.zh-CN.md)（[English](../TABLETOP_FRAME_CONTRACT.md)）：物理基座原点高于桌面 0.45 m。本次发布既不改变安装几何，也不验证历史采集是否满足该约定。
+桌面任务中，物理基座原点固定高于桌面顶部 0.45 m。本次发布不验证历史采集是否满足该约束，详见[主 README](../README.zh-CN.md#结果与坐标约定)。
 
 ## 加载发布文件
 
@@ -61,4 +61,4 @@ D_wrist = wrist_intrinsics["distortion"]
 T_wrist_roll_camera = wrist_extrinsics["T_wrist_roll_camera"]
 ```
 
-使用结果时保留原始 JSON 结构和数值精度。完整字段解析及重新标定步骤见[头部指南](../sp_vision/head_calib.zh-CN.md)与[腕部指南](../sp_vision/wrist_calib.zh-CN.md)。
+使用结果时保留原始 JSON 结构和数值精度。重新标定步骤及实测棋盘格尺寸要求见[主 README](../README.zh-CN.md)。

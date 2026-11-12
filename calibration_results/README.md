@@ -38,7 +38,7 @@ T_base_right_wrist_camera(q) = T_base_wrist_roll(q) · T_wrist_roll_camera
 
 Use image-synchronized joint angles with the matching kinematic model. `T_base_board` is the fixed calibration board pose for its own session, not a general object pose. `nominal_T_*` is a model reference, not the measured camera extrinsic. The source deployment head guide (`sp_vision/head_calib.md` in the source checkout) records a subsequent D455 model update; the September head JSON retains its earlier nominal transform and consistency check. Its `model_consistency` pass therefore does not verify compatibility with the current model. Rerun the solve and independent validation against the intended model before acceptance.
 
-For tabletop work, the [fixed tabletop frame contract](../TABLETOP_FRAME_CONTRACT.md) ([中文](../TABLETOP_FRAME_CONTRACT.zh-CN.md)) requires the physical-base origin to be 0.45 m above the table. This publication neither changes mounting geometry nor verifies that historical captures satisfy that contract.
+For tabletop work, the physical-base origin must be 0.45 m above the tabletop. This publication does not verify that historical captures satisfy this constraint. See the [main README](../README.md#results-and-frames).
 
 ## Load the published files
 
@@ -61,4 +61,4 @@ D_wrist = wrist_intrinsics["distortion"]
 T_wrist_roll_camera = wrist_extrinsics["T_wrist_roll_camera"]
 ```
 
-Keep the original JSON schema and numeric precision when consuming these results. Full field descriptions and recalibration instructions are in the [head guide](../sp_vision/head_calib.md) and [wrist guide](../sp_vision/wrist_calib.md).
+Keep the original JSON schema and numeric precision. See the [main README](../README.md) for recalibration and board measurement instructions.

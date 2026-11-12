@@ -20,11 +20,40 @@ The installer creates `.venv`, installs dependencies, and checks all three CLI e
 ## Workflow
 
 1. Copy the required `*.example.json` files in `sp_vision/configs/` to local JSON files and fill in connection settings.
-2. Print and measure the board: defaults are **7×10 inner corners, 0.021 m squares**, or 8×11 printed squares.
+2. Print the board, count its inner corners and **measure its physical square size**, then update the config. The example has 7×10 inner corners, or 8×11 printed squares.
 3. Fix the board, capture about 40 distinct poses, then solve intrinsics and extrinsics.
 4. Calibrate a rigid probe TCP and independently validate three board corners.
 
-Follow the [head guide](sp_vision/head_calib.md) or [wrist guide](sp_vision/wrist_calib.md). Script examples run from `sp_vision/`; config paths resolve relative to the JSON file, data paths relative to the working directory. See `sp-vision-head --help`, `sp-vision-wrist --help`, and `sp-vision-capture --help` for options.
+Run script examples from `sp_vision/`; config paths resolve relative to the JSON file, data paths relative to the working directory. See `sp-vision-head --help`, `sp-vision-wrist --help`, and `sp-vision-capture --help` for options.
+
+### Measure the printed board
+
+Use calipers or a ruler on the final printed, mounted board. Measure across several consecutive squares horizontally and vertically, then divide each length by the number of squares. Repeat at different locations to check print scaling and equal horizontal/vertical dimensions. The required value is the **side length of one square**, excluding the paper and border.
+
+Divide the measured millimetres by 1000 and set `board.square_m` in local `head_config.json` / `wrist_config.json`. Set `board.columns` and `board.rows` to inner-corner counts. The head example's `0.021` and wrist example's `0.015` are examples, not measurements of your board. Remake and remeasure a warped or unevenly scaled board. Capture, intrinsics, extrinsics and validation must use the same measured geometry; re-solve and revalidate after changing it.
+
+### Capture and solve
+
+```bash
+cd sp_vision
+cp configs/head_config.example.json configs/head_config.json
+cp configs/wrist_config.example.json configs/wrist_config.json
+cp configs/robot_profile.example.json configs/robot_profile.json
+```
+
+Edit the local configs first: enter measured board geometry, addresses and topics. Point `capture.profile` (head) and `capture.state_profile` to `robot_profile.json`. Select ROS or the bridge for head capture. Set up SSH public-key login for the wrist, optionally selecting `capture.ssh_identity_file`.
+
+```bash
+python calibration.py --config configs/head_config.json capture --session data/head --count 40
+python calibration.py --config configs/head_config.json intrinsics --session data/head --output data/head/head_intrinsics.json
+python calibration.py --config configs/head_config.json extrinsics --session data/head --intrinsics data/head/head_intrinsics.json --output data/head/head_extrinsics.json
+
+python calibration_wrist.py --config configs/wrist_config.json capture --session data/wrist --count 40
+python calibration_wrist.py --config configs/wrist_config.json intrinsics --session data/wrist --output data/wrist/wrist_intrinsics.json
+python calibration_wrist.py --config configs/wrist_config.json extrinsics --session data/wrist --intrinsics data/wrist/wrist_intrinsics.json --output data/wrist/wrist_extrinsics.json
+```
+
+During capture, `s` saves, `f` reverses corner order, `r`/Space reacquires and `q` quits. Keep the board fixed, vary head/wrist poses and wait for motion to settle. A completed capture replaces previous views; use `--append` to add views. Require `passed: true`, then record probe poses with `state`, fit TCP with `pivot`, choose three non-collinear corners with `select-validation`, touch and record them in order, and run `validate`. See each subcommand's `--help` for arguments.
 
 | Function | Additional requirements |
 |---|---|
@@ -45,7 +74,7 @@ Follow the [head guide](sp_vision/head_calib.md) or [wrist guide](sp_vision/wris
 
 [Published head and wrist results](calibration_results/README.md) passed internal fit checks, but independent touch errors were **14.42 mm** for the head and **12.26 mm** for the wrist, exceeding the 10 mm limit. Re-solve and validate with the intended model before reuse.
 
-`T_A_B` maps B into A; translations use metres and joint angles use radians. Tabletop work follows the [fixed 45 cm mounting constraint](TABLETOP_FRAME_CONTRACT.md). Bundled models contain kinematics without meshes. An intrinsic/extrinsic `passed: true` does not establish independent touch acceptance.
+`T_A_B` maps B into A; translations use metres and joint angles use radians. For tabletop work, the physical-base origin is fixed **0.45 m above the tabletop**: `z_physical_base_world - z_tabletop_world = 0.45 m`. Resolve the physical-base frame rather than substituting the URDF root or wrist origin. Bundled models contain kinematics without meshes. An intrinsic/extrinsic `passed: true` does not establish independent touch acceptance.
 
 Keep local configuration, images and generated reports in ignored locations such as `data/`. Do not commit passwords, private keys or capture datasets.
 
@@ -56,4 +85,6 @@ python -m pip install -e '.[test]'
 python -m pytest -q
 ```
 
-[Changelog](CHANGELOG.md) · [Contributors and sources](CONTRIBUTORS.md) · [MIT license](LICENSE)
+[MIT license](LICENSE), retaining Jerry Lo’s original copyright notice. Thanks to [AcSg999](https://github.com/AcSg999) and [Shukashuki](https://github.com/Shukashuki).
+
+Sources: tools and kinematic snapshots from [tron2_deployment_on_dc](https://github.com/AcSg999/tron2_deployment_on_dc), `sp_vision/` at `dbd6c2f2d0718f38c86fac34dc86788ad43c60b5`; bridge adapter derived from [dexpipe](https://github.com/Shukashuki/dexpipe), `hardware/tron2_rgbd.py` at `1e4a810de477bda7f621db553ecd496bb0884f2f`; read-only controller adapter references [tron2_env](https://github.com/limxdynamics/tron2_env) at `03e39d3f7d66dcb096b41f03612fdab2f8c10ea5`.

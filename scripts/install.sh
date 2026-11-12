@@ -3,8 +3,7 @@
 #
 # This is the step that produces .venv/bin/python together with the
 # .venv/bin/sp-vision-head, .venv/bin/sp-vision-wrist and
-# .venv/bin/sp-vision-capture runtime units. Every command in README.md and in
-# sp_vision/*_calib*.md then runs with that interpreter.
+# .venv/bin/sp-vision-capture runtime units. README commands use that interpreter.
 #
 # Requirements: a Python 3.10-or-newer executable (default "python3.10",
 # override with TRON2_PYTHON), its venv/ensurepip modules, OpenCV's shared
