@@ -106,8 +106,16 @@ node.destroy_node()
 rclpy.shutdown()
 PY
     """
+    command = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=5"]
+    identity_file = settings.get("ssh_identity_file")
+    if identity_file:
+        identity_path = common.config_path(config, identity_file)
+        if not identity_path.is_file():
+            raise ValueError(f"capture.ssh_identity_file does not exist: {identity_path}")
+        command.extend(["-o", "IdentitiesOnly=yes", "-i", str(identity_path)])
+    command.extend([settings["host"], "bash -s"])
     result = subprocess.run(
-        ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=5", settings["host"], "bash -s"],
+        command,
         input=remote.encode(), capture_output=True, timeout=timeout + 10, check=False,
     )
     if result.returncode:

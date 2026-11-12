@@ -33,7 +33,11 @@ cp configs/wrist_config.example.json configs/wrist_config.json
 
 Set `capture.host`, `ros_setup`, `ros_domain_id`, `color_topic` and `joint_topic` for your ROS 2 installation. The example host and topics are installation-specific defaults, not discovered devices. The script connects by SSH and accepts an image only when its timestamp is within 100 ms of a fresh joint sample. The ROS 2 first four joints use `abad`, `hip`, `yaw`, `knee` names, while the URDF uses `proximal_pitch`, `proximal_roll`, `proximal_yaw`, `elbow`. The configured name list maps them into the **same 14-value order used by the controller `arm_q14` in head touch validation**. The names differ; the vector order does not. Capture saves both the named ROS 2 values and that ordered vector. Physical FK accuracy still needs the held-out board and independent touch checks.
 
+SSH runs with `BatchMode=yes`, so it needs working public-key login and does not prompt for a password. To select one key and avoid `Too many authentication failures` from extra agent identities, set `capture.ssh_identity_file` in the local config, for example `"~/.ssh/id_ed25519"`. The script then uses `IdentitiesOnly=yes` with that key. Relative key paths resolve against the config JSON directory; `null` leaves SSH identity selection unchanged. Authorize the corresponding public key once, entering the remote user's password when prompted:
+
 ```bash
+ssh-copy-id -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519.pub guest@10.192.1.4
+ssh -o BatchMode=yes -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519 guest@10.192.1.4 true
 python calibration_wrist.py --config configs/wrist_config.json probe
 ```
 

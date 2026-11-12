@@ -10,13 +10,13 @@ The latest local head (2026-09-23) and right wrist (2026-10-05) intrinsic/extrin
 
 ## ROS 2 one-frame camera diagnostic
 
-The `sp-vision-capture` diagnostic reads one color image from a ROS 2 Foxy host over SSH. It is separate from the main head calibration, whose default RGB-D backend subscribes locally through ROS 1 Noetic. The right wrist calibration also uses its own ROS 2 image and joint-state acquisition path. Do not use this single-image diagnostic as a head calibration frame because it does not save depth or synchronized head state. To check a ROS 2 stream:
+The `sp-vision-capture` diagnostic reads one color image from a ROS 2 Foxy host over SSH. It is separate from the main head calibration, which reads color images and synchronized head state through the configured WebSocket bridge or local ROS 1 Noetic topics. The right wrist calibration also uses its own ROS 2 image and joint-state acquisition path. Do not use this single-image diagnostic as a head calibration frame because it does not save synchronized head state. To check a ROS 2 stream:
 
 ```bash
 python capture_ros2_image.py
 ```
 
-The script subscribes to `sensor_msgs/msg/CompressedImage` with the sensor-data QoS profile over SSH and saves `data/right-camera-latest.jpg`. Use `--camera top` for the corresponding head color topic, `/camera/top/color/image_raw/compressed`. Both paths only read images; the snapshot does not include depth or joint state and is not a calibrated observation.
+The script subscribes to `sensor_msgs/msg/CompressedImage` with the sensor-data QoS profile over SSH and saves `data/right-camera-latest.jpg`. Use `--camera top` for the corresponding head color topic, `/camera/top/color/image_raw/compressed`. Both paths only read images; the snapshot does not include joint state and is not a calibrated observation.
 
 The head workflow implements:
 
@@ -65,7 +65,7 @@ cp configs/robot_profile.example.json configs/robot_profile.json
 
 If the profile selects the WebSocket bridge backend instead of ROS Noetic, install its optional Python dependency from this directory with `python -m pip install -e '..[live]'`.
 
-Keep the local config beside the example so `assembly.urdf` and `scene.xml` resolve correctly. For live capture, set `capture.profile` in `head_config.json` to `robot_profile.json` and fill its camera intrinsics, distortion, depth intrinsics, depth-to-color transform and selected ROS/bridge connection settings. Example placeholders and null fields are not a runnable camera profile. Offline solving of previously recorded views does not need a live camera profile. The XML is used for kinematic cross-checks; referenced meshes are not included. Before recording controller state, also fill `robot.host` and `robot.port` (default `5000`) in that profile and point `capture.state_profile` at it; the `state` command needs a compatible external `tron2_env` runtime and is not required for offline solving.
+Keep the local config beside the example so `assembly.urdf` and `scene.xml` resolve correctly. For live capture, set `capture.profile` in `head_config.json` to `robot_profile.json` and fill its `camera.color_topic`, `camera.joint_state_topic` (default `/joint_states`), and selected ROS/bridge connection settings. Head capture does not require existing camera intrinsics, distortion, depth intrinsics, a depth-to-color transform, or a depth topic. The solvers use color checkerboard corners, measured square size, and synchronized head angles. Replace placeholders in the selected connection settings before capture. Offline solving of previously recorded views does not need a live camera profile. The XML is used for kinematic cross-checks; referenced meshes are not included. Before recording controller state, also fill `robot.host` and `robot.port` (default `5000`) in that profile and point `capture.state_profile` at it; the `state` command needs a compatible external `tron2_env` runtime and is not required for offline solving.
 
 ## 1. Capture 40 views
 
@@ -79,6 +79,14 @@ python calibration.py \
 ```
 
 By default, `--count` is the number of views in a fresh capture. After all views are saved, the new `view-*` directories replace the previous ones in this session and numbering restarts at `view-001`. Quitting early leaves the previous set intact. To deliberately continue an existing dataset, pass `--append --count N`; for example, add ten views to a 30-view session with `--append --count 10`. Re-run intrinsics and extrinsics after either kind of capture because existing JSON results still describe the previous images.
+
+Capture subscribes only to color and joint state; it does not read depth or check RGB/depth skew. Image/head timestamp skew must satisfy both `camera.max_state_skew_ms` and `quality.max_state_skew_ms` (each defaults to 100 ms). Unsynchronized fallback samples are not accepted. The bridge keeps both streams open until a matching pair arrives, rather than stopping each stream after a fixed frame count. `capture.timeout_s` bounds acquisition waits. Existing RGB-D profile fields may remain in the shared profile but are unused by head capture.
+
+If HTTP proxy variables are set, add the bridge hostname or IP to `no_proxy` before capture so a newer `websockets` installation connects directly to the robot LAN. For example, with `camera.bridge_host` set to `10.192.1.4`:
+
+```bash
+export no_proxy="10.192.1.4${no_proxy:+,$no_proxy}"
+```
 
 Keys are:
 

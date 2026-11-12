@@ -1,8 +1,9 @@
 {
   "schema_version": 1,
-  "board": {"columns": 7, "rows": 10, "square_m": 0.021},
+  "board": {"columns": 7, "rows": 10, "square_m": 0.015},
   "capture": {
     "host": "guest@10.192.1.4",
+    "ssh_identity_file": null,
     "ros_setup": "/opt/ros/foxy/setup.bash",
     "state_profile": "robot_profile.example.json",
     "ros_domain_id": 0,

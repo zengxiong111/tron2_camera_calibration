@@ -10,13 +10,13 @@
 
 ## ROS 2 相机单帧诊断
 
-`sp-vision-capture` 诊断工具通过 SSH 从 ROS 2 Foxy 主机读取一张彩色图像。它与头部主标定流程不同：头部默认 RGB-D 后端通过本机 ROS 1 Noetic 订阅；右腕标定则有独立的 ROS 2 图像和关节状态采集路径。该单帧诊断不保存深度或同步头部状态，因此不能把结果当作头部标定数据。检查 ROS 2 数据流：
+`sp-vision-capture` 诊断工具通过 SSH 从 ROS 2 Foxy 主机读取一张彩色图像。它与头部主标定流程不同：头部通过配置的 WebSocket bridge 或本机 ROS 1 Noetic 话题读取彩色图像和同步头部状态；右腕标定则有独立的 ROS 2 图像和关节状态采集路径。该单帧诊断不保存同步头部状态，因此不能把结果当作头部标定数据。检查 ROS 2 数据流：
 
 ```bash
 python capture_ros2_image.py
 ```
 
-脚本通过 SSH 使用传感器数据 QoS 订阅 `sensor_msgs/msg/CompressedImage`，保存到 `data/right-camera-latest.jpg`。加 `--camera top` 可读取对应的头部彩色话题 `/camera/top/color/image_raw/compressed`。两种方式都只读取图像；单帧快照不包含深度或关节状态，也不是经过标定的观测结果。
+脚本通过 SSH 使用传感器数据 QoS 订阅 `sensor_msgs/msg/CompressedImage`，保存到 `data/right-camera-latest.jpg`。加 `--camera top` 可读取对应的头部彩色话题 `/camera/top/color/image_raw/compressed`。两种方式都只读取图像；单帧快照不包含关节状态，也不是经过标定的观测结果。
 
 头部工作流负责标定：
 
@@ -66,7 +66,7 @@ cp configs/robot_profile.example.json configs/robot_profile.json
 
 若本机配置选择 WebSocket 桥接后端而非 ROS Noetic，请在此目录运行 `python -m pip install -e '..[live]'` 安装该可选 Python 依赖。
 
-将本地配置保留在示例旁边，使模型相对路径正确解析。实时采集前，将 `head_config.json` 的 `capture.profile` 改为 `robot_profile.json`，并填写该 profile 的相机内参、畸变、深度内参、深度到彩色变换和所选 ROS/bridge 连接参数。示例中的占位符和 null 不能直接用于采集。离线处理已有图像无需连接相机。记录控制器状态前，还要在该 profile 中填写 `robot.host` 和 `robot.port`（默认端口 `5000`），并让 `capture.state_profile` 指向它。路径示例：
+将本地配置保留在示例旁边，使模型相对路径正确解析。实时采集前，将 `head_config.json` 的 `capture.profile` 改为 `robot_profile.json`，并填写该 profile 的 `camera.color_topic`、`camera.joint_state_topic`（默认 `/joint_states`）和所选 ROS/bridge 连接参数。头部采集不需要已有相机内参、畸变、深度内参、深度到彩色变换或深度话题；求解只使用彩色棋盘角点、实测方格边长和同步头部关节角。采集前需替换所选连接参数中的占位符。离线处理已有图像无需连接相机。记录控制器状态前，还要在该 profile 中填写 `robot.host` 和 `robot.port`（默认端口 `5000`），并让 `capture.state_profile` 指向它。路径示例：
 
 ```json
 {
@@ -95,7 +95,13 @@ python calibration.py \
 
 默认情况下，`--count` 是本轮重新采集的总张数。全部采完后，新图像将替换同一 `--session` 中原来的 `view-*` 目录，并从 `view-001` 重新编号；中途退出则保留原数据。如需有意续采，显式传入 `--append --count N`；例如已有 30 张时用 `--append --count 10` 追加到 40 张。两种采集方式结束后都需重新求解内参和外参，因为原有 JSON 结果仍对应之前的图像。
 
-程序直接复用现有 profile 的 bridge 或 ROS 相机配置，同时读取与图像对应的 `[pitch, yaw]`。它不会沿用旧固定头姿检查。同步状态回退、关节/图像时间差超限或未完整检测 70 个角点的帧不能保存。
+程序复用现有 profile 的 bridge 或 ROS 连接配置，只订阅彩色图像和关节状态，读取与图像对应的 `[pitch, yaw]`，不读取深度，也不检查 RGB/深度时间差。图像/头部时间差必须同时满足 `camera.max_state_skew_ms` 和 `quality.max_state_skew_ms`（两者默认均为 100 ms）。bridge 会保持两路接收，直到匹配到合格帧，不再按固定帧数分别提前结束；`capture.timeout_s` 限制采集等待时间。共享 profile 中原有的 RGB-D 字段可以保留，但头部采集不会使用。程序不沿用旧固定头姿检查；同步状态回退、关节/图像时间差超限或未完整检测 70 个角点的帧不能保存。
+
+若设置了 HTTP 代理环境变量，采集前需把 bridge 主机名或 IP 加入 `no_proxy`，让较新版本的 `websockets` 直接连接机器人局域网。例如，`camera.bridge_host` 为 `10.192.1.4` 时：
+
+```bash
+export no_proxy="10.192.1.4${no_proxy:+,$no_proxy}"
+```
 
 窗口按键：
 
