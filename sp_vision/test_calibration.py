@@ -144,9 +144,8 @@ def test_capture_replaces_complete_session_but_preserves_it_on_quit(tmp_path, mo
     (session / "intrinsics.json").write_text("old result")
 
     class FakeCamera:
-        def capture(self, include_joint_state):
-            assert include_joint_state
-            return np.zeros((8, 8, 3), dtype=np.uint8), None, {"head_pitch_yaw": [0, 0]}
+        def capture(self):
+            return np.zeros((8, 8, 3), dtype=np.uint8), {"head_pitch_yaw": [0, 0]}
 
         def close(self):
             pass

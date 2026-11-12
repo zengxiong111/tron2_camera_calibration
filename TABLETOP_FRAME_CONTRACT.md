@@ -4,13 +4,6 @@ For TRON2 tabletop work in this repository, the vertical height from the tableto
 
 中文版本：[TABLETOP_FRAME_CONTRACT.zh-CN.md](TABLETOP_FRAME_CONTRACT.zh-CN.md)。
 
-## Contents
-
-- [Frame and height definitions](#frame-and-height-definitions)
-- [Mandatory constraints](#mandatory-constraints)
-- [Verification and existing artifacts](#verification-and-existing-artifacts)
-- [Documentation coverage](#documentation-coverage)
-
 ## Frame and height definitions
 
 | Quantity | Required interpretation |
@@ -22,16 +15,13 @@ For TRON2 tabletop work in this repository, the vertical height from the tableto
 | Hand/wrist/flange origin | Not the physical robot base origin |
 | XY distance | Independent of the fixed vertical height; do not interpret 45 cm as a horizontal or Euclidean distance |
 
-The fixed value applies to left and right arms, Revo3/Wuji hand integrations, retargeting, IK, collision repair, trajectory interpolation/cropping, rendering, simulation/PPO and deployment that use the TRON2 tabletop setup. It does not redefine the original SHARPA/human source scene or a hand-only coordinate system.
 
 ## Mandatory constraints
 
 1. Resolve the physical-base origin and table top in one world frame before producing trajectories or configuring a scene.
 2. Enforce `physical_base_z = table_top_z + 0.45`. Keep this relation fixed during optimization; do not optimize the gap or silently change table/base transforms to gain reachability, joint margin or collision clearance.
 3. Keep authored robot link, flange and hand transforms unchanged. Convert between physical base and URDF root with the exact model transform; do not substitute an approximate root height.
-4. Propagate the same mounting geometry to reconstruction, object placement, retargeting, IK, controller trajectories, visualization, physics and hardware calibration. Source-to-target transforms must preserve synchronized hand/object/table geometry.
-5. If the fixed height makes a target infeasible, report that infeasibility and revise the task/trajectory within the fixed mounting constraint. Do not relax the 0.45 m rule automatically.
-6. A mounting correction requires fresh IK, synchronized trajectory exports, limit/velocity/FK and clearance checks, updated hashes and new rendering. Editing layout metadata or moving only the visual robot is not a valid repair.
+4. If the fixed height makes a target infeasible, report that infeasibility and revise the task/trajectory within the fixed mounting constraint. Do not relax the 0.45 m rule automatically.
 
 ## Verification and existing artifacts
 

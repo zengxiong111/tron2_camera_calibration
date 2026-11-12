@@ -2,6 +2,8 @@
 
 [English](wrist_calib.md)
 
+准备棋盘、连接机器人或查找模型前，先看 [准备资料](../README.zh-CN.md#准备资料)：棋盘生成器、SSH 密码、Wi-Fi 密码和官方双臂＋头部 URDF。
+
 按 [README](../README.zh-CN.md) 跑一次 `scripts/install.sh` 后（正是该步骤生成 `.venv/bin/python`），先在仓库根目录执行 `source .venv/bin/activate`，再执行 `cd sp_vision` 运行以下脚本示例；下文命令中的 `python` 即该环境解释器。配置中的相对路径以 JSON 所在目录为基准，数据及结果路径以当前工作目录为基准。命令只读取传感器或执行离线求解，不驱动机器人。
 
 这是右手腕彩色相机的独立只读流程。从本目录运行命令，图像和结果保存于 `data/wrist_camera_session/`；该目录不会进入 Git。模型文件随本目录提供，离线标定不再依赖外部仓库。程序不驱动机器人。
@@ -33,7 +35,11 @@ cp configs/wrist_config.example.json configs/wrist_config.json
 
 根据自己的 ROS 2 环境设置 `capture.host`、`ros_setup`、`ros_domain_id`、`color_topic` 和 `joint_topic`。示例主机及话题属于安装环境默认值，不代表自动发现的设备。脚本通过 SSH 连接，仅接收时间戳相差不超过 100 ms 的新图像与关节状态。ROS 2 的前四个关节名是 `abad`、`hip`、`yaw`、`knee`，URDF 对应位置写作 `proximal_pitch`、`proximal_roll`、`proximal_yaw`、`elbow`。配置中的名称列表把它们排成**头部触点验证读取的控制器 `arm_q14` 的同一 14 维顺序**：名称不同，向量顺序并未改变。采集同时保存 ROS 2 原始名称和值、以及排好顺序的向量。FK 的实物精度仍需用留出集棋盘图像和独立触碰检查。
 
+SSH 使用 `BatchMode=yes`，需要可用的公钥登录，不会提示输入密码。若要固定使用一把密钥，避免 agent 中其他密钥触发 `Too many authentication failures`，在本地配置中设置 `capture.ssh_identity_file`，例如 `"~/.ssh/id_ed25519"`，脚本就会配合 `IdentitiesOnly=yes` 使用该密钥。相对密钥路径以配置 JSON 所在目录为基准；`null` 保持 SSH 原有的密钥选择方式。先授权对应公钥一次，提示时输入远端用户密码：
+
 ```bash
+ssh-copy-id -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519.pub guest@10.192.1.4
+ssh -o BatchMode=yes -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519 guest@10.192.1.4 true
 python calibration_wrist.py --config configs/wrist_config.json probe
 ```
 

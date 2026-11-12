@@ -1,99 +1,59 @@
 # TRON2 相机标定
 
-固定桌面高度：[坐标系约束](TABLETOP_FRAME_CONTRACT.zh-CN.md) · [English](TABLETOP_FRAME_CONTRACT.md)
-
-
 [English](README.md)
 
-本项目提供独立的 Python 工具，用于离线标定 TRON2 可动头部彩色相机和右腕彩色相机。软件包包含求解器所需的代码和运动学模型快照；不包含机器人控制器、ROS 安装、相机录像或本机机器人配置。
-
-## 已发布的标定结果
-
-本地最新头部（2026-09-23）和右腕（2026-10-05）内外参 JSON 已发布到 [calibration_results](calibration_results/README.zh-CN.md)，附来源校验值及坐标系、单位说明。两组拟合均通过内部检查，但已记录的独立触点验证未达到 10 mm 阈值（头部 14.42 mm，右腕 12.26 mm）。复用前请阅读结果说明；发布不代表硬件验收通过。
+用于 TRON2 头部和右腕彩色相机的采集、内参标定、手眼外参求解与独立触点验证。离线求解不需要 ROS；采集和状态读取只读传感器，不发送运动指令。
 
 ## 安装
 
-需要 Python 3.10 或更新版本。克隆仓库后在根目录跑一次安装脚本，**这一步生成 `.venv/bin/python`**，以及 `sp-vision-head`、`sp-vision-wrist`、`sp-vision-capture` 三个命令行入口；本 README 和标定指南中的所有命令都使用该解释器：
+需要 Python 3.10+（含 `venv`）。Ubuntu 如缺少 OpenCV 共享库，先安装 `libgl1 libglib2.0-0`。
 
 ```bash
 git clone https://github.com/zengxiong111/tron2_camera_calibration.git
 cd tron2_camera_calibration
-bash scripts/install.sh
+TRON2_PYTHON=python3 bash scripts/install.sh
+source .venv/bin/activate
 ```
 
-`scripts/install.sh` 依次执行：`python3.10 -I -m venv .venv` 创建虚拟环境 → 用 `.venv/bin/python` 升级 pip → 安装本包及 `test`、`live` 辅助依赖（即 `'.[test,live]'`）→ `pip check` → 校验三个 `sp-vision-* --help` 入口。需要手工建环境时，等价命令是：
+脚本创建 `.venv`，安装依赖并检查三个命令入口。已有环境会检查 Python 版本，不会重建。可用 `TRON2_PYTHON` 指定解释器、`TRON2_PIP_INDEX_URL` 指定软件源；脚本不安装 ROS 或 `tron2_env`。
 
-```bash
-python3 -m venv .venv
-.venv/bin/python -m pip install --upgrade pip
-.venv/bin/python -m pip install '.[test,live]'
-```
+## 使用流程
 
-安装脚本的边界：
+1. 将 `sp_vision/configs/` 中所需的 `*.example.json` 复制为对应的本地 JSON，填写连接配置。
+2. 打印并实测棋盘格：默认 **7×10 内角点、方格边长 0.021 m**，即 8×11 个方格。
+3. 固定棋盘，采集约 40 个不同姿态；依次求解内参、外参。
+4. 标定刚性触针 TCP，再用三个角点做独立触碰验证。
 
-- 需要 `PATH` 上有 Python 3.10 或更新版本。Ubuntu 20.04 的系统 Python 3.8 不行，也不要改写 `/usr/bin/python3`；用 `TRON2_PYTHON=/path/to/python3.10 bash scripts/install.sh` 指定其他解释器。
-- 该解释器必须带 `venv`/`ensurepip` 模块（Debian/Ubuntu 上通常是 `python3.10-venv` 软件包）。
-- OpenCV 需要系统共享库：Ubuntu 上先执行 `sudo apt install -y libgl1 libglib2.0-0`，否则 `import cv2` 会因缺少 `libGL.so.1` 失败。
-- 需要能访问软件源，默认 `https://pypi.org/simple`；用 `TRON2_PIP_INDEX_URL` 可换源。该选择只对脚本自身及其构建子进程生效，不改写全局 pip 配置。
-- `.venv` 已存在时脚本**只校验解释器版本，不会重建**；版本低于 3.10 会直接报错退出（请保留原环境，另建一份检出）。要强制重建需先手动删除 `.venv`。
-- 脚本**不安装 ROS，也不安装可选的 `tron2_env` 运行时**（见下）。
+详细命令见[头部指南](sp_vision/head_calib.zh-CN.md)和[右腕指南](sp_vision/wrist_calib.zh-CN.md)。示例命令从 `sp_vision/` 运行；配置内路径相对 JSON 文件，数据路径相对当前目录。用 `sp-vision-head --help`、`sp-vision-wrist --help`、`sp-vision-capture --help` 查看参数。
 
-开发和测试时把可编辑安装装进同一个环境：
-
-```bash
-.venv/bin/python -m pip install -e '.[test]'
-.venv/bin/python -m pytest -q
-```
-
-下文命令中出现的 `python` 均指该虚拟环境的解释器：先执行一次 `source .venv/bin/activate` 后继续用 `python`，或在仓库根目录显式调用 `.venv/bin/python`（例如 `.venv/bin/python sp_vision/calibration.py ...`）。`.venv` 已被 Git 忽略，也不进入 wheel 包，每个检出创建一次即可。不要与提供 `opencv-python` 或 headless OpenCV wheel 的环境混用，因为本项目以 `opencv-contrib-python` 作为唯一的 `cv2` 提供者。
-
-基础依赖也列在 `requirements.txt`，供使用 requirements 文件的环境安装。
-
-离线标定只需要这个虚拟环境：有 NumPy、SciPy 和带 contrib 的 OpenCV，就足以求解头部与腕部内外参、TCP pivot 与触点验证。头部相机通过桥接器实时采集还需要 `websockets` 客户端（已随 `'.[live]'` 装好）。默认的头部相机 ROS 后端在本机使用 ROS 1 Noetic，需要系统安装 `rospy`、`message_filters`、`sensor_msgs`，并能连接 ROS master。独立的右腕采集流程和 `sp-vision-capture` 工具使用配置相机主机上的 ROS 2 Foxy，需要该主机安装 `rclpy` 和 `sensor_msgs`；这些 ROS 系统包不会由本 Python 包或安装脚本安装。可选的控制器状态命令（`state` 记录姿态、`probe` 做腕部映射对比）需要单独提供的 `tron2_env` 运行环境及其传输依赖，离线标定不依赖它们。
-
-## 命令
-
-安装后提供三个 CLI；传入 `--help` 可查看子命令和参数：
-
-```bash
-sp-vision-head --help
-sp-vision-wrist --help
-sp-vision-capture --help
-```
-
-源码目录中仍可直接运行原脚本：
-
-```bash
-python sp_vision/calibration.py --help
-python sp_vision/calibration_wrist.py --help
-python sp_vision/capture_ros2_image.py --help
-```
-
-打包的示例配置和模型快照位于 `sp_vision/configs/`。使用前应把对应的 `*.example.json` 复制为本地 JSON，再填入本机相机主机、话题或配置路径。Git 和 wheel 包均不包含本机配置及标定会话；请将录像、拟合结果和报告放到可写工作目录，例如 `data/`。
-
-## 文档导航
-
-| 文档 | 用途 |
+| 功能 | 额外运行条件 |
 |---|---|
-| [头部相机标定](sp_vision/head_calib.zh-CN.md) | 配置、采集、内外参求解及触点验证 |
-| [右腕相机标定](sp_vision/wrist_calib.zh-CN.md) | 关节映射核对、腕部采集及相机到腕部外参验证 |
-| [贡献者](CONTRIBUTORS.zh-CN.md) | 项目贡献者与版权归属 |
-| [更新记录](CHANGELOG.zh-CN.md) | 版本历史和兼容说明 |
-| [来源清单](SOURCE_MANIFEST.json) | 源提交、原始及修改后文件哈希、模型资产范围 |
+| 离线内外参、TCP 与验证 | 安装后的 Python 环境 |
+| 头部采集 | 本机 ROS 1 Noetic 或 WebSocket 桥接；只需彩色图像和同步头部关节状态，不需要深度图或已有内参 |
+| 右腕采集 | 相机主机上的 ROS 2 Foxy、图像和关节状态话题，以及 SSH 公钥登录；可用 `capture.ssh_identity_file` 指定私钥 |
+| `state` / 腕部 `probe` 控制器对比 | 另行安装兼容的 `tron2_env`，填写 `robot.host` / `robot.port` |
+| 单帧诊断 | ROS 2 主机及 SSH；图像不含同步关节状态，不能直接用于标定 |
 
-标定指南的脚本示例从 `sp_vision/` 目录运行。触点验证读取 `state` 子命令生成的 JSON，该命令只采样控制器反馈，不发送运动指令。仓库不分发标定数据集或历史拟合结果。
+## 准备资料
 
-## 工作流与证据范围
+- [棋盘格生成器](https://calib.io/zh/pages/camera-calibration-pattern-generator)：生成打印图案；打印后实测方格边长并更新配置。
+- [TRON2 SDK 开发指南](https://www.limxdynamics.com/zh/documents/847884267345285120)：开发连接说明及 SSH 登录密码。腕部脚本使用免密登录，请先按指南登录并授权公钥。
+- [TRON2 用户手册](https://www.limxdynamics.com/zh/documents/844648486841487360)：联网步骤及 Wi-Fi 密码。
+- [TRON2 官方机器人模型](https://github.com/limxdynamics/tron2-robot-description)：双臂＋头部等配置的 URDF/xacro 与模型资源；选择与实机一致的型号。仓库自带模型是求解器使用的运动学快照，不随官方仓库自动更新。
 
-- **离线标定**读取保存的图像、关节状态记录、JSON 设置和随包运动学模型。它可拟合相机内参、外参、固定点 TCP，并执行几何一致性检查；不会打开相机、连接 ROS 或控制机器人。
-- **实时采集**与求解相互独立。头部工作流默认通过本机 ROS 1 Noetic 读取 RGB-D 数据，也可使用现有 WebSocket RGB-D 桥接后端；独立的右腕工作流通过相机主机上的 ROS 2 读取右侧彩色图像和同步关节状态。`sp-vision-capture` 是 ROS 2 单帧诊断工具。使用时须区分 ROS 版本和数据流。这些接口都不会发送运动指令。
-- **模型快照仅用于运动学。**随包 URDF/MJCF 快照引用了未随仓库分发的网格文件。求解器只使用关节变换，不加载视觉或碰撞几何。因此这些快照仅支持运动学正向计算和模型链一致性检查，不能用于网格渲染、碰撞检查、物理仿真或机器人几何避障结论。
-- **求解通过不等于实机验证。**离线拟合和留出数据检查不能证明实时相机同步正确、物理安装正确、机器人触碰验证成功或 Sim2Real 表现。请按头部和腕部指南完成独立触碰检查，并按报告所定义的范围解读 `passed` 字段。
+## 结果与坐标约定
 
-数据采集与验证步骤见[头部相机标定](sp_vision/head_calib.zh-CN.md)和[右腕相机标定](sp_vision/wrist_calib.zh-CN.md)。
+已发布[头部与右腕内外参](calibration_results/README.zh-CN.md)。它们通过内部拟合检查，但独立触点误差为头部 **14.42 mm**、右腕 **12.26 mm**，均未达到 10 mm 阈值。复用前应按目标模型重新求解并验证。
 
-## 许可证
+`T_A_B` 表示从 B 到 A 的变换，平移单位为米、关节角为弧度。桌面任务遵守[固定 45 cm 安装约束](TABLETOP_FRAME_CONTRACT.zh-CN.md)。模型快照不包含网格，只用于运动学求解。内外参 `passed: true` 不代表独立触碰验收通过。
 
-贡献者：[AcSg999](https://github.com/AcSg999)、[Shukashuki](https://github.com/Shukashuki)。来源署名见[贡献者说明](CONTRIBUTORS.zh-CN.md)。
+本地配置、图像和新生成的报告放在忽略目录中（如 `data/`），不提交密码、私钥或采集数据。
 
-MIT。原始版权声明保留在 [LICENSE](LICENSE) 中。
+## 开发与许可证
+
+```bash
+python -m pip install -e '.[test]'
+python -m pytest -q
+```
+
+[更新记录](CHANGELOG.zh-CN.md) · [贡献者与来源](CONTRIBUTORS.zh-CN.md) · [MIT 许可证](LICENSE)

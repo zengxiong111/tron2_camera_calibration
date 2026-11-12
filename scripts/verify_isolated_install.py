@@ -83,8 +83,8 @@ if not head_result["passed"] or not wrist_result["passed"]:
     raise RuntimeError("installed head/wrist model consistency check failed")
 print(f"PASS installed head URDF/MJCF kinematics consistency: max_error={head_result['maximum_error']:.3g}")
 print(f"PASS installed wrist URDF/MJCF kinematics consistency: translation={wrist_result['translation_m']:.3g}m rotation={wrist_result['rotation_deg']:.3g}deg")
-rigid, bridge_capture, bridge_config, ros_capture = head._import_capture_dependencies()
-print(f"PASS installed adapter imports: {bridge_capture.__module__}, {rigid.__module__}, {ros_capture.__module__}")
+bridge_capture, bridge_config, ros_capture = head._import_capture_dependencies()
+print(f"PASS installed adapter imports: {bridge_capture.__module__}, {bridge_config.__module__}, {ros_capture.__module__}")
 '''
         print(run([str(python), "-c", probe, str(ROOT)], cwd=work, env=clean_env).stdout, end="")
         # Tests are copied outside the checkout and redirected to the installed

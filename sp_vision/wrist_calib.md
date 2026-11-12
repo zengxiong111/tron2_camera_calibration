@@ -2,6 +2,8 @@
 
 [简体中文](wrist_calib.zh-CN.md)
 
+See [preparation references](../README.md#preparation-references) for the board generator, SSH password, Wi-Fi password and official dual-arm/head URDF.
+
 After running `scripts/install.sh` as described in the [README](../README.md) — that is the step that produces `.venv/bin/python` — run `source .venv/bin/activate` from the repository root, then `cd sp_vision` and run the script examples below; `python` in these commands is that environment's interpreter. Configuration paths resolve relative to their JSON file; data and results resolve relative to the current working directory. The commands read sensors or solve offline and do not move the robot.
 
 This is a separate, read-only workflow for the right wrist color camera. Run commands from this directory. Images and results go under `data/wrist_camera_session/`, which is ignored by Git. The bundled model assets keep offline calibration independent from the parent repository. The code never moves the robot.
@@ -33,7 +35,11 @@ cp configs/wrist_config.example.json configs/wrist_config.json
 
 Set `capture.host`, `ros_setup`, `ros_domain_id`, `color_topic` and `joint_topic` for your ROS 2 installation. The example host and topics are installation-specific defaults, not discovered devices. The script connects by SSH and accepts an image only when its timestamp is within 100 ms of a fresh joint sample. The ROS 2 first four joints use `abad`, `hip`, `yaw`, `knee` names, while the URDF uses `proximal_pitch`, `proximal_roll`, `proximal_yaw`, `elbow`. The configured name list maps them into the **same 14-value order used by the controller `arm_q14` in head touch validation**. The names differ; the vector order does not. Capture saves both the named ROS 2 values and that ordered vector. Physical FK accuracy still needs the held-out board and independent touch checks.
 
+SSH runs with `BatchMode=yes`, so it needs working public-key login and does not prompt for a password. To select one key and avoid `Too many authentication failures` from extra agent identities, set `capture.ssh_identity_file` in the local config, for example `"~/.ssh/id_ed25519"`. The script then uses `IdentitiesOnly=yes` with that key. Relative key paths resolve against the config JSON directory; `null` leaves SSH identity selection unchanged. Authorize the corresponding public key once, entering the remote user's password when prompted:
+
 ```bash
+ssh-copy-id -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519.pub guest@10.192.1.4
+ssh -o BatchMode=yes -o IdentitiesOnly=yes -i ~/.ssh/id_ed25519 guest@10.192.1.4 true
 python calibration_wrist.py --config configs/wrist_config.json probe
 ```
 

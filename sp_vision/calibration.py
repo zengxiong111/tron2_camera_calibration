@@ -2,7 +2,7 @@
 """Minimal moving-head camera calibration experiment.
 
 The module is deliberately hardware-free at import time.  Only the ``capture``
-subcommand opens the configured RGB-D source; every solver is offline and reads
+subcommand opens the configured color/state source; every solver is offline and reads
 JSON plus images from disk.
 """
 from __future__ import annotations
@@ -560,18 +560,16 @@ def check_frame_sync(frame, config) -> None:
 def _import_capture_dependencies():
     try:
         if __package__:
-            from .adapters.validation import rigid
-            from .adapters.rgbd import (
-                Tron2HighRgbdCapture,
-                Tron2HighRgbdConfig,
-                Tron2RosHighRgbdCapture,
+            from .adapters.color import (
+                Tron2HighColorCapture,
+                Tron2HighColorConfig,
+                Tron2RosHighColorCapture,
             )
         else:
-            from adapters.validation import rigid
-            from adapters.rgbd import (
-                Tron2HighRgbdCapture,
-                Tron2HighRgbdConfig,
-                Tron2RosHighRgbdCapture,
+            from adapters.color import (
+                Tron2HighColorCapture,
+                Tron2HighColorConfig,
+                Tron2RosHighColorCapture,
             )
     except ImportError as error:
         raise RuntimeError(
@@ -579,32 +577,27 @@ def _import_capture_dependencies():
             "offline calibration commands do not require ROS or websockets. "
             "Install the optional backend dependencies or provide pre-captured views."
         ) from error
-    return rigid, Tron2HighRgbdCapture, Tron2HighRgbdConfig, Tron2RosHighRgbdCapture
+    return Tron2HighColorCapture, Tron2HighColorConfig, Tron2RosHighColorCapture
 
 
 def open_camera(config):
-    """Open the existing bridge/ROS adapter without imposing fixed-head calibration."""
+    """Open color and head feedback; checkerboard calibration does not use depth."""
     capture_config = config.get("capture", {})
     profile_path = config_path(config, capture_config["profile"])
     profile = read_json(profile_path)
     camera = profile["camera"]
-    rigid, bridge_type, options_type, ros_type = _import_capture_dependencies()
-    depth_to_color = rigid(camera["depth_to_color"], "depth_to_color")
+    bridge_type, options_type, ros_type = _import_capture_dependencies()
     options = {
-        "color_k": tuple(np.asarray(camera["intrinsics"], dtype=float).ravel()),
-        "color_dist": tuple(camera["distortion"]),
-        "depth_k": tuple(np.asarray(camera["depth_intrinsics"], dtype=float).ravel()),
-        "depth_to_color_r": tuple(depth_to_color[:3, :3].ravel()),
-        "depth_to_color_t_m": tuple(depth_to_color[:3, 3]),
-        "ros_color_topic": camera["color_topic"],
-        "ros_depth_topic": camera["depth_topic"],
+        "color_topic": camera["color_topic"],
         "joint_state_topic": camera.get("joint_state_topic", "/joint_states"),
         "host": camera.get("bridge_host", "127.0.0.1:18443"),
         "ws_path": camera.get("bridge_path", "/bridge/ws"),
         "internal_token": os.environ.get(camera.get("token_env", "TRON2_BRIDGE_TOKEN")),
         "verify_tls": camera.get("verify_tls", True),
-        "max_skew_ms": camera.get("max_skew_ms", 100),
-        "max_state_skew_ms": camera.get("max_state_skew_ms", 100),
+        "timeout_s": float(capture_config.get("timeout_s", 12.0)),
+        "max_state_skew_ms": min(
+            float(camera.get("max_state_skew_ms", 100)),
+            float(config.get("quality", {}).get("max_state_skew_ms", 100))),
     }
     if camera["backend"] == "ros":
         os.environ["ROS_MASTER_URI"] = camera["ros_master_uri"]
@@ -653,7 +646,7 @@ def capture_command(config, session: Path, count: int, append: bool = False) -> 
         saved = 0
         try:
             while saved < count:
-                rgb, _depth, sync = driver.capture(include_joint_state=True)
+                rgb, sync = driver.capture()
                 image = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
                 flip = False
                 while True:
