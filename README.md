@@ -85,6 +85,6 @@ python -m pip install -e '.[test]'
 python -m pytest -q
 ```
 
-[MIT license](LICENSE), retaining Jerry Lo’s original copyright notice. Thanks to [AcSg999](https://github.com/AcSg999) and [Shukashuki](https://github.com/Shukashuki).
+[MIT license](LICENSE), retaining Jerry Lo’s original copyright notice. Thanks to [AcSg999](https://github.com/AcSg999), [Shukashuki](https://github.com/Shukashuki), [peasgo](https://github.com/peasgo), and [Wangbaiyue007](https://github.com/Wangbaiyue007).
 
 Sources: tools and kinematic snapshots from [tron2_deployment_on_dc](https://github.com/AcSg999/tron2_deployment_on_dc), `sp_vision/` at `dbd6c2f2d0718f38c86fac34dc86788ad43c60b5`; bridge adapter derived from [dexpipe](https://github.com/Shukashuki/dexpipe), `hardware/tron2_rgbd.py` at `1e4a810de477bda7f621db553ecd496bb0884f2f`; read-only controller adapter references [tron2_env](https://github.com/limxdynamics/tron2_env) at `03e39d3f7d66dcb096b41f03612fdab2f8c10ea5`.

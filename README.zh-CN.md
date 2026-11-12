@@ -85,6 +85,6 @@ python -m pip install -e '.[test]'
 python -m pytest -q
 ```
 
-[MIT 许可证](LICENSE)，保留 Jerry Lo 的原始版权声明。感谢 [AcSg999](https://github.com/AcSg999) 和 [Shukashuki](https://github.com/Shukashuki)。
+[MIT 许可证](LICENSE)，保留 Jerry Lo 的原始版权声明。感谢 [AcSg999](https://github.com/AcSg999)、[Shukashuki](https://github.com/Shukashuki)、[peasgo](https://github.com/peasgo) 和 [Wangbaiyue007](https://github.com/Wangbaiyue007)。
 
 来源：标定工具与运动学快照引入自 [tron2_deployment_on_dc](https://github.com/AcSg999/tron2_deployment_on_dc) 的 `sp_vision/`（`dbd6c2f2d0718f38c86fac34dc86788ad43c60b5`）；桥接适配器源于 [dexpipe](https://github.com/Shukashuki/dexpipe) 的 `hardware/tron2_rgbd.py`（`1e4a810de477bda7f621db553ecd496bb0884f2f`）；只读控制器适配器参考 [tron2_env](https://github.com/limxdynamics/tron2_env)（`03e39d3f7d66dcb096b41f03612fdab2f8c10ea5`）。
