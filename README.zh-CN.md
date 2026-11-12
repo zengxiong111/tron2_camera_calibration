@@ -20,7 +20,7 @@ source .venv/bin/activate
 ## 使用流程
 
 1. 将 `sp_vision/configs/` 中所需的 `*.example.json` 复制为对应的本地 JSON，填写连接配置。
-2. 打印棋盘格，清点内角点数量并**实测方格边长**，再填写配置。示例为 7×10 内角点，即 8×11 个方格。
+2. 自行前往[棋盘格生成器](https://calib.io/zh/pages/camera-calibration-pattern-generator)生成、下载并打印棋盘格；清点内角点数量并**实测打印后的方格边长**，再填写配置。示例为 7×10 内角点，即 8×11 个方格。
 3. 固定棋盘，采集约 40 个不同姿态；依次求解内参、外参。
 4. 标定刚性触针 TCP，再用三个角点做独立触碰验证。
 
@@ -65,7 +65,7 @@ python calibration_wrist.py --config configs/wrist_config.json extrinsics --sess
 
 ## 准备资料
 
-- [棋盘格生成器](https://calib.io/zh/pages/camera-calibration-pattern-generator)：生成打印图案；打印后实测方格边长并更新配置。
+- [棋盘格生成器](https://calib.io/zh/pages/camera-calibration-pattern-generator)：棋盘格需自行生成、下载并打印；打印后实测方格边长并更新配置。
 - [TRON2 SDK 开发指南](https://www.limxdynamics.com/zh/documents/847884267345285120)：开发连接说明及 SSH 登录密码。腕部脚本使用免密登录，请先按指南登录并授权公钥。
 - [TRON2 用户手册](https://www.limxdynamics.com/zh/documents/844648486841487360)：联网步骤及 Wi-Fi 密码。
 - [TRON2 官方机器人模型](https://github.com/limxdynamics/tron2-robot-description)：双臂＋头部等配置的 URDF/xacro 与模型资源；选择与实机一致的型号。仓库自带模型是求解器使用的运动学快照，不随官方仓库自动更新。

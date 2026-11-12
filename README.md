@@ -20,7 +20,7 @@ The installer creates `.venv`, installs dependencies, and checks all three CLI e
 ## Workflow
 
 1. Copy the required `*.example.json` files in `sp_vision/configs/` to local JSON files and fill in connection settings.
-2. Print the board, count its inner corners and **measure its physical square size**, then update the config. The example has 7×10 inner corners, or 8×11 printed squares.
+2. Generate, download and print your own board using the [pattern generator](https://calib.io/zh/pages/camera-calibration-pattern-generator). Count its inner corners and **measure the printed square size**, then update the config. The example has 7×10 inner corners, or 8×11 printed squares.
 3. Fix the board, capture about 40 distinct poses, then solve intrinsics and extrinsics.
 4. Calibrate a rigid probe TCP and independently validate three board corners.
 
@@ -65,7 +65,7 @@ During capture, `s` saves, `f` reverses corner order, `r`/Space reacquires and `
 
 ## Preparation references
 
-- [Calibration pattern generator](https://calib.io/zh/pages/camera-calibration-pattern-generator): create a printable board, then measure its square size and update the config.
+- [Calibration pattern generator](https://calib.io/zh/pages/camera-calibration-pattern-generator): generate, download and print your own board, then measure its square size and update the config.
 - [TRON2 SDK development guide](https://www.limxdynamics.com/zh/documents/847884267345285120): development connections and SSH login password. Authorize your public key before using the wrist script's non-interactive login.
 - [TRON2 user manual](https://www.limxdynamics.com/zh/documents/844648486841487360): network setup and Wi-Fi password.
 - [Official TRON2 robot description](https://github.com/limxdynamics/tron2-robot-description): URDF/xacro and model resources including dual-arm/head variants. Select the actual hardware variant. Bundled solver snapshots do not automatically track upstream changes.
