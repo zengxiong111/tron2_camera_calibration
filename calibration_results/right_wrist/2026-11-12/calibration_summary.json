@@ -1,0 +1,472 @@
+{
+  "schema_version": 1,
+  "kind": "sp_vision_wrist_calibration_summary",
+  "created_at": "2026-11-12T13:57:59.004428+08:00",
+  "session": "/home/dc/calibration/tron2_camera_calibration/sp_vision/data/wrist_camera_session_1112V1",
+  "stage": "offline_intrinsics_and_extrinsics_complete",
+  "offline_passed": true,
+  "camera_frame": "right_wrist_camera_color_optical_frame",
+  "mount_link": "wrist_roll_R_Link",
+  "color_topic": "/camera/right/color/image_resized/compressed",
+  "pattern": {
+    "columns": 7,
+    "rows": 10,
+    "square_m": 0.015
+  },
+  "image_size": [
+    640,
+    480
+  ],
+  "input_view_count": 40,
+  "state_skew_ms": {
+    "minimum": 0.107108,
+    "maximum": 60.692411,
+    "limit": 100,
+    "passed": true
+  },
+  "intrinsics": {
+    "file": "/home/dc/calibration/tron2_camera_calibration/sp_vision/data/wrist_camera_session_1112V1/wrist_intrinsics.json",
+    "passed": true,
+    "rms_px": 0.24742037105867326,
+    "maximum_training_view_rms_px": 0.47222799026908563,
+    "per_view_limit_px": 1.5,
+    "radial_minimum_derivative": 0.893407908507071,
+    "training_views": [
+      "view-001",
+      "view-002",
+      "view-003",
+      "view-004",
+      "view-005",
+      "view-006",
+      "view-007",
+      "view-008",
+      "view-009",
+      "view-010",
+      "view-011",
+      "view-012",
+      "view-013",
+      "view-014",
+      "view-015",
+      "view-016",
+      "view-017",
+      "view-018",
+      "view-019",
+      "view-020",
+      "view-021",
+      "view-022",
+      "view-023",
+      "view-024",
+      "view-025",
+      "view-026",
+      "view-027",
+      "view-028",
+      "view-029",
+      "view-030",
+      "view-031",
+      "view-032",
+      "view-033",
+      "view-034"
+    ],
+    "holdout_views": [
+      "view-035",
+      "view-036",
+      "view-037",
+      "view-038",
+      "view-039",
+      "view-040"
+    ],
+    "rejected_views": []
+  },
+  "extrinsics": {
+    "file": "/home/dc/calibration/tron2_camera_calibration/sp_vision/data/wrist_camera_session_1112V1/wrist_extrinsics.json",
+    "passed": true,
+    "training": {
+      "count": 34,
+      "translation_mean_mm": 4.18601555586205,
+      "translation_max_mm": 8.929036411555263,
+      "rotation_max_deg": 1.087233600584701,
+      "pnp_rms_max_px": 0.4722283184528351,
+      "worst_translation_view": "view-009",
+      "worst_rotation_view": "view-009",
+      "passed": true
+    },
+    "holdout": {
+      "count": 6,
+      "translation_mean_mm": 3.9803338622075666,
+      "translation_max_mm": 5.920874495104097,
+      "rotation_max_deg": 0.7113753517854904,
+      "pnp_rms_max_px": 0.35864898562431335,
+      "worst_translation_view": "view-038",
+      "worst_rotation_view": "view-036",
+      "passed": true
+    },
+    "limits": {
+      "translation_mm": 15.0,
+      "rotation_deg": 2,
+      "pnp_rms_px": 1.5
+    },
+    "mount_rotation_span_deg": 122.22823632784117,
+    "min_mount_rotation_span_deg": 20,
+    "secondary_rotation_rad": 2.5473079364439215,
+    "min_secondary_rotation_rad": 0.12,
+    "model_consistency": {
+      "passed": true,
+      "translation_m": 5.263396857282597e-09,
+      "rotation_deg": 2.325728470873411e-06
+    },
+    "calibrated_from_nominal": {
+      "translation_m": 0.0028089224584769983,
+      "rotation_deg": 1.3298172173050788
+    },
+    "rejected_views": [],
+    "outliers": []
+  },
+  "independent_touch_validation": {
+    "performed": false,
+    "required_maximum_error_m": 0.01,
+    "next_stage": "prepare or verify the current rigid probe TCP, then perform three independent checkerboard touches"
+  },
+  "tabletop_contract": {
+    "required_physical_base_above_tabletop_m": 0.45,
+    "physical_mounting_measured": false,
+    "note": "T_base_board locates the checkerboard corner origin, not the tabletop surface. It does not independently verify the tabletop-to-physical-base height."
+  },
+  "configuration_source": "/home/dc/calibration/tron2_camera_calibration/sp_vision/configs/wrist_config.json",
+  "source_files_sha256": {
+    "/home/dc/calibration/tron2_camera_calibration/sp_vision/configs/wrist_config.json": "fd7185a3c5bb3a136f9cd05bce1b61283ca5d3b8b1bdc3be1210d868288e93f0",
+    "/home/dc/calibration/tron2_camera_calibration/sp_vision/configs/assembly.urdf": "180faad7e72463812158cbbb984a970b8df60c8bce812d337d945eda522ca16d",
+    "/home/dc/calibration/tron2_camera_calibration/sp_vision/configs/scene.xml": "bdc87c0a548384213c4ce2319090f7fe80f6861afe1de40a7de967cb9ba9eab0",
+    "/home/dc/calibration/tron2_camera_calibration/sp_vision/calibration.py": "6a24b4cc97cbb44c5fd7c75f48cac78df287b53a6df26b410af55db671e18dd4",
+    "/home/dc/calibration/tron2_camera_calibration/sp_vision/calibration_wrist.py": "46cefbb0b0f93ca6e98581115a346ba9400e5cb2a49d01a70bc5e964df6307d9"
+  },
+  "result_sha256": {
+    "wrist_intrinsics.json": "f5c694cbffa7ec79ca7b6946280145c6cd4976ab4a7a1666aa1559cf0d199c1f",
+    "wrist_extrinsics.json": "67e54a874d72e1e21fdc20fccfb2e45ecbd7beddb04393c17ab38d41fe595e4d"
+  },
+  "inputs": [
+    {
+      "view": "view-001",
+      "files_sha256": {
+        "color.png": "c40e6b6d51292ca3583335af18cac7029ca3bbd8d491a66d617b9b23b77d888d",
+        "corners.png": "884ad268df53b3f700884283ba3306d60293c8e0f46ffe88338b81986508365d",
+        "frame.json": "06de84d156c9652413e69078ca05ecba5ec82b5f337a8cdad28e077ebd4d5a94"
+      }
+    },
+    {
+      "view": "view-002",
+      "files_sha256": {
+        "color.png": "fa5113751ee7d8f9303eebd01232e9cbc7867235ea464e94f51d5b6c46e1cd5c",
+        "corners.png": "347b7b0af75f227b7095b19460ecd231dc2aad4a0f27192ec769dc28444bff8f",
+        "frame.json": "03e0ea576eda73f016ce29614b073d1d6d7f6156f74e915c2b6b49e35fff661c"
+      }
+    },
+    {
+      "view": "view-003",
+      "files_sha256": {
+        "color.png": "d811dc327bbeb51d86536179f66bc40652a310fb83838b11d53ca02ea4563f7d",
+        "corners.png": "90ac1a49857935af46eee6b80fcd5ed4c60361936f7b144dc2ea4c766a82ce0a",
+        "frame.json": "992b6a28df1cc413b951b152c69c78f3982651b510605e64e6dbe696d63fc701"
+      }
+    },
+    {
+      "view": "view-004",
+      "files_sha256": {
+        "color.png": "ef556d3448238c656fe290d59d12e18d9c8d6318f17959945b07ea0b4c9c661e",
+        "corners.png": "ee87e9ac698706b03af64f6fe7085893bc52a301c649e3e26eef2be574cd180e",
+        "frame.json": "69ad9b9d399f16b51048afd202d5913320c1019b9b1c3e1bc31747fc7c12c117"
+      }
+    },
+    {
+      "view": "view-005",
+      "files_sha256": {
+        "color.png": "5ac191b6c24269b0a6bfbeab126c8a6906eea6705468fc6b8902792ea793699b",
+        "corners.png": "a227f2ff71a00df2612c6ab16b5e4dcf31cdc285de472febef06652208b00170",
+        "frame.json": "445ee62724c5d3dfb058881146a41eb0cddf1fbceedb569ff5e709d44d15ad7a"
+      }
+    },
+    {
+      "view": "view-006",
+      "files_sha256": {
+        "color.png": "ce3ff1249f2ad84782ce9431d17b3bdb8288b419a75f510b1a051fd11518a2e1",
+        "corners.png": "1db49f89512b6c2856db3b028bb715657c352da332629d761965eb63a1479cfa",
+        "frame.json": "11b14d95227cd2e22d16a4dfc87c5d597589f2782544ed1a6f146d8c09cfa2b6"
+      }
+    },
+    {
+      "view": "view-007",
+      "files_sha256": {
+        "color.png": "9cd6d1534bf050851cb1cc3439c7b5a59763f0714ed41d2f72e7725d674063d2",
+        "corners.png": "ca5b6f11d5aa41596d2638002797a8868eb5a659c55dff42c8dc869bb7f3b3fc",
+        "frame.json": "8260024b4eaed3d10f1add5d45041ae36354153522fa11b369f61853ab866716"
+      }
+    },
+    {
+      "view": "view-008",
+      "files_sha256": {
+        "color.png": "8e6f409ceb18e0ac47fca55a3f8a90cac5fc25fc037e51f4ed1c59e41b4defda",
+        "corners.png": "73afad199dabe15e372992d7814bc7ca58e634dff742aa3d18dc5532364ae094",
+        "frame.json": "502b14596d27b2b8b366bece28274452513cd9c90660f40a19a8d563652f88d2"
+      }
+    },
+    {
+      "view": "view-009",
+      "files_sha256": {
+        "color.png": "9a69680501f28eba692b23300e2f449070590ba67088b51ad79aa906e65ae946",
+        "corners.png": "8f9f8defe7f1be09f2013be52868d62e289b0da2d908286386776711613d43de",
+        "frame.json": "e4f712e7040c7471c5d1d2b26a8e5382903885d1eadd2458029dd581b8869dca"
+      }
+    },
+    {
+      "view": "view-010",
+      "files_sha256": {
+        "color.png": "982f80158b500ba13a69aa5ddc5334d56ec6f214f6c6829456c97c53860e3dfd",
+        "corners.png": "645fae3e01c1ee814678368725244ad512d81f098fd3949f8911dd1c817fdc08",
+        "frame.json": "8408b3e8c2f90b1aaaa89407139760c7cfc2dea696d1b11f2c6498e0c9355386"
+      }
+    },
+    {
+      "view": "view-011",
+      "files_sha256": {
+        "color.png": "9851e08eff069c3cc9e6e5bf736f001164611d9699318d13717d9bed2ac5b610",
+        "corners.png": "094b36e4b4c852f46aa0bb8824b2a0610c18f4b4d69ab87a96514a3b2f3d2819",
+        "frame.json": "86645cb06fb50dd57be567530d9c3ce916909f1f4def46ab7d7e92bccd390f87"
+      }
+    },
+    {
+      "view": "view-012",
+      "files_sha256": {
+        "color.png": "f0b6086c60f12ff1eb5a7422ff2003c5b69e180fc2defcf9ad280c0b624a4b78",
+        "corners.png": "0abf92b082a81c349f9b70d16e07dfbb4026024068039fbcd4af5170bd86011b",
+        "frame.json": "a46246fc229c00024f5398d7412849a556478f777c38d9b0d6a645c53f7795e4"
+      }
+    },
+    {
+      "view": "view-013",
+      "files_sha256": {
+        "color.png": "d44c791a96d067e034577dbf74d415535c49eacd031d68dbd9fdb92bf1d0ecfb",
+        "corners.png": "35a817e3c322b15ba31e5df4cfe6054e0fc4220f1837a9be2a5fe1d47cb72d51",
+        "frame.json": "19b89784c8bd96270c2d7292abcf8536d48c16ab09a992c5886d8c8b862aeae3"
+      }
+    },
+    {
+      "view": "view-014",
+      "files_sha256": {
+        "color.png": "bf849a5e4b16fd2897df78ca46ebc2880ef630222695c80a3dec94250e995ef1",
+        "corners.png": "1c23498f2ccc59fd804c1f3bf4c99680acde9a934a603b7f142512a3eb04f7c2",
+        "frame.json": "381d4eb4594acce58220814a3e7f8df35faf4a3351e3579e65513add4b56ea6b"
+      }
+    },
+    {
+      "view": "view-015",
+      "files_sha256": {
+        "color.png": "31d17ac31cc4db4445fb2d683d760cc993df69aed68bb9585d72f1b7fd2a458e",
+        "corners.png": "e5a8ff684933fd9b58e614cb987174c81ed8577dd5a4de0cb9bbaeceb8d08d2f",
+        "frame.json": "72cb30190ce2968beb61e723bbf02d0fd4a6e75557244e3cad44e2e48d1998f7"
+      }
+    },
+    {
+      "view": "view-016",
+      "files_sha256": {
+        "color.png": "dbd4e254efb4e4ff7af6942e1ff0f1e79e606f2f1adc8debc1b041ebd3c3b980",
+        "corners.png": "25c5ef5a5f489ff2e05f14e559ae22b6ff7a7914c3b73d3e640e92190ebccd5d",
+        "frame.json": "a8c3e662467bc02b01e118d1b9b884d2bc1a169f199ec2ba52394b612af4ffe3"
+      }
+    },
+    {
+      "view": "view-017",
+      "files_sha256": {
+        "color.png": "c78ecbba37a0c0c6abaa5010c2dfb3df2d33eaf83a1edb02210c2e279e250c1b",
+        "corners.png": "7584f3e26dbaed2a20ff8ca71bf5aa3ae92db56fa7993308a150abd955e7fbba",
+        "frame.json": "fc811e9d0fed03134b2ec482a88431a6299004912110baad38a9e4f0fac34103"
+      }
+    },
+    {
+      "view": "view-018",
+      "files_sha256": {
+        "color.png": "fe2b027198584284b9ec9761cf7448d560146d79c3f97ad07e87b90b64c3424d",
+        "corners.png": "00ef5555945b911bb5d0292d20dacdc5a5f626c7c35f0c8c0575d91bc292e331",
+        "frame.json": "0869c0e30efec50a1be6ef09c6d057e3ddc097786af54cdef170d0e6431ee332"
+      }
+    },
+    {
+      "view": "view-019",
+      "files_sha256": {
+        "color.png": "c3371114eb5d1b818226653ee91575a45499d9da89409ba38c54dee6b7b45dc7",
+        "corners.png": "1d1fbb6bb554603afb2b08e6abb7f6c3c07331124218bec9d4dadec46b9df809",
+        "frame.json": "11de644ba27e7cbcf839fd92a29a9694f790b8f3ba1a349620be5dfe73e6b81c"
+      }
+    },
+    {
+      "view": "view-020",
+      "files_sha256": {
+        "color.png": "d77c1eb87572f0db4e45827721cc7fb982a3d7438eec855364dbdf8df45ecbf2",
+        "corners.png": "05985c5c375603ca6519bf4a929bf9cb33d88d2bc78b13e4c470ff73cc10c097",
+        "frame.json": "5010363662c73eb947e4e6a7d299899911437c0ab32d14de9725e9b4b9120cb4"
+      }
+    },
+    {
+      "view": "view-021",
+      "files_sha256": {
+        "color.png": "c43ce78b6d0d6e970df5fcd386a3942cbdff5e14d1ab372b972547941ee81e30",
+        "corners.png": "932e18e9b6dcb8fd36bd8aa3761990cf7cc9ea9c684afdd72425ecf557c63bc3",
+        "frame.json": "1d5f194baf6b0e1bc43fab2c0839146056d9d1e52ad24bcc7b00c95e8f118a4f"
+      }
+    },
+    {
+      "view": "view-022",
+      "files_sha256": {
+        "color.png": "26e6b7d32a78529726f27fcfc4d0daa5cecb757ebe5b064b274ebfe136eb8c8d",
+        "corners.png": "92e3d8043024fa9ab32f6c6bb044fce3f6e0faf867dda5033c763ba9ea81dbf6",
+        "frame.json": "a8fe02920a6166d90d8d090d743edecfae911d24e9ac1e5d09aad8f7d89ba459"
+      }
+    },
+    {
+      "view": "view-023",
+      "files_sha256": {
+        "color.png": "d1b67ff6fa8e459daf5cb3dcb91a661d22c62379142c32674ee4ace0dabff52f",
+        "corners.png": "fa7a9fd335e981bf7af71b13d0deb5e4ac65ca4e15ddc7a63604fc38d234b8ac",
+        "frame.json": "9088633998f5c2dcbec641fd644c75f2419e50dda45822acbd0e0721bcb54cb9"
+      }
+    },
+    {
+      "view": "view-024",
+      "files_sha256": {
+        "color.png": "4fb2c395c5f0dabfb858601650d59d84101c6b1b4ac4a1ec4b37b543d4cab900",
+        "corners.png": "a5b55a9a4e38afd8c74645a2b6a596712518e6b654ac1a9a27ac5f766e601d05",
+        "frame.json": "489bcc414fa82769dcdef47bb9ed2466d5b17e862dbfc7aef794e2e521b27f60"
+      }
+    },
+    {
+      "view": "view-025",
+      "files_sha256": {
+        "color.png": "88a14767edc2340c3e995c89bf9f556d8f953492d5d01390165b989f9d099ac7",
+        "corners.png": "109efbfd38369b0f2a01feb2dd9a2179c99d1cf8854e7eec984d730d4d962527",
+        "frame.json": "ee5f6a48dba428a6028bb4b63403043a607bcbdc9c78b6f84e5631c044d3e3c8"
+      }
+    },
+    {
+      "view": "view-026",
+      "files_sha256": {
+        "color.png": "31d07b8d35df249e36d6a80bae676259f054d1e917b209a1ace8a4cc5b715ab7",
+        "corners.png": "1cccdf7cb757e81a0e0603a88e3fb205e7a47a6ea768d0ed6ad7392252ca1ff7",
+        "frame.json": "6458b51d5d51601591a661f71703ea4a039272fd2d9766ef0414aeb3069aab73"
+      }
+    },
+    {
+      "view": "view-027",
+      "files_sha256": {
+        "color.png": "2823df97a9609e0334322d08e582f9983b695c0c2e5d12db3fb72bf550a7a1ab",
+        "corners.png": "f59c565293185acbecfe44ac4aa893b0c00be72987a920d2e8ea9eb10a7da47b",
+        "frame.json": "5fefdb1e00eb849e7d92951e4d209a89abf6541b5dc36ae9676695bcb3f04dc4"
+      }
+    },
+    {
+      "view": "view-028",
+      "files_sha256": {
+        "color.png": "67257cf11b83cf19d41d1d9159e38102c418560b164785dd39c8e4681204865a",
+        "corners.png": "f11a0378ac3bef723f77e058ee33c2e760bc4f744e2a9c8f821fb0eee43b8cfb",
+        "frame.json": "a740bbb00f770c4ad2100a00576939f8ef632344838cb504d8d3a66c5955e3f6"
+      }
+    },
+    {
+      "view": "view-029",
+      "files_sha256": {
+        "color.png": "73e2a3354adef53a3639d1f94852c54e0c1353b7525a6bc955d30c5bef6ca861",
+        "corners.png": "70783d9eca00d4ceaff0fc20e575d0fe95d692bc3e5f32f697e611136e298f89",
+        "frame.json": "abe8056f1f312c2241780ead1266de4e846630ab149c33de7b078567303bd7b1"
+      }
+    },
+    {
+      "view": "view-030",
+      "files_sha256": {
+        "color.png": "749cf535bd0493edca51e7066c63da5a58d35c34260776a8fbda6cb0d0522728",
+        "corners.png": "a8f3d5f5e03a291fc1f9117fb38c5d99f526fd2a00e91253848bd122458c24c3",
+        "frame.json": "4e2a568ded461c0d80f5202c98558789444ce47caaa1ff7dc14d2df86e5c1e29"
+      }
+    },
+    {
+      "view": "view-031",
+      "files_sha256": {
+        "color.png": "f22b6aecb33566cecdb70f251555af4d04494661fcac8a963e2a46840459f16a",
+        "corners.png": "7e451b75ebc3d8b6751dfd3d72aa7f594b6f58e716f66bb2e0f237f02718b2ed",
+        "frame.json": "da759f4dc2ec0af36283082ca4a21073050450fd0553da8b25251427771eaa91"
+      }
+    },
+    {
+      "view": "view-032",
+      "files_sha256": {
+        "color.png": "197c1131d12ea5ec41cadae82a3ab29ef8d35c516e22f77ab2f939880d133ac1",
+        "corners.png": "fc4115154f844f8eb79bfc10c7d5afcb10301a781e13cbcafd6d43c7734e3def",
+        "frame.json": "8b575cf3291d3570d063ed5928dd2c9e37c3b09d96592b37274a734367bb0267"
+      }
+    },
+    {
+      "view": "view-033",
+      "files_sha256": {
+        "color.png": "78bbbde4bbf125a082d63f7d539ecac9d0d7f81718b4a865d8492306f5683777",
+        "corners.png": "e8a8415f9d274ae2615bf2d2b001fc75eb562599281478f4bfdd0aa5013bfccb",
+        "frame.json": "ae09360fe0089c71f713afe6ce334859e5a883570a7bac5145fb39add8f5aafa"
+      }
+    },
+    {
+      "view": "view-034",
+      "files_sha256": {
+        "color.png": "c4032d58e69c4fe77804272a47db7a459ef70a652a7c14cd52f53827f5228766",
+        "corners.png": "5a547e1dba2facd452ac9944eed1d7972f65771b0c4f558d67711b3054f2cedf",
+        "frame.json": "e14666dda06483e96e4242b353fcd59cba42102416d965ec1d687bcbf38184b1"
+      }
+    },
+    {
+      "view": "view-035",
+      "files_sha256": {
+        "color.png": "ea5ee1184f9573b6d2e169834b402ddb1bb1ebbbf4d9d88456321e2df3f8696a",
+        "corners.png": "513cfeddaeda022299ff362abc07c2179bba4dbf58ad66d1478abeb16baff1bd",
+        "frame.json": "95980c73841f7575bc549a05ad5caf45ba258cb05adbd5f99cdb21192a858182"
+      }
+    },
+    {
+      "view": "view-036",
+      "files_sha256": {
+        "color.png": "f232cbd8314a42b5680e7db4a703582510b7dbd91c437b8a026659c998dfe8c0",
+        "corners.png": "37c293404cbe44b34dd4b012190da8d53995153fe2c7a73c4c6ad6b822d5b9a8",
+        "frame.json": "790f0d1506f3537701eafcbfd170296e15388d9702beaf7f0d344af9d6c3c5a1"
+      }
+    },
+    {
+      "view": "view-037",
+      "files_sha256": {
+        "color.png": "52949b76ff37330dd20a38efe729b8008477dca78166994a85941efaa4bdd149",
+        "corners.png": "7fe25983744b5463553ab4a69f56d2c46c1cf2551b3e4ee7d053c212b9cc7e9f",
+        "frame.json": "dc6b872ce72bd329f7a6e2c038ccf8301c9ec439faadaa3007ba9a10cb4f5b04"
+      }
+    },
+    {
+      "view": "view-038",
+      "files_sha256": {
+        "color.png": "67a56ae4788334461ee844b467086fca7c8e3382c7bc9ba86a96148d7a51b58b",
+        "corners.png": "a1c419041714be479739a9f414419be3428da9758795919c9d541bce91ad86cb",
+        "frame.json": "958d1ae89998c8f00425ac2bfc843c7f80fd8e4c725305942fb14475cd75e2d6"
+      }
+    },
+    {
+      "view": "view-039",
+      "files_sha256": {
+        "color.png": "66d72ee71b72b1797b001f117756c228861cd505e731da117f5612be0f163e22",
+        "corners.png": "20079ccbacaceebe51dda1837fb79a9e24c4466542e08d92d79cb66b0f5e529a",
+        "frame.json": "9b4c9ee27c6dc3c9b6dfc55cfe69039505ed5640c2e20b254bea7e49d819eb69"
+      }
+    },
+    {
+      "view": "view-040",
+      "files_sha256": {
+        "color.png": "bbb571f56f3bdbaf29ccc1dc6ac7228f68a50b0db6cd788911ae870386ed4c0d",
+        "corners.png": "b76879299c6f8758bf3bed69a60e3f5899b524c2a43a5832dd5f45f3fdc8dfad",
+        "frame.json": "d053eb3e398efa026e51084ebe75ee6b6284cac314044963098b45e838889227"
+      }
+    }
+  ],
+  "commands": [
+    "../.venv/bin/python calibration_wrist.py --config configs/wrist_config.json intrinsics --session data/wrist_camera_session_1112V1 --output data/wrist_camera_session_1112V1/wrist_intrinsics.json",
+    "../.venv/bin/python calibration_wrist.py --config configs/wrist_config.json extrinsics --session data/wrist_camera_session_1112V1 --intrinsics data/wrist_camera_session_1112V1/wrist_intrinsics.json --output data/wrist_camera_session_1112V1/wrist_extrinsics.json"
+  ]
+}
